@@ -1,5 +1,10 @@
 {% extends "home/home_base.html" %}
-{% load i18n static  %}
+{% load i18n static leaflet_tags %}
+
+{% block extrastyle %}{{super}}
+    {% leaflet_js %}
+    {% leaflet_css %}
+{% endblock %}
 
 {% block breadcrumbs %}{% endblock %}
 
