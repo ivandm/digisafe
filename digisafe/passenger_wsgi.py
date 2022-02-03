@@ -1,7 +1,7 @@
 import sys, os
-ApplicationDirectory = 'httpdocs/digisafe'
+ApplicationDirectory = '../../httpdocs/digisafe'
 ApplicationName = 'digisafe'
-VirtualEnvDirectory = 'httpdocs/python-app-venv'
+VirtualEnvDirectory = '../../httpdocs/python-app-venv'
 VirtualEnv = os.path.join(os.getcwd(), VirtualEnvDirectory, 'bin', 'python3')
 if sys.executable != VirtualEnv: os.execl(VirtualEnv, VirtualEnv, *sys.argv)
 sys.path.insert(0, os.path.join(os.getcwd(), ApplicationDirectory))
