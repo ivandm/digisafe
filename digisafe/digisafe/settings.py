@@ -192,6 +192,7 @@ LEAFLET_CONFIG = {
 
 # Settings for deploy
 SECURE_SSL_REDIRECT = False
+FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 if not DEBUG:
     FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
     SECURE_HSTS_SECONDS = 0
