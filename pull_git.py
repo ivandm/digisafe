@@ -31,7 +31,7 @@ import shutil
 from digisafe.digisafe.settings import STATIC_ROOT
 dst = ""
 for src in ["css/", 'js/', "fonts/", "imgs"]:
-    shutil.copy2("digisafe/"+src, STATIC_ROOT)
+    shutil.copy2("digisafe/static/"+src, STATIC_ROOT)
 
 cmd = 'python3 digisafe/manage.py compress --force'
 print(cmd)
