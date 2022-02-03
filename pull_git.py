@@ -27,11 +27,11 @@ cmd = 'python3 digisafe/manage.py collectstatic -c --no-post-process --noinput'
 print(cmd)
 os.system(cmd)
 
-import shutil
+from distutils.dir_util import copy_tree
 from digisafe.digisafe.settings import STATIC_ROOT
 dst = ""
 for src in ["css/", 'js/', "fonts/", "imgs"]:
-    shutil.copy2("digisafe/static/"+src, STATIC_ROOT)
+    copy_tree("digisafe/static/"+src, STATIC_ROOT)
 
 cmd = 'python3 digisafe/manage.py compress --force'
 print(cmd)
