@@ -1,8 +1,10 @@
 {% load i18n static leaflet_tags geojson_tags %}
 
 {% block extrastyle %}{{ block.super }}
+    <qui></qui>
     {% leaflet_js %}
     {% leaflet_css %}
+    <qui></qui>
 {% endblock %}
 
 {% block mappa %}
