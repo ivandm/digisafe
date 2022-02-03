@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout,authenticate, login
 from django.urls import reverse
@@ -54,9 +54,10 @@ def loginLostView(request):
         form = AccountLoginLostForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            u = User.objects.filter(email=email)
+            # u = User.objects.filter(email=email)
+            u = get_object_or_404(User, email=email)
             if u: # se esite cambia crea la password temporanea
-                u = u[0]
+                # u = u[0]
                 t = TmpPassword(user=u)
                 t.set_client_ip(request)
                 t.save()
