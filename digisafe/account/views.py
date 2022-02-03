@@ -72,8 +72,8 @@ def loginLostView(request):
                 EmailMessage(
                     subject=_('Digi.Safe. new credentials'),
                     body=mex,
-                    from_email='from@example.com',
-                    reply_to=('from@example.com',),
+                    from_email='noreply@ircot.net',
+                    reply_to=('noreply@ircot.net',),
                     to=[email],
                 ).send(fail_silently=False)
                 return redirect(reverse('account:reset-password'))
@@ -103,8 +103,8 @@ def resetPasswordView(request):
                 EmailMessage(
                     subject=_('Digi.Safe. new password'),
                     body=mex,
-                    from_email='from@example.com',
-                    reply_to=('from@example.com',),
+                    from_email='noreply@ircot.net',
+                    reply_to=('noreply@ircot.net',),
                     to=[email],
                 ).send(fail_silently=False)
                 return redirect(reverse('account:login'))
@@ -131,8 +131,8 @@ def changePasswordView(request):
                 EmailMessage(
                     subject=_('Digi.Safe. new password'),
                     body=mex,
-                    from_email='from@example.com',
-                    reply_to=('from@example.com',),
+                    from_email='noreply@ircot.net',
+                    reply_to=('noreply@ircot.net',),
                     to=[email],
                 ).send(fail_silently=False)
             except BadHeaderError:
