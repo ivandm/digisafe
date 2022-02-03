@@ -31,9 +31,9 @@ os.system(cmd)
 #print(cmd)
 #os.system(cmd)
 
-#cmd = 'sudo chmod -R 777 %s' % os.getcwd()
-#print(cmd)
-#os.system(cmd)
+cmd = 'sudo chmod -R 777 %s' % os.getcwd()
+print(cmd)
+os.system(cmd)
 
 cmd = 'python3 digisafe/manage.py migrate'
 print(cmd)
