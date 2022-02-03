@@ -11,4 +11,6 @@ django-geojson
 jsonfield
 Pillow
 reportlab
+django_compressor
+django-libsass
 

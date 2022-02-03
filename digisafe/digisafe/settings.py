@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     # maps manage
     'leaflet',
     'djgeojson',
+
+    # SCSS compiler
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -140,7 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticdeploy'
+# STATIC_ROOT = BASE_DIR / 'staticdeploy'
+STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -204,3 +208,9 @@ EMAIL_HOST_USER = "noreply@ircot.net"
 EMAIL_HOST_PASSWORD = "DigiSafeeMail@01012022_*"
 # EMAIL_USE_SSL = True
 EMAIL_USE_TLS = True
+
+# SCSS compiler
+STATICFILES_FINDERS = ['compressor.finders.CompressorFinder',]
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)

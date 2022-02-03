@@ -27,6 +27,11 @@ cmd = 'python3 digisafe/manage.py collectstatic -c --no-post-process --noinput'
 print(cmd)
 os.system(cmd)
 
+cmd = 'python3 digisafe/manage.py compress --force'
+print(cmd)
+os.system(cmd)
+
+
 #cmd = 'sudo chgrp -R assoclinic %s' % os.getcwd()
 #print(cmd)
 #os.system(cmd)
