@@ -23,9 +23,9 @@ os.system(cmd)
 # os.remove("clinica/settings_config.py")
 # os.rename('clinica/settings_config_.py', 'clinica/settings_config.py')
 
-#cmd = 'python3 manage.py collectstatic -c --no-post-process --noinput'
-#print(cmd)
-#os.system(cmd)
+cmd = 'python3 manage.py collectstatic -c --no-post-process --noinput'
+print(cmd)
+os.system(cmd)
 
 #cmd = 'sudo chgrp -R assoclinic %s' % os.getcwd()
 #print(cmd)
