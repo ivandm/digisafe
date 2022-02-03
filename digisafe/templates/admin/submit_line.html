@@ -1,0 +1,56 @@
+{% load i18n admin_urls %}
+<div class="submit-row">
+{% block submit-row %}
+{%if not protocol or user.is_superuser or protocol.status == 'm' and protocol.owner == user %}
+    {% if show_save %}<input type="submit" value="{% translate 'Save' %}" class="default" name="_save">{% endif %}
+    {% if show_delete_link and original and not_close %}
+        {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
+        <p class="deletelink-box"><a href="{% add_preserved_filters delete_url %}" class="deletelink">{% translate "Delete" %}</a></p>
+    {% endif %}
+    {% if show_save_as_new %}<input type="submit" value="{% translate 'Save as new' %}" name="_saveasnew">{% endif %}
+    {% if show_save_and_add_another %}<input type="submit" value="{% translate 'Save and add another' %}" name="_addanother">{% endif %}
+    {% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% translate 'Save and continue editing' %}{% else %}{% translate 'Save and view' %}{% endif %}" name="_continue">{% endif %}
+    {% if protocol.checkAll and protocol.owner == user %}
+    <input type="submit" value="{% translate 'Insert request' %}" class="default" name="_richiestaprotocol">
+    {% endif %}
+{% endif %}
+{% if show_close or 1 %}<a href="{% url opts|admin_urlname:'changelist' %}" class="closelink">{% translate 'Close' %}</a>{% endif %}
+
+{%if protocol.status == 'r' and user.profile.director and protocol.course.need_institution %}
+<input type="submit" value="{% translate 'Load to institution' %}" class="default" name="_caricaprotocol">
+{%if status_form%}<input type="submit" value="{% translate 'Denied' %}" class="default" name="_declinaprotocol">{% endif %}
+{% endif %}
+
+{%if protocol.status == 'r' and user.profile.director and not protocol.course.need_institution %}
+<input type="submit" value="{% translate 'Authorize' %}" class="default" name="_autorizzaprotocol">
+{%if status_form%}<input type="submit" value="{% translate 'Denied' %}" class="default" name="_declinaprotocol">{% endif %}
+{% endif %}
+
+{% if protocol.status == 'c' and user.profile.institution and protocol.course.need_institution %}
+<input type="submit" value="{% translate 'Authorize' %}" class="default" name="_autorizzaprotocol">
+{%if status_form%}<input type="submit" value="{% translate 'Denied' %}" class="default" name="_negaprotocol">{% endif %}
+{% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% translate 'Update and continue editing' %}{% else %}{% translate 'Update and view' %}{% endif %}" name="_continue">{% endif %}
+{% endif %}
+
+{% if protocol.status == 'a' and user.profile.trainer %}
+<input type="submit" value="{% translate 'Finish' %}" class="default" name="_terminaprotocol">
+<input type="submit" value="{% if can_change %}{% translate 'Update and continue editing' %}{% else %}{% translate 'Update and view' %}{% endif %}" name="_continue">
+{% endif %}
+
+{% if protocol.status == 't' and user.profile.director %}
+    {% if protocol.checkAllSignedFiles == True and not protocol.course.need_institution %}
+    <input type="submit" value="{% translate 'Ok and Close' %}" class="default" name="_chiudiprotocol">
+    {% endif %}
+    {%if status_form%}<input type="submit" value="{% translate 'Denied' %}" class="default" name="_negaprotocol">{% endif %}
+{% endif %}
+
+{% if protocol.status == 't' and user.profile.institution and protocol.course.need_institution %}
+    {%if protocol.checkAllSignedFiles == True and protocol.checkAllCertificateLoads == True %}
+    <input type="submit" value="{% translate 'Ok and Close' %}" class="default" name="_chiudiprotocol">
+    {% endif %}
+    {%if status_form %}<input type="submit" value="{% translate 'Denied' %}" class="default" name="_negaprotocol">{% endif %}
+    {% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% translate 'Save and continue editing' %}{% else %}{% translate 'Save and view' %}{% endif %}" name="_continue">{% endif %}
+{% endif %}
+
+{% endblock %}
+</div>

@@ -1,0 +1,21 @@
+{% load i18n %}
+<table id="change-history">
+    <thead>
+    <tr>
+        <th scope="col">{% translate 'Date/time' %}</th>
+        <th scope="col">{% translate 'User' %}</th>
+        <th scope="col">{% translate 'Action' %}</th>
+        <th scope="col">{% translate 'Info' %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for action in objects_list %}
+    <tr>
+        <th scope="row">{{ action.datetime|date:"DATETIME_FORMAT" }}</th>
+        <td>{{ action.owner.get_username }}{% if action.owner.get_full_name %} ({{ action.owner.get_full_name }}){% endif %}</td>
+        <td>{{ action.text }}</td>
+        <td>{{ action.info }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

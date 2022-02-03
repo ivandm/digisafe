@@ -1,0 +1,106 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static protocoltags %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{% url 'admin:jsi18n' %}"></script>
+<link href="{% static 'css/digisafe.css' %}" rel="stylesheet" type="text/css">
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<!-- Libreria jQuery -->
+<script src="{% static 'js/jquery/jquery.js' %}"></script>
+
+<!-- Libreria pdf.js -->
+<script src="{% static 'js/pdfjs-2.12.313-dist/build/pdf.js' %}"></script>
+
+<!-- Libreria pdf-lib.js -->
+<script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+<script src="https://unpkg.com/downloadjs@1.4.7"></script>
+
+<!-- Script pdf per scegliere le coordinate delle firme nel pdf -->
+<script src="{% static 'js/pdf-view.js' %}"></script>
+    
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}">
+<style type="text/css">
+    #pdf-canvas{
+            cursor: crosshair;
+        }
+</style>
+{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ module_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+&rsaquo; {% translate 'Sign file' %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+  <div class="container-md">
+    <div class=" m-2">
+        <div class="col">
+            <!-- <div>Protocol {{protocol.pk}}/{{protocol.course.code}}</div> -->
+            <div>{% translate 'Type' %}: {{file.get_doc_type_display}} </div>
+            <!-- <div id="filepdf" >Originale: {{file.getSignedFile}}</div> -->
+            <!-- <div><span>File id: {{file.id}}</span></div> -->
+        </div>
+    </div>
+
+    <div id="canvas" class="border m-2 bg-secondary bg-opacity-75 text-center">
+    <div class="row bg-secondary bg-gradient text-white text-center p-2">
+        <!-- <div class="col-md-5 text-center"> -->
+            <!-- <div class="row"> -->
+            <!-- </div> -->
+            <!-- <div class="row" style="display: none;"> -->
+                <!-- <div class_="col"> -->
+                    <!-- <div class="input-group"> -->
+                        <!-- <button id="zoomout" class="btn bi bi-zoom-out px-2" ></button> -->
+                        <!-- <input type="range" class="form-control form-range" id="zoom" placeholder="zoom" min="0.5" max="2.0" step="0.25"> -->
+                        <!-- <button id="zoomin" class="btn bi bi-zoom-in px-2"></button> -->
+                    <!-- </div> -->
+                <!-- </div>  -->
+            <!-- </div> -->
+        <!-- </div> -->
+        <div class="col-1 "><div id="prev" class="btn btn-primary"><</div></div>
+        <div class="col-2 fw-bold text-center"><span id="page_num" class="text-center"></span> / <span id="page_count" class="text-center"></span></div>
+        <div class="col-1 "><div id="next" class="btn btn-primary">></div></div>
+        <div class="col-sm "><button id="delLastSign" class="btn btn-danger bi bi-x-circle"> Last sign</button></div>
+        <div class="col-sm "><button id="savePdf" class="btn btn-success bi bi-cloud-download"> Save</button></div>
+        <div class="col-sm "><button id="removeAllSigns" class="btn btn-danger bi bi-x-circle"> All signs</button></div>
+        <div class="col-md">{% translate 'Double ckick on file to insert sign' %}</div>
+    </div>
+        
+        <canvas id="pdf-canvas" class=""></canvas>
+    </div>
+    
+    <div style="display:none;">
+      <img id="source_img"
+           src="{{user.profile.sign.url}}"
+           width="100" height="50">
+    </div>
+  </div>
+<script>
+    const csrftoken   = '{{ csrf_token }}';
+    const user_id     = {{ user.id }};
+    const protocol    = {{protocol.pk}};
+    const fileid      = {{file.id}};
+    const txt_sign    = '{{user.last_name}} {{user.first_name}}';
+    const url         = '/document/{{file.getSignedFile}}';
+    const url_save    = '{% url "protocol:protocol-save-signs" %}';
+    const url_removeAllSigns = '{% url "protocol:protocol-remove-signs" %}';
+    const image = document.getElementById('source_img');
+</script>
+{% endblock %}

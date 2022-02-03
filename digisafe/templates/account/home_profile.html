@@ -1,0 +1,86 @@
+{% load i18n static leaflet_tags geojson_tags %}
+
+{% block extrastyle %}
+    {% leaflet_js %}
+    {% leaflet_css %}
+{% endblock %}
+
+<DIV class="m-2">
+<h1>Personal Profile Panel</h1>
+
+{% if pending %}
+    <div>
+        <h3>{% translate 'Pending request' %}</h3>
+        {% for p in pending %}
+        <div>
+            <a href="{% url 'companies:company-public-view' p.company.id %}" target="blank_">{{p.company}}</a>
+            <div>
+                <button class="btn btn-success" id="accept" request_id="{{p.id}}">{% translate 'Accept' %}</button>
+                <button class="btn btn-danger"  id="refuse" request_id="{{p.id}}">{% translate 'Refuse' %}</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    <div>
+        <script type='text/javascript' >
+            var csrfmiddlewaretoken = "{{ csrf_token }}";
+            var url_save_position = "{%  url "account:setposition" %}";
+            var viewSaveButton = true;
+        </script>
+        {% include 'maps/searchplace.html' %}
+    </div>
+</DIV>
+
+<script>
+function send_response(request_id, action, that){
+    $.ajax({
+        type: 'POST',
+        dataType:'json',
+        url: "{% url 'companies:company-request-user-action' %}",
+        data:  {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            request_id: request_id,
+            action: action,
+        },
+        success: function (response) {
+            // on successfull creating object
+            console.log(response);
+            if (response.accept == 'ok'){
+                $(that).parent().text("{% translate 'Accepted' %}");
+                //console.log("Accepted")
+            }
+            if (response.refuse == 'ok'){
+                $(that).parent().text("{% translate 'Refused' %}");
+                //console.log("Refused")
+            }
+            // response_from_html(response);
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            console.log("error ajax: ", response);
+            //var body = document.getElementById('body_result');
+            // body.innerHTML = "Errore nella richiesta";
+        }
+    });
+}
+
+window.onload = function() {
+    $("button#accept").each(function(el){
+        $(this).click(function(e) {
+            console.log("accept");
+            var resp = send_response($(this).attr("request_id"), "accept", this);
+            console.log(resp);
+        });
+    });
+
+    $("button#refuse").each(function(el){
+        $(this).click(function(e) {
+            console.log("refuse");
+            send_response($(this).attr("request_id"), "refuse", this);
+        });
+    });
+
+
+}
+</script>

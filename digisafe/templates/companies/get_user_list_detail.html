@@ -1,0 +1,14 @@
+{% load i18n companytags %}
+
+{% for u in object_list %}
+<div class="row gy-2 my-1">
+    <div class="col">{{u.last_name}} {{u.first_name}} </div>
+    <div class="col">{{u.email}}</div>
+    {% pending_request request u as pending %}
+    {% if pending %}
+    <div class="col-2">Pending...</div>
+    {% else %}
+    <div class="col-2"><button id="user_click" class="btn btn-primary" user_id="{{u.id}}">{% translate "Request" %}</button></div>
+    {% endif %}
+</div>
+{% endfor %}

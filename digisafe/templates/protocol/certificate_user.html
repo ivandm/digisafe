@@ -1,0 +1,205 @@
+{% load i18n static protocoltags %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:'en-us' }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<head>
+<title>{% block title %}Register protocol {{protocol.pk}} {% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/certificate.css' %}" >
+<!-- <script src="{% static 'js/jquery/jquery.js' %}"></script> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="{% static 'js/print.js' %}"></script>
+
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+
+</head>
+ 
+<body class="">
+{% include "protocol/print_obj.html" %}
+<!-- Container -->
+<div id="container" class="">
+  <div class="paginaA4" id="">
+    <div id="ModelloAttestatoNew" class="height100">
+        <div class="intestazione">
+          <div class="row center">
+            <div class="col">
+                <div class="">
+                    <div>
+                        <!-- LOGO TRAINING PROVIDER IRCOT -->
+                        <img src="https://card.ircot.co.uk/images/modelloattestati/provider_LOGO.png" name="logo">
+                    </div>
+                    <div class="fitText" size="16">
+                        {% translate "Training center" %}
+                        <br><i><b>{{protocol.center}}</b></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+                <div class="">
+                    <div>
+                        <!-- <img class="qrcode" src="https://card.ircot.co.uk/qrcodeimg/user_SBRCRS77E14A182B_IRCOT229_FIRE.HR.png?nocache=1871" name="QRCODE"> -->
+                        <img class="qrcode" <img src="{{qrcode_img}}" name="QRCODE">
+                    </div>
+                    <div>{% translate "Certificate check" %}</div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="attestato_body">
+            <div class="dati_corso">
+                <div class="center">
+                        <h1 class="fs-1 fw-bold center">
+                        {% translate "Certificate" %}
+                        </h1>
+                        <span class="ModAtt_sub_attestato">
+                        {% translate "We certify that" %}
+                        </span>
+                </div>
+                <div class="center">
+                    <div class="fw-bold height100 fitTextNameTrainer" size="30">
+                        {{trainer.last_name}} {{trainer.first_name}}
+                    </div>
+                </div>
+                <div class="mx-3">
+                  <div class="row">
+                    <div class="col-3 lh-1">
+                        <span class="fitText p-1">
+                        <u>{% translate "Birth" %}</u>: <br>
+                        {{trainer.anagrafica.getPlaceTemplate}}<br>
+                        {% translate "Fiscal code" %}: 
+                        {{trainer.anagrafica.fiscal_code}}
+                        </span>
+                      </div>
+                    <div class="col center">
+                        <div class="fw-bold">
+                        {% translate "attended the training course" %}
+                        </div>
+                        <div class="center">
+                            <span class="fs-3">{{protocol.course.feature.title}}</span><br>
+                            <span class="">{{protocol.course.feature.laws}}</span><br>
+                        </div>
+                        <div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="">{% translate "Typology (new/update)" %}: </span>
+                                    <span class="text-uppercase">{{protocol.get_type_display}}</span>
+                                </div>
+                                <div class="col center">
+                                    <span class=""><i>{% translate "Risk" %} {{protocol.course.feature.get_risk_display}}</i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                  </div>
+                  <div class="center countries fitText" style="overflow: hidden;">
+                        {% translate "Country" %}: {{protocol.course.country_code}}
+                  </div>  
+                </div>
+            </div>
+            <div id="date_corso" class="date_corso">
+                <div class="row-table">
+                    <div class="scaleable-wrapper-page height100 tabelleDate ">
+                        <div class="scaleable-wrapper-content" fittop="1">
+                          <table class="ModAtt_smallest">
+                              <tbody><tr>
+                                <th class="ModAtt_left">{% translate "Place" %}</th>
+                                <th>{% translate "Date" %}</th>
+                                <th>{% translate "Time" %}</th>
+                                <th>{% translate "Type" %}</th>
+                                <!--th>Docente</th-->
+                              </tr>
+                            </tbody>
+                            <tbody>
+                                {%for s in protocol.session_set.all%}
+                                <tr>
+                                    <td class="ModAtt_left">{{s.getPlace}}</td>
+                                    <td>{{s.date}}</td>
+                                    <td>{{s.start_time}}/{{s.end_time}}</td>
+                                    <td>{{s.get_subject_type_display}}</td>
+                                    <!--td></td-->
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="firme">
+                <div class="row-table">
+                    <div class="">
+                      <div class="row">
+                        <div class="col center fitText">
+                          {% if protocol.course.need_institution %}
+                            {% translate "Training project authorized by the subject" %} {{protocol.institution}}<br>
+                            {% for a in protocol.authorizations_set.all %}
+                                protocol {{a.auth_prot}} ​​of {{a.datetime|date}}<br>
+                            {% endfor %}
+                          {% else %}
+                            {{protocol.getRequalifictionMessage}}<br>
+                          {% endif %}
+                            {{protocol.getRequalifictionMessage}}<br>
+                            <b>{% translate "Qualification date" %} {{protocol.getQualification}}</b><br>
+                            <b>{% translate "Qualification expire date" %} {{protocol.getExpiration}}</b>
+                        </div>
+                        <div class="col  fs-6">
+                            
+                        </div>
+                        <div class="col center">
+                            <div class="" >
+                                {%if protocol.course.need_institution %}
+                                {% translate "Institution" %}
+                                {%else%}
+                                {% translate "Center" %}
+                                {%endif%}
+                            </div>
+                            <div>
+                                {% get_certificate_center_logo protocol as logo %}
+                                {%if logo %}
+                                <img style="width:80px;" src="{{logo}}" name="QRCODE">
+                                {%endif%}
+                            </div>
+                            <div class=""  style="margin-bottom: 0cm">
+                                {%if protocol.course.need_institution %}
+                                    {{protocol.institution}}
+                                {%else%}
+                                    {{protocol.center}}
+                                {%endif%}
+                            </div>                            
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>        
+        </div>    
+        <div class="attestato_footer">
+            <div class="row-table row">
+                <div class="col-4">
+                    <span class="text-uppercase">
+                        {% translate "Certificate protocol" %}
+                    </span>
+                    <br><b>{{protocol.pk}}/{{protocol.course.code}}</b> 	
+                </div>
+                <div class="col text-end">
+                    <span class="fitText ">
+                        {% translate "Verify the authenticity of this certificate with the QRCODE shown above" %}<br>
+                        {% translate "Otherwise on the web site" %} <b><a class="" href="https://{{web_site}}">{{web_site}}</a></b>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  {% include 'protocol/certificate_content.html' %}
+</div>
+<!-- END Container -->
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<div class="inline-group">
+<h2>Check course settings</h2>
+<div class="check">
+    <h4><b>TEORIA</b> </h4>
+    <div class="{%if protocol.checkHoursTheory%}success{%else%}danger{%endif%}">
+        Ore inserite: {{protocol.getHoursTheory}} / 
+        Ore richieste: {{protocol.getHoursTheoryRequest}} 
+        {% if not protocol.checkHoursTheory %}
+        / <span>Ore Mancanti: {{protocol.getDifferenceHoursTheory}}</span>
+        {%endif%}
+    </div>
+</div>
+<div class="check">
+    {% if protocol.checkPractice %}
+    <h4><b>PRATICA</b> </h4>
+    <div class="{%if protocol.checkNumTrainer%}success{%else%}danger{%endif%}">
+        {%if protocol.checkNumTrainer%}
+            Trainer pratica sufficienti
+        {%else%}
+            <span>Trainer pratica NON sufficienti</span>
+            Trovati più di {{protocol.getPracticeLearnersPerTainer}} discenti per ogni docente
+        {%endif%}
+    </div>
+    <div class="{%if protocol.checkHoursPractice%}success{%else%}danger{%endif%}">
+        {%if protocol.checkHoursPractice%}
+            Ore di pratica sufficienti
+        {%else%}
+            <span>Ore di pratica NON sufficienti</span>
+            Inserite: {{protocol.getHoursPractice}}
+            Richieste: {{protocol.getHoursPracticeRequest}}
+            Rimanenti:  {{protocol.getDifferenceHoursPractice}}
+        {%endif%}
+    </div>
+    {%endif%}
+</div>
+<div class="check">
+    <h4><b>Check all</b></h4>
+    {%if protocol.checkAll%}
+    <div class="checkall">
+        <div class="success">Check passed</div>
+    </div>
+    {%else%}
+    <div class="checkall">
+        <div class="danger"><span>Check NOT passed</span></div>
+    </div>
+    {%endif%}
+</div>
+</div>
+    

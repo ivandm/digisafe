@@ -1,0 +1,83 @@
+{% load i18n static protocoltags %}
+{% for pag, learners_page in learners.items %}
+<div class="verbale-pagina paginaA4 page-break" id="">
+    <div class="verbale-pagina-elenco height100 " id="">
+        <div class="header-page">
+            <div class="row-table row mx-0">
+                <div class="col logo"><img src="{% static protocol.center.logo.url %}"></div>
+                <div class="col registro strong">
+                    {% translate "Course protocol" %}<br>
+                    {{protocol.pk}}/{{protocol.course.code}}</div>
+                <div class="col provider strong">{% translate "Exam attendances list" %}</div>
+            </div>
+        </div>
+        
+        <div class="body-page ">
+            <div class="scaleable-wrapper-content" fittop="1">
+              <div class="tabellaDiscenti">
+                <!-- head Table-->
+                <div class="row-table headTable row mx-0">
+                    <div class="col-1   border headTableVERB">N.</div>
+                    <div class="col   border headTableVERB">{% translate "Name" %}</div>
+                    <div class="col   border headTableVERB">{% translate "Fiscal code" %}</div>
+                    <div class="col   border headTableVERB">{% translate "Birth & Place" %}</div>
+                    <div class="col-1   border headTableVERB">{% translate "% Hours" %}</div>
+                    <div class="col-1   border headTableVERB">{% translate "Result (pos/neg)" %}</div>
+                    <div class="col   border headTableVERB">{% translate "Sign" %}</div>
+                </div>
+                <!-- body Table-->
+                <!-- Di seguito Stampa elenco discenti-->
+                {% for l in learners_page %}
+                <div class="mx-0 signTableVERB row">
+                    <!-- N. -->
+                    <div class="col-1 signTableVERB border">
+                        <div class="fitText" fittop="1">
+                        {% count_attendance forloop.counter forloop.parentloop.counter %}
+                        </div>
+                    </div>
+                    <!-- COGNOME E NOME -->
+                    <div class="col signTableVERB border ">
+                        <div class="fitText" fittop="1">
+                        {{l.user.last_name}} {{l.user.first_name}}
+                        </div>
+                    </div>
+                    <!-- CODICE FISCALE -->
+                    <div class="col signTableVERB border">
+                        <div class="fitText" fittop="1">
+                        {{l.user.anagrafica.fiscal_code}}
+                        </div>
+                    </div>
+                    <!-- LUOGO E DATA DI NASCITA -->
+                    <div class="col signTableVERB border ">
+                        <div class="fitText" fittop="1">
+                        {{l.user.anagrafica.getPlaceTemplate}}
+                        </div>
+                    </div>
+                    <!-- % ORE SVOLTE -->
+                    <div class="col-1  border">
+                     
+                    </div>
+                    <!-- ESITO -->
+                    <div class="col-1  border">
+                     
+                    </div>
+                    <!-- FIRMA DISCENTE -->
+                    <div class="col  border">
+                     
+                    </div>
+                    
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+        </div>
+        
+               
+    </div>
+    <div class="footer-page">
+        <div class="row-table">
+            <div class="page_number strong">{% translate "Page" %} *{{forloop.counter|add:"1"}}/{{tot_learners_pages|add:"1"}}* </div>
+        </div>
+    </div> 
+</div>
+{% endfor %}

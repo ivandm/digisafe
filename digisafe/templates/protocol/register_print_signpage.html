@@ -1,0 +1,111 @@
+{% load i18n static protocoltags %}
+
+{% for session, page_session_learners  in sessions %}
+{% for page, learners_page in page_session_learners.items %}
+<div class="registro-pagina paginaA4 page-break" id="">
+    <div class="registro-pagina-firme height100" id="">
+        <div class="header-page">
+            <div class="row-table row">
+                <div class="logo col"><img src="{% static protocol.center.logo.url %}"></div>
+                <div class="registro strong col">
+                    {% translate "Course protocol" %}/{% translate "Course code" %}<br>
+                    {{protocol.course.pk}}/{{protocol.course.code}}
+                </div>
+                <div class="giorno strong col">
+                    {% translate "Sign page on" %}<br> 
+                    {{session.date}} {{session.start_time}}/{{session.end_time}}  <br> 
+                    <span><span class=""> </span>{% translate "Trainer" %}: </span>
+                    <span><span class=""></span>{{session.trainer.last_name}} {{session.trainer.first_name}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="body-page">
+            <div class="row-table_">
+                <div class="colFirmeDiscenti row">
+                    <div class="col-8 ps-4">
+                        <div class="row-table row">
+                            <div class="colwidth_firme border headTable col-1">N</div>
+                            <div class="colwidth_firme border headTable col-2">{% translate "Time IN" %}</div>
+                            <div class="colwidth_firme border headTable col-2">{% translate "Time OUT" %}</div>
+                            <div class="colwidth_firme border headTable col">{% translate "Sing IN" %}</div>
+                            <div class="colwidth_firme border headTable col">{% translate "Sing OUT" %}</div>
+                        </div>
+                        {% for l in learners_page %}
+                        <div class="row-table row">
+                            <div class="colwidth_firme border col-1">{% count_attendance forloop.counter forloop.parentloop.counter %}</div>
+                            <div class="colwidth_firme border col-2">{{session.start_time}}</div>
+                            <div class="colwidth_firme border col-2">{{session.end_time}}</div>
+                            <div class="colwidth_firme border col"></div>
+                            <div class="colwidth_firme border col"></div>
+                        </div>
+                        {%endfor%}                        
+                    </div>    
+                    <div class="colFirmeDocenti col-4">
+                        <div class="boxed center strong">{% translate "Topics" %}</div>
+                        <div class="boxed">
+                            <span class="riga strong">{%if session.subject_type == 't'%}{% translate "Theory" %}{%else%}{% translate "Practice" %}{%endif%}</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">{% translate "Hours from" %} ......... {% translate "to" %} .........</span>
+                            <span class="riga">{% translate "Trainer" %}</span>
+                            <span class="">{% translate "Sign" %}</span>
+                            <span class="riga">.</span>
+                        </div>
+                        <div class="boxed">
+                            <span class="riga strong">{%if session.subject_type == 't'%}{% translate "Theory" %}{%else%}{% translate "Practice" %}{%endif%}</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">{% translate "Hours from" %} ......... {% translate "to" %} .........</span>
+                            <span class="riga">{% translate "Trainer" %}</span>
+                            <span class="">{% translate "Sign" %}</span>
+                            <span class="riga">.</span>
+                        </div>
+                        <div class="boxed">
+                            <span class="riga strong">{%if session.subject_type == 't'%}{% translate "Theory" %}{%else%}{% translate "Practice" %}{%endif%}</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">{% translate "Hours from" %} ......... {% translate "to" %} .........</span>
+                            <span class="riga">{% translate "Trainer" %}</span>
+                            <span class="">{% translate "Sign" %}</span>
+                            <span class="riga">.</span>
+                        </div>
+                        <div class="boxed">
+                            <span class="riga center strong">{% translate "NOTE" %}</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">-</span>
+                            <span class="riga">{% translate "Sign" %}</span>
+                        </div>
+                        <div class="boxed">
+                            <span class="riga center strong">{% translate "Attendance" %}</span>
+                            <span class="riga">{% translate "Presents" %}</span>
+                            <span class="riga">{% translate "Absents" %}</span>
+                        </div>
+                        <div class="boxed">
+                            <span class="center strong">{% translate "Director Sign" %}</span>
+                            <br>
+                            <span class="riga">.</span>
+                        </div>
+                        <div class="boxed"></div>
+                    </div>     
+                </div> 
+            </div>
+        </div>
+        
+        <div class="footer-page">
+            <div class="row-table">
+                <div class="page_number strong">{% translate "Page" %} *{{ page }}* {% translate "of" %} *{{tot_pages}}*</div>
+            </div>
+        </div>        
+    </div>
+</div>
+{% endfor %}
+{% endfor %}

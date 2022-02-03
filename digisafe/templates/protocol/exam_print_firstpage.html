@@ -1,0 +1,94 @@
+{% load i18n static %}
+<div class="registro-pagina paginaA4 page-break" id="">
+    <div class="verbale-prima-pagina height100" id="">
+        <div class="header-page">
+            <div class="row-table row">
+                <div class="col logo"><img src="{% static protocol.center.logo.url %}"></div>
+                <div class="col center_vertical strong">{% translate "Exam reporter" %}</div>
+                <div class="col center strong">
+                    {% translate "Exam center provider" %}
+                    <div class="center_vertical strong">
+                        <span>{{protocol.center}}</span><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="verbale-prima-pagina body-page w-100">
+            <div class="scaleable-wrapper-content w-100 " fittop="1">
+                <div class="row-table">
+                    <h3 class="center">{% translate "Exam reporter" %}</h3>
+                </div>
+                <div class="row-table">
+                  <div class="col_left">
+                    <div class="fw-bold fs-3">{% translate "Training project" %}</div>
+                    <p>
+                    <span>{% translate "Course protocol" %}: <b>{{protocol.pk}}/{{protocol.course.code}}</b> </span><br>
+                    <span>Date: {{protocol.datetime}} </span>
+                    </p>
+                  </div>
+                  <div class="col_right me-6 pe-6">
+                    <div class="fw-bold fs-3">{% translate "Type" %}</div>
+                    <div right="">{{protocol.get_type_display}}</div>
+                  </div>
+                </div>
+                <hr>
+                <div class="row-table">
+                <h3 class="center">{% translate "Commission" %}</h3>
+                <div class="row fw-bold mb-3">
+                    <div class="col  center">{% translate "Examiner name" %}</div>
+                    <div class="col-2  center">{% translate "Members" %}</div>
+                    <div class="col  center">{% translate "Sign" %}</div>
+                </div>
+                <div class="row">
+                    <div class="col commissione_left center">____________________________________</div>
+                    <div class="col-2 commissione_center center">{% translate "Chairman" %}</div>
+                    <div class="col commissione_right center">____________________________________</div>
+                </div>
+                <div class="row">
+                    <div class="col commissione_left center">____________________________________</div>
+                    <div class="col-2 commissione_center center">{% translate "Component" %}</div>
+                    <div class="col commissione_right center">____________________________________</div>
+                </div>
+                <div class="row">
+                    <div class="col commissione_left center">____________________________________</div>
+                    <div class="col-2 commissione_center center">{% translate "Component" %}</div>
+                    <div class="col commissione_right center">____________________________________</div>
+                </div>
+                <div class="row">
+                    <div class="col commissione_left center">____________________________________</div>
+                    <div class="col-2 commissione_center center">{% translate "Component" %}</div>
+                    <div class="col commissione_right center">____________________________________</div>
+                </div>
+                <div class="row">
+                    <div class="col commissione_left center">____________________________________</div>
+                    <div class="col-2 commissione_center center">{% translate "Component" %}</div>
+                    <div class="col commissione_right center">____________________________________</div>
+                </div>
+                <div class="row">
+                    <div class="col  "><p>{% translate "Date" %}</p><p>____ / ____ / ________</p></div>
+                    <div class="col  center">
+                        <span>{% translate "Director sign" %}</span><br>
+                        <span class="fst-italic">{{protocol.center.director.first_name}} {{protocol.center.director.last_name}}</span><br>
+                        <span>____________________________________</span><br>
+                    </div>
+                </div>
+                </div>
+                <hr>
+                <div class="position-absolute bottom-0 start-0 w-100">
+                    <div class="fw-bold fs-4">{% translate "METHOD OF VERIFICATION CARRIED OUT" %}:</div>
+                    <span>[ ] {% translate "MULTIPLE ANSWER TEST" %}</span><br>
+                    <span>[ ] {% translate "OPEN ANSWER TEST" %}</span><br>
+                    <span>[ ] {% translate "ORAL EXAM" %}</span><br>
+                    <span>[ ] {% translate "PRACTICE TEST" %}</span>
+                    <div class="mb-2 me-4 border-bottom border-dark">[ ] {% translate "OTHERS" %}:</div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="registro-pagina-elenco">
+        <div class="footer-page">
+            <div class="page_number strong">{% translate "Page" %} *1/{{tot_learners_pages|add:"1"}}*</div>
+        </div> 
+    </div>
+</div>

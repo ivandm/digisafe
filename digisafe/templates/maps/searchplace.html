@@ -1,0 +1,57 @@
+{% extends "maps/maps_base.html" %}
+{% load i18n static leaflet_tags geojson_tags mapstags %}
+
+{% block mappa %}
+
+<div class="container">
+    Mappa
+
+    {% leaflet_map "map" callback="window.map_init" %}
+        <div>
+            <div class="my-2">
+                <b>{% translate 'Select center' %}</b>
+                <p id="select_center"></p>
+                <button class="btn btn-primary" id="savePosition" style="display:none;" onclick="savePositionFunc()">{% translate 'Save position' %}</button>
+            </div>
+            <div>
+                <b>{% translate 'Address Lookup' %} </b>
+                <div id="search">
+                    <input class="form-control"  type="text" name="addr" value="" id="addr" size="58" />
+                    <button class="btn btn-primary" type="button" onclick="addr_search();">{% translate 'Search' %}</button>
+                    <div id="results"></div>
+                </div>
+            </div>
+
+        </div>
+</div>
+<script type='text/javascript' >
+    var init_position = {% get_init_position user %}
+    /*
+        Variabili da settare per la gestione del salvataggio della posizione dell'utente
+        Vanno dichiarate prima di includere il presente file
+        */
+    // csrfmiddlewaretoken:  il token da inviare per salvare la posizione
+    // url_save_position:    url dove inviare la posizione da salvare
+    // viewSaveButton:       default false. Abilita il bottone per salvare la posizione dell'account.
+
+    //collection:           marker da visulizzare
+
+</script>
+
+<script src="{% static 'js/map_search.js' %}"></script>
+
+<style>
+    #map{  /* all maps */
+        height: 100%;
+    }
+    .address{ cursor: pointer;}
+    .leaflet-center-icon{
+        color: red;
+	    margin-left: -12px;
+        margin-top: -12px;
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+    }
+</style>
+{% endblock %}

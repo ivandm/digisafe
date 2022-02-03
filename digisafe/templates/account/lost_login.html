@@ -1,0 +1,27 @@
+{% extends "home/home_base.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+{{ form.media }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div id="content-main">
+
+    <form action="" method="post" id="login-form">{% csrf_token %}
+      <div class="form-row">
+        {{ form.email.errors }}
+        <label for="" class="form-label">{{ form.email.label_tag }}</label> {{ form.email }}
+      </div>
+
+      <div class="submit-row text-center m-5">
+        <input type="submit" value="{% translate 'Request' %}">
+      </div>
+    </form>
+
+    </div>
+</div>
+{% endblock %}

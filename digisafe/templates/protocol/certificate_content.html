@@ -1,0 +1,19 @@
+{% load i18n static protocoltags %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<div class="paginaA4" id="">
+    <div>
+        <b>{% translate "Training" %}</b>
+        <span>{% translate "Theory hours" %} {{protocol.course.new.theory_html}}</span>
+        <span>{% translate "Practice hours" %} {{protocol.course.new.practice_html}}</span>
+    </div>
+    <div>
+    <b>{% translate "Update" %}</b>
+    <span>{% translate "Theory hours" %} {{protocol.course.update.theory_html}}</span>
+        <span>{% translate "Practice hours" %} {{protocol.course.update.practice_html}}</span>
+    </div>
+    <div>
+    {% get_certificate_content_i18n protocol LANGUAGE_CODE %}
+    </div>
+</div>

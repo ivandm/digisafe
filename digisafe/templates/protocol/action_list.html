@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block extrastyle %}{{ block.super }}{{media}}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ module_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+&rsaquo; {% translate 'Actions' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div class="module">
+
+{% if objects_list %}
+    {% include 'protocol/action_list_objects.html' %}
+{% else %}
+    <p>{% translate 'This object doesn’t have a actions history. It probably wasn’t added via this admin site.' %}</p>
+{% endif %}
+</div>
+</div>
+{% endblock %}

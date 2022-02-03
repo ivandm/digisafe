@@ -1,0 +1,33 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block extrastyle %}{{ block.super }}{{media}}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ module_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+&rsaquo; {% translate 'Denied confirm' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div class="module">
+
+    <form method="post">{% csrf_token %}
+    {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+    <div>
+        {{ form }}
+    </div>
+    <div class="submit-row">
+        <input type="submit" value="{% translate 'Conferma Declina' %}" class="default" name="_declinaprotocol">
+        <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}" class="closelink">{% translate "No, take me back" %}</a>
+    </div>
+    </form>
+    
+</div>
+</div>
+{% endblock %}

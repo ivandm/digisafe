@@ -1,0 +1,63 @@
+{% load i18n static protocoltags %}
+
+{% for pag, learners_page in learners.items %}
+<div class="registro-pagina paginaA4 page-break" id="">
+    <div class="registro-pagina-elenco height100" id="">
+        <div class="header-page">
+            <div class="row-table row">
+                <div class="logo col"><img src="{% static protocol.center.logo.url %}"></div>
+                <div class="registro strong col">
+                    {% translate "Course protocol" %}/{% translate "Course code" %}<br>
+                    {{protocol.course.pk}}/{{protocol.course.code}}
+                </div>
+                <div class="provider strong col" >{% translate "Attendance list page" %}</div>
+            </div>
+        </div>
+        <div class="scaleable-wrapper-page body-page">
+            <div class="scaleable-wrapper-content" fittop="1">
+              <div class="tabellaDiscenti container">
+                <!-- head Table-->
+                <div class="headTable row text-uppercase  fw-bold">
+                    <div class="col-1 border">N.</div>
+                    <div class="col border">{% translate "Surname, fisrt name" %}</div>
+                    <div class="col border">{% translate "Fiscal code" %}</div>
+                    <div class="col border">{% translate "Birth place and date " %}</div>
+                </div>
+                <!-- body Table-->
+                <!-- Di seguito Stampa elenco discenti-->
+                
+                {% for l in learners_page %}
+                <div class="row-table row">
+                    <div class="colwidth_elenco border col-1">
+                        <div class="" fittop="1">
+                        {% count_attendance forloop.counter forloop.parentloop.counter %}
+                        </div>
+                    </div>
+                    <div class="colwidth_elenco border col">
+                        <div class="fitText" fittop="1">
+                        {{l.user.last_name}} {{l.user.first_name}}</div>
+                    </div>
+                    <div class="colwidth_elenco border col">
+                        <div class="fitText" fittop="1">
+                        {{l.user.anagrafica.fiscal_code}} </div>
+                    </div>
+                    <div class="colwidth_elenco border text-container col">
+                        <div class="fitText" fittop="1">
+                        {{l.user.anagrafica.getPlaceTemplate}}</div>
+                    </div>
+                </div>   
+                {%endfor%}
+              </div>    
+            </div>
+        </div>
+        
+        <div class="footer-page">
+            <div class="row-table">
+                <div class="page_number strong">{% translate "Page" %} *{{ pag }}* {% translate "of" %} *{{tot_pages}}*</div>
+                
+            </div>
+        </div>        
+    </div>
+</div>
+
+{% endfor %}

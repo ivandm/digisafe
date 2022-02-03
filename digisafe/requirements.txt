@@ -1,0 +1,13 @@
+#sudo apt-get install binutils libproj-dev gdal-bin
+# pip install -r requirements.txt
+django-tinymce
+PyPDF2
+numpy
+qrcode
+django-weasyprint
+django-leaflet
+django-geojson
+jsonfield
+Pillow
+reportlab
+

@@ -1,0 +1,103 @@
+{% load i18n static %}
+
+<div class="container">
+    <div class="" >
+      <form class="row g-3" onsubmit="search_user">
+        <label for="user" class="col-sm-2 col-form-label">{% translate "User" %}</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control-plaintext" id="user" value="">
+        </div>
+        <div class="col-auto">
+            <button type="submit" id="search_button" class="btn btn-primary mb-3">{% translate "Search" %}</button>
+        </div>
+      </form>
+    </div>
+    <div class="head fw-bold">
+        <div class="row">
+            <div class="col">{% translate "User" %}</div>
+            <div class="col">{% translate "Info" %}</div>
+            <div class="col-2">{% translate "Associate" %}</div>
+        </div>
+    </div>
+    <div class="body" id="body_result">
+
+    </div>
+
+</div>
+<script>
+window.onload = function() {
+    document.getElementById('search_button').addEventListener('click', search_user);
+    
+    
+    function response_from_html(response){
+        var body = document.getElementById('body_result');
+        body.innerHTML = response;
+        $("button#user_click").each(function(el){
+            console.log(el);
+            $(this).click(function(e) {
+                console.log( $(this) );
+                var that = this;
+                var user_id = $(this).attr("user_id");
+                url = "{% url 'companies:company-request-user' %}";
+                var data = {};
+                data["user_id"] = user_id;
+                $.ajax({
+                    type: 'GET',
+                    dataType:'json',
+                    url: url,
+                    data: data,
+                    success: function (response) {
+                        // on successfull creating object
+                        console.log(response);
+                        if (response.save == 'ok'){
+                            $(that).attr("disabled");
+                            $(that).addClass("disabled");
+                            $(that).text("{% translate 'Pending...' %}");
+                            console.log("disabled")
+                        }
+                        // response_from_html(response);
+                    },
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log("error ajax: ", response);
+                        //var body = document.getElementById('body_result');
+                        // body.innerHTML = "Errore nella richiesta";
+                    }
+                });
+            });
+        })
+        
+    }
+    
+    function search_user(e){
+        console.log("search_user");
+        e.preventDefault();
+        var slug = document.getElementById('user').value;
+        var url = "{% url 'companies:company-user-search' %}";
+        var data = {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    slug: slug,
+            }
+        $.ajax({
+            type: 'POST',
+            // dataType:'json',
+            url: url,
+            data: data,
+            success: function (response) {
+                // on successfull creating object
+                // console.log(response);
+                response_from_html(response);
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                console.log("error ajax: ", response);
+                var body = document.getElementById('body_result');
+                body.innerHTML = "Errore nella richiesta";
+            }
+        });
+    }
+    
+    
+}
+
+</script>

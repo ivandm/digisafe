@@ -1,0 +1,61 @@
+{% extends "home/home_base.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+{{ form.media }}
+{% endblock %}
+
+
+{% block content %}
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+{% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">
+    {{ error }}
+</p>
+{% endfor %}
+{% endif %}
+
+<div class="container">
+<div id="content-main">
+{% if error_login %}
+<div class="bg-danger p-2 text-white">{{error_login}}</div>
+{% endif %}
+{% if user.is_authenticated %}
+<p class="errornote">
+{% blocktranslate trimmed %}
+    You are authenticated as {{ username }}, but are not authorized to
+    access this page. Would you like to login to a different account?
+{% endblocktranslate %}
+</p>
+{% endif %}
+
+<form action="" method="post" id="login-form">{% csrf_token %}
+  <div class="form-row">
+    {{ form.username.errors }}
+    <label for="" class="form-label">{{ form.username.label_tag }}</label> {{ form.username }}
+  </div>
+  <div class="form-row">
+    {{ form.password.errors }}
+    <label for="" class="form-label">{{ form.password.label_tag }}</label> {{ form.password }}
+    <input type="hidden" name="next" value="{{ next }}">
+  </div>
+  {% url 'account:login-lost' as login_lost_url %}
+  {% if login_lost_url %}
+  <div class="password-reset-link mt-3">
+    <a href="{{ login_lost_url }}">{% translate 'Forgotten your password or username?' %}</a>
+  </div>
+  {% endif %}
+  <div class="submit-row text-center m-5">
+    <input type="submit" value="{% translate 'Log in' %}">
+  </div>
+</form>
+
+</div>
+</div>
+{% endblock %}

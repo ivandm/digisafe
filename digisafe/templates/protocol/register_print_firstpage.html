@@ -1,0 +1,104 @@
+{% load i18n static %}
+<div class="registro-pagina paginaA4 page-break" id="">
+    <div class="registro-prima-pagina height100" id="">
+        <div class="header-page">
+            <div class="row">
+                <div class="col logo"><img src="{% static protocol.center.logo.url %}"></div>
+                <div class="col registro registro_center_vertical strong text-capitalize">{% translate "Attendance register" %}</div>
+                <div class="col provider strong">
+                    {%if protocol.course.need_institution%}
+                        {% translate "Institution name" %}
+                    {%else%}
+                        {% translate "Traininig provider" %}
+                    {%endif%}
+                    <div class="registro_center_vertical strong">
+                        <span>
+                        {%if protocol.course.need_institution%}
+                            {{protocol.institution}}
+                        {%else%}
+                            {{protocol.center}}
+                        {%endif%}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="body-page">
+            <div class="" fittop="1">
+                <div class="row">
+                  <div class="col">
+                    <div class="fw-bold">{% translate "Course protocol" %}</div>
+                    <div right="">{{protocol.pk}}</div>
+                  </div>
+                  <div class="col">
+                    <div class="fw-bold">{% translate "Code course" %}</div>
+                    <div right="">{{protocol.course.code}}</div>
+                  </div>
+                  <div class="col">
+                    <div class="fw-bold">{% translate "Type" %}</div>
+                    <div right="">{{protocol.get_type_display}}</div>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <div class="fw-bold">{% translate "Title" %}</div>
+                        <div right="">{{protocol.course.feature.title}}</div>
+                    </div>
+                    <div class="col">
+                        <div class="fw-bold">{% translate "Description" %}</div>
+                        <div right="">{{protocol.course.feature.desc}}</div>
+                        <div right=""><span>{% translate "Law" %}: </span>{{protocol.course.feature.laws}}</div>
+                    </div>
+                </div>
+                <hr>
+                <div class="fw-bold fs-4">{% translate "Training sessions" %}</div>
+                <div class="row fw-bold">
+                    <div class="col-4">{% translate "PLACE"%}</div>
+                    <div class="col-2">{% translate "Date"%}</div>
+                    <div class="col-2">{% translate "Type"%}</div>
+                    <div class="col-4">{% translate "Trainer"%}</div>
+                </div>
+                {%for s in protocol.session_set.all%}
+                <div class="session-row row">
+                    <div class="col-4"><span>{{s.city}}<br>{{s.address}}</span></div>
+                    <div class="col-2">{{s.date}}<br>{{s.start_time}}/{{s.end_time}}</div>
+                    <div class="col-2">{{s.get_subject_type_display}}</div>
+                    <div class="col-4">{{s.trainer.first_name}} {{s.trainer.last_name}}<br>{{s.trainer.anagrafica.fiscal_code}}</div>
+                </div>
+                {%endfor%}
+                <hr>
+            </div>
+            <div class="bottom-absolute w-100">
+                <div class="text-capitalize fw-bold fs-4">
+                {%if protocol.course.need_institution%}
+                    {% translate "Institution delegate" %}
+                {%else%}
+                    {% translate "Training center" %}
+                {%endif%}
+                </div>
+                <div class="row ">
+                    <div class="col">
+                        <span class="text-uppercase">{% translate "Center name" %}: </span><br>
+                        <span class="fw-bold">{{protocol.center}}</span>
+                    </div>
+                    <div class="col">
+                        <span>{% translate "Director name" %}: </span><br>
+                        <span>{{protocol.center.director.first_name}} {{protocol.center.director.last_name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <div class="row">
+                <div class="col">{% translate "Date" %}<br><br><br>____ / ____ / ____</div>
+                <div class="col"><div>{% translate "Stamp" %}</div><div class="stamp_box border"></div></div>
+                <div class="col">
+                    {% translate "Sign" %}<br>
+                    <span class="fst-italic">{{protocol.center.director.first_name}} {{protocol.center.director.last_name}}</span><br><br><hr>
+                </div>
+            </div>
+            <div class="page_number strong">{% translate "Page" %} *1* {% translate "of" %} *{{tot_pages}}*</div>
+        </div>        
+    </div>
+</div>

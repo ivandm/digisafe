@@ -1,0 +1,159 @@
+/**
+*
+* Foglio di stile per il modulo Ircot Certificate
+*
+**/
+
+/**
+* Impostazioni COMUNI
+**/
+.A4_width{width: 210mm;}
+.clear-both {clear: both;}
+.page-break {page-break-before: always;}
+.inline-block{display: inline;}
+.colore1{background-color: white}
+.colore2{background-color: #efefef}
+.riga {border-bottom: dotted 1px; padding-bottom: 2px; padding-top:4px;}
+.center {text-align: center;}
+.boxed {
+    border-top: solid 1px;
+    border-left: solid 1px;
+    border-right: solid 1px;    
+}
+.strong {
+	font-weight: bold;
+}
+.checkbox-unchecked {
+    /* display: inline-block; */
+    width: 14px;
+    height: 14px;
+    margin-right: .25em;
+    line-height: 14px;
+}
+.checkbox-unchecked:before {
+    font-family: 'IcoMoon';
+	font-style: normal;
+	speak: none;
+	content: "\3d";
+}
+.paginaA4 {
+    padding: 2mm;
+    resize: both;
+    /* margin: 10px; */
+    /* background: #666; */
+    width: 200mm;
+    height: 287mm;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: 2mm;
+}
+#ModelloAttestatoNew{
+    position: relative;
+}
+/* Serve a dare l'altezza del DIV al blocco PARENT per la funzione scalabile con scalable.js  */
+div.height100{ height: 100%;}
+div.row-table{
+    /* border-bottom: 1px solid; */
+}
+div.row-table:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+div.intestazione , .attestato_body, .firme, .extra, .attestato_footer {
+    margin-bottom: 10px;
+    padding: 5px;
+}
+/* INTESTAZIONE */
+div.intestazione{
+    border-bottom: 1px solid;
+    height: 15%;
+}
+div.intestazione img{
+    height: 80px;
+}
+.qrcode{height: 100px !important;}
+/* BODY */
+div.attestato_body {position: relative; height: 75%;}
+
+/* DATI DEL CORSO e del CORSISTA */
+div.dati_corso{ width: 100%; height: 260px;}
+.countries{height: 20px;}
+/* DATE DEL CORSO */
+.date_corso{
+    /* position:relative; */
+    /* max-height: 350px; */
+    left: 2px;
+    right: 2px;
+    /* border: solid 1px; */
+    /* background-color: #000; */
+    
+}
+div.date_corso  { width: 100%; height: 400px;}
+div.date_corso  table{ width: 100%;}
+div.date_corso th{background-color: #4CAF50; color: white;}
+div.date_corso tr:nth-child(even) {background-color: #a6d8a8;}
+.tabelleDate{ 
+    max-height: 340px;
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    /* top: 50%; */
+    /* -ms-transform: translateY(-50%); */
+    /* transform: translateY(-50%); */
+}
+/* FIRME */
+div.firme {
+    height: 90px;
+    position:absolute;
+    bottom: 40px;
+    width: 100%;
+    margin-bottom: 0px;
+    border-top: 1px solid;
+
+}
+div.firme .sx{
+    text-align: center;
+    float: left;
+    width: 33%;
+}
+div.firme .cx{
+    text-align: center;
+    float: left;
+    width: 33%;
+}
+
+div.firme .dx{
+    text-align: center;
+    float: right;
+    width: 33%;
+}
+
+/* FOOTER */
+div.attestato_footer {
+    bottom: 0px;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    height:40px;
+    margin-bottom: 0px;
+    height: 8%;
+}
+div.attestato_footer .row-table{
+    border-top: 1px solid;
+    border-bottom: none;
+    padding: 6px;
+    
+}
+div.attestato_footer .sx{
+    text-align: left;
+    float: left;
+    max-width: 30%;
+}
+div.attestato_footer .dx{
+    text-align: right;
+    float: right;
+    max-width: 68%;
+}
