@@ -27,9 +27,11 @@ cmd = 'python3 digisafe/manage.py collectstatic -c --no-post-process --noinput'
 print(cmd)
 os.system(cmd)
 
+import shutil
+
 from distutils.dir_util import copy_tree
 from digisafe.digisafe.settings import STATIC_ROOT
-dst = ""
+shutil.copy2("digisafe/static/theme.scss", str(STATIC_ROOT))
 for src in ["css/", 'js/', "fonts/", "imgs"]:
     copy_tree("digisafe/static/"+src, str(STATIC_ROOT))
 
