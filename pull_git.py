@@ -35,7 +35,7 @@ os.system(cmd)
 #print(cmd)
 #os.system(cmd)
 
-cmd = 'python3 manage.py migrate'
+cmd = 'python3 digisafe/manage.py migrate'
 print(cmd)
 os.system(cmd)
 
