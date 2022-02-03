@@ -1,0 +1,17 @@
+{% extends "home/home_base.html" %}
+{% load i18n static  %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger text-center m-2" role="alert">
+    <h1 class="fw-bold">{% translate 'Error' %}</h1>
+    <div>
+        <p>{% translate "Check carefully. Email doesn't exist" %}:</p>
+        <p>{{email}}</p>
+    </div>
+</div>
+
+{% endblock %}

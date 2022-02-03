@@ -54,10 +54,10 @@ def loginLostView(request):
         form = AccountLoginLostForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            # u = User.objects.filter(email=email)
-            u = get_object_or_404(User, email=email)
+            u = User.objects.filter(email=email)
+            # u = get_object_or_404(User, email=email)
             if u: # se esite cambia crea la password temporanea
-                # u = u[0]
+                u = u[0]
                 t = TmpPassword(user=u)
                 t.set_client_ip(request)
                 t.save()
@@ -78,6 +78,9 @@ def loginLostView(request):
                     to=[email],
                 ).send(fail_silently=False)
                 return redirect(reverse('account:reset-password'))
+            else:
+                messages.error(request, _('Email {0} doesn\'t check into database.'.format(email)))
+                return render(request, "error_pages/email_404.html", context={'email': email})
     else:
         form = AccountLoginLostForm()
         return render(request, "account/lost_login.html", context={'form':form})
