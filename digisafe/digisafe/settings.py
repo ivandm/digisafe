@@ -71,6 +71,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'digisafe.urls'
 
 import os
+print(os.path.join(os.path.dirname(__file__), 'templates'))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
