@@ -21,13 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 import random, string
-# SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
-SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
+SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
+# SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["digisafe.ircot.net", "localhost", "192.168.10.104", "192.168.8.101"]
+ALLOWED_HOSTS = ["digisafe.ircot.net", "127.0.0.1", "localhost", "192.168.10.104", "192.168.8.101"]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
@@ -76,7 +76,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ["templates",
-                 os.path.join(os.path.dirname(__file__), 'templates'),
+                 BASE_DIR / 'templates/',
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -188,9 +188,11 @@ LEAFLET_CONFIG = {
 }
 
 # Settings for deploy
-FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
-SECURE_HSTS_SECONDS = 0
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = False
+if not DEBUG:
+    FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
+    SECURE_HSTS_SECONDS = 0
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
