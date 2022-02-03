@@ -73,7 +73,9 @@ ROOT_URLCONF = 'digisafe.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates",],
+        'DIRS': ["templates",
+                 os.path.join(os.path.dirname(__file__), 'templates'),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
