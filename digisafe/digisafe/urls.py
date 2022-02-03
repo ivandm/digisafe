@@ -30,7 +30,7 @@ urlpatterns = [
     path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()),
     path('admin/', admin.site.urls),
     
-    path('tinymce/', include('tinymce.urls')), #WYSIWYG editor
+    path('tinymce/', include('tinymce.urls')),  # WYSIWYG editor
     
     path('countries/', include('countries.urls')),
     path('protocol/', include('protocol.urls')),
