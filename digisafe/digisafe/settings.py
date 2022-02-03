@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 import random, string
-SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
-# SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
+# SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
+SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -71,7 +71,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'digisafe.urls'
 
 import os
-print(os.path.join(os.path.dirname(__file__), 'templates'))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -145,7 +144,6 @@ STATIC_ROOT = BASE_DIR / 'staticdeploy'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-print(STATIC_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

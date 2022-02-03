@@ -103,6 +103,8 @@ function eventDraggedMarker(e){
     var lat = centerMarker.getLatLng().lat;
     var lon = centerMarker.getLatLng().lng;
     map.setView([lat, lon]);
+    var latlng = L.latLng(lat, lon);
+    setNewMarker(latlng);
     var xmlhttp = new XMLHttpRequest();
     var url = "https://nominatim.openstreetmap.org/reverse?lat="+lat+"&lon="+lon+"&format=jsonv2";
     xmlhttp.onreadystatechange = function()
@@ -149,7 +151,6 @@ function map_init(mymap, options)
 //        console.log(e);
         eventDraggedMarker(e);
     });
-
 
     map.on('click', function(e){
         eventClickMap(e);
