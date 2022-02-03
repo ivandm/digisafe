@@ -196,3 +196,12 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+
+# PARAMETRI EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.ionos.co.uk"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "noreply@ircot.net"
+EMAIL_HOST_PASSWORD = "DigiSafeeMail@01012022_*"
+# EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
