@@ -11,14 +11,16 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import socket
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-try:
-    import deploy
+if IPAddr == "77.68.51.150":
     DEPLOY = True
-except:
+else:
     DEPLOY = False
 
 # Quick-start development settings - unsuitable for production
