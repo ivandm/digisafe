@@ -32,7 +32,7 @@ import shutil
 from distutils.dir_util import copy_tree
 from digisafe.digisafe.settings import STATIC_ROOT
 shutil.copy2("digisafe/static/theme.scss", str(STATIC_ROOT))
-for src in ["css/", 'js/', "fonts/", "imgs"]:
+for src in ["css/", 'js/', "fonts/", "imgs", "bootstrap-5.1.3-dist"]:
     copy_tree("digisafe/static/"+src, str(STATIC_ROOT)+"/"+src)
     print("digisafe/static/"+src, str(STATIC_ROOT)+"/"+src)
 
