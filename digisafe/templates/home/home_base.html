@@ -8,10 +8,12 @@
 
 {% block nav-bar %}
 <!-- As a link -->
-<nav class="navbar navbar-light bg-light">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'home:index' %}">Home</a>
-    <a class="navbar-brand" href="{% url 'account:index' %}">Account</a>
-  </div> 
-</nav>
+<div class="">
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="px-1">
+      <a class="navbar-brand" href="{% url 'home:index' %}">Home</a>
+      <a class="navbar-brand" href="{% url 'account:index' %}">Account</a>
+    </div>
+  </nav>
+</div>
 {% endblock %}
