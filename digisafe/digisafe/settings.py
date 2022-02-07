@@ -28,8 +28,8 @@ else:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 import random, string
-# SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
-SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
+SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
+# SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -211,13 +211,14 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
 
 # PARAMETRI EMAIL
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.ionos.co.uk"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "noreply@ircot.net"
-EMAIL_HOST_PASSWORD = "DigiSafeeMail@01012022_*"
-# EMAIL_USE_SSL = True
-EMAIL_USE_TLS = True
+if DEPLOY:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = "smtp.ionos.co.uk"
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = "noreply@ircot.net"
+    EMAIL_HOST_PASSWORD = "DigiSafeeMail@01012022_*"
+    # EMAIL_USE_SSL = True
+    EMAIL_USE_TLS = True
 
 # SCSS compiler
 STATICFILES_FINDERS = ['compressor.finders.CompressorFinder','django.contrib.staticfiles.finders.AppDirectoriesFinder']

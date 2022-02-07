@@ -34,7 +34,7 @@ class InstitutionFileSystemStorage(FileSystemStorage):
         return super()._save(name, content)
     
     def delete(self, name):
-        # print("ProtocolFileSystemStorage.delete name", name)
+        print("InstitutionFileSystemStorage.delete name", name)
         super().delete(name)
 
 
@@ -63,21 +63,33 @@ def validate_customfile_extension(value):
     if not ext.lower() in valid_extensions:
         raise ValidationError(_("Unsupported file extension. Valid extetions are '{0}'".format(".pdf")))
 
+def customfile_path_name_institution(instance, file_name):
+    file_root, file_ext = os.path.splitext(file_name)
+    return "file_inst_{}_{}_{}".format(instance.institution.id, instance.name.replace(' ', '-').lower(), file_ext)
 
-fsCustomFiles = InstitutionFileSystemStorage(location='files/', base_url="/docs")
-class institutioCustomFiles(models.Model):
+
+fsCustomFiles = InstitutionFileSystemStorage(location='files/', base_url="/document")
+class InstitutioCustomFiles(models.Model):
     "Files specifici dell'Ente"
     institution = models.ForeignKey(
             Institution,
             on_delete=models.CASCADE,
         )
-    name = models.CharField(max_length=255, blank=True, default='')
-    file = models.FileField(upload_to=file_path_name_institution,
-                               storage=fs, blank=True,
+    name = models.CharField(max_length=255, blank=False, default='')
+    file = models.FileField(upload_to=customfile_path_name_institution,
+                               storage=fsCustomFiles, blank=False,
                                validators=[validate_file_size, validate_customfile_extension],
                               )
     need = models.BooleanField(default=False)
     description = models.TextField(default='', blank=True)
+
+    def __str__(self):
+        return "{0}".format(self.name)
+
+    def delete(self, *args, **kwargs):
+        print("InstitutioCustomFiles delete")
+        self.file.delete() # obbligato per cancellare il file nel filesystem
+        super().delete(*args, **kwargs)
 
 
 class CoursesAdmitedInstitution(models.Model):

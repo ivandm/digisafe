@@ -198,9 +198,10 @@ class SessionInline(admin.TabularInline, StatusManager):
             if obj.status != 'm' or obj.owner != request.user: return 0
         
     def get_readonly_fields(self, request, obj=None):
+        if request.user.is_superuser:
+            return super().get_readonly_fields(request, obj)
         if obj:
-            status = obj.status
-            if status != 'm' or obj.owner != request.user:
+            if obj.status != 'm' or obj.owner != request.user:
                 self.can_delete = False
                 return self.readonly_fields_not_modify
         return super().get_readonly_fields(request, obj)
@@ -274,7 +275,6 @@ class LearnersInline(admin.TabularInline, StatusManager):
             else:
                 # print("LearnersInline.get_formset others")
                 self.can_delete = False
-            
             if obj.status in ["t"] and not obj.checkAllSignedFiles():
                 for c in obj.files_set.all():
                     if not c.check_signed():
@@ -303,6 +303,10 @@ class FilesInline(admin.TabularInline, StatusManager):
         # print("FilesInline.get_max_num", obj)
         if obj:
             if obj.owner == request.user and obj.status == 'a':
+                # Documenti dell'Ente
+                if obj.course.need_institution and obj.institution.use_custom_files:
+                    return obj.institution.institutiocustomfiles_set.count()
+                # Documenti IRCoT
                 return len(self.model.doc_type.field.choices)
             else:
                 return 0
@@ -416,9 +420,9 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     class Media:
         css = {
             'all': (
-            # 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
             'css/digisafe.css',
             "/static/admin/css/forms.css",
+            "/static/css/site.css",
             )
             }
         js = (
@@ -912,8 +916,14 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         # extra_context.update(status_form=DeniedConfirmForm())
         p = Protocol.objects.get(pk=object_id)
         if request.user.profile.trainer and p.owner == request.user:
-            extra_context['attendance_register_view'] = True
-            extra_context['exam_reporte_view'] = True
+            if p.course.need_institution and p.institution.use_custom_files:
+                extra_context['custom_institution_files'] = True
+                extra_context['object_custom_institution_files'] = p.institution.institutiocustomfiles_set.all()
+                f = p.institution.institutiocustomfiles_set.all()[0]
+                print(dir(f))
+            else:
+                extra_context['attendance_register_view'] = True
+                extra_context['exam_reporte_view'] = True
         return extra_context
     
     def _set_a_status_response_change(self, request, obj):

@@ -7,6 +7,8 @@
         <a href="{% url 'admin:certificate-list' original.pk%}" class="digi-bg-primary historylink " target='_blank'>{% translate "Certificate list" %}</a>
     </li>
     {%endif%}
+
+    {# Ente non necessario #}
     {%if attendance_register_view%}
     <li>
         <a href="{% url 'protocol:register-view' original.pk%}" class="historylink digi-bg-primary " target='_blank'>{% translate "Attendance register" %}</a>
@@ -17,6 +19,17 @@
         <a href="{% url 'protocol:exam-reporter-view' original.pk%}" class="historylink digi-bg-primary " target='_blank'>{% translate "Exam reporter" %}</a>
     </li>
     {%endif%}
+
+    {# Ente necessario. Fornisce files custom dell'Ente #}
+    {% if custom_institution_files %}
+    {% for doc in object_custom_institution_files %}
+        <li class="">
+            <a href="{{doc.file.url}}" class="historylink {%if doc.need%}digi-bg-primary{%else%}digi-bg-success{%endif%}" target='_blank'>{{doc.name}}</a>
+        </li>
+    {% endfor %}
+    {% endif %}
+
+    {% comment '' %}
     {%if sign_file_exam %}
     <li class="">
         <a href="{% url 'admin:sign-file' original.pk sign_file_exam.id%}" class="historylink digi-bg-primary " target='_blank'>{% translate "Sign exam" %}</a>
@@ -27,6 +40,7 @@
         <a href="{% url 'admin:sign-file' original.pk sign_file_register.id%}" class="historylink digi-bg-primary " target='_blank'>{% translate "Sign register" %}</a>
     </li>
     {%endif%}
+    {% endcomment %}
 
     <li>
         <a href="{% url 'admin:actions-list' original.pk%}" class="historylink">{% translate "Actions" %}</a>

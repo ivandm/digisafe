@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.db.models import Sum, DurationField, ExpressionWrapper, F, IntegerField, Value
 
 import math
-from datetime import timedelta
+import datetime
 from utils import time
 
 # from .widgets import FileSignField
@@ -164,8 +164,8 @@ class Protocol(models.Model):
                 )
 
     TYPE_CHOICES = [
-        ("new", 'New'),
-        ("update", 'Update'),
+        ("new", _('New')),
+        ("update", _('Update')),
         ]
     type        = models.CharField(
                     max_length=25,
@@ -283,9 +283,14 @@ class Protocol(models.Model):
         
     def getExpiration(self):
         years = self.course.feature.years
-        qual  = self.session_set.latest('date').date
+        qual  = self.getQualification() #session_set.latest('date').date
         return qual.replace(year = qual.year + years)
-        
+
+    def expired(self):
+        print(type(self.getExpiration()))
+        now = datetime.date.today()
+        return self.getExpiration() < now
+
     def checkPractice(self):
         h = self.getHoursPracticeRequestMin()
         return h>0
@@ -334,7 +339,10 @@ class Protocol(models.Model):
         if False in [x.inst_cert.name!="" for x in self.learners_set.filter(passed=True)]:
             return False
         return True
-        
+
+    def status_close(self):
+        return self.status == "h"
+
 class Session(models.Model):
     protocol    = models.ForeignKey(
                     Protocol,
@@ -512,6 +520,8 @@ class Files(models.Model):
     TYPE_CHOICES = [
         ("r", _('Attendance register')),
         ("v", _('Exam reporter')),
+        ("p", _('Privacy')),
+        ("o", _('Other')),
         ]
     doc_type    = models.CharField(
                     max_length=2,

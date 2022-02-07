@@ -26,7 +26,8 @@ urlpatterns = [
     path('', include(('home.urls', 'home'), namespace='home')),   
     path('account/', include(('account.urls', 'account'), namespace='account')),
     path('company/', include(('companies.urls', 'companies'), namespace='companies')),
-    
+    path('institutions/', include(('institutions.urls', 'institutions'), namespace='institutions')),
+
     path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()),
     path('admin/', admin.site.urls),
     

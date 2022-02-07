@@ -22,8 +22,10 @@ def accountView(request):
         p = UsersPosition.objects.filter(user = request.user)
         if p:
             context.update(position=p[0])
-        print("accountView", c)
+        # print("accountView", c)
         context.update(company_list=c)
+    if request.user.learners_set.count():
+        context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/index.html", context=context)
     
 def loginView(request):

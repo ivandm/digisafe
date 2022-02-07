@@ -14,10 +14,14 @@
     
     <nav>
       <div class="nav nav-pills" id="nav-account-tab" role="tablist">
-        <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+        <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">
             Personal profile</button>
+        {% if courses %}
+          <button class="nav-link"        id="nav-courses-tab" data-bs-toggle="tab" data-bs-target="#nav-courses" type="button" role="tab" aria-controls="nav-courses" aria-selected="false">
+            Owner courses</button>
+        {%endif%}
         {% if user.profile.administrator %}
-        <button class="nav-link"        id="nav-admin-tab" data-bs-toggle="tab" data-bs-target="#nav-admin" type="button" role="tab" aria-controls="nav-admin" aria-selected="true">
+        <button class="nav-link"        id="nav-admin-tab" data-bs-toggle="tab" data-bs-target="#nav-admin" type="button" role="tab" aria-controls="nav-admin" aria-selected="false">
             Admin profile</button>
         {% endif %}
       </div>
@@ -26,6 +30,11 @@
         <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             {% include 'account/home_profile.html' %}
         </div>
+        {% if courses %}
+        <div class="tab-pane fade" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
+            {% include 'account/home_courses.html' %}
+        </div>
+        {% endif %}
         {% if user.profile.administrator %}
         <div class="tab-pane fade" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
             {% include 'account/home_admin.html' %}

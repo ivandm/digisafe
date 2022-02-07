@@ -22,6 +22,12 @@
     background:var(--primary) !important;
 }
 .digi-bg-primary:hover{background:var(--button-hover-bg) !important;}
+
+.digi-bg-success{
+    background:var(--success) !important;
+}
+.digi-bg-success:hover{background:var(--success-hover-bg) !important;}
+
 .digi-btn{
     display: inline-block;
     font-weight: 400;

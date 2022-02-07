@@ -119,8 +119,7 @@ class LearnersForm(forms.ModelForm):
             # self.instance.save()
             pass
     
-    
-        
+
 class DeniedConfirmForm(forms.Form):
     info_denied = forms.CharField(widget=forms.Textarea, help_text=_("Without fill this form doesn't chage the status in case of denied choise."))
     
