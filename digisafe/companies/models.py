@@ -1,4 +1,5 @@
 from django.db import models
+import os
 
 from digisafe import storage
 from users.models import User
