@@ -31,11 +31,10 @@
 <div class="digi-warning">{% translate "Warning. Request integration. See Actions" %}</div>
 {% endif %}
 <div class="last-protocol-actions">
-<b>{% translate "Last actions" %}</b>
-{% last_protocol_actions original as objects_list %}
-{% include 'protocol/action_list_objects.html' %}
+    <b>{% translate "Last actions" %}</b>
+    {% last_protocol_actions original as objects_list %}
+    {% include 'protocol/action_list_objects.html' %}
 </div>
-
 {% endblock %}
 
 {% block content %}
@@ -85,6 +84,16 @@
     </div>
 </div>
 {%endif%}
+
+{%if integration_info_form%}
+<div class="denied-form">
+    <div class="inline-group ">
+        <h2>{% translate "Response information" %}</h2>
+        {{integration_info_form}}
+    </div>
+</div>
+{%endif%}
+
 
 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 

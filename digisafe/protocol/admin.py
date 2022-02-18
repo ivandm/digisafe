@@ -16,7 +16,7 @@ from .models import Protocol, Session, Learners, Files, Authorizations, Action
 from .forms import ProtocolForm, SessionForm, LearnersForm, FilesForm
 from courses.models import Courses
 from users.models import User
-from .forms import DeniedConfirmForm
+from .forms import DeniedConfirmForm, IntegrationInfoForm
 
 # class manage status
 class StatusManager:
@@ -247,6 +247,8 @@ class LearnersInline(admin.TabularInline, StatusManager):
     
     def get_readonly_fields(self, request, obj=None):
         # print("LearnersInline.get_readonly_fields")
+        if request.user.is_superuser:
+            return []
         if obj:
             fields = []
             status = obj.status
@@ -282,6 +284,8 @@ class LearnersInline(admin.TabularInline, StatusManager):
                 
         return super().get_formset(request, obj, **kwargs)
 
+    def get_ordering(self, request):
+        return ['pk']
 
 class FilesInline(admin.TabularInline, StatusManager):
     model = Files
@@ -305,7 +309,7 @@ class FilesInline(admin.TabularInline, StatusManager):
             if obj.owner == request.user and obj.status == 'a':
                 # Documenti dell'Ente
                 if obj.course.need_institution and obj.institution.use_custom_files:
-                    return obj.institution.institutiocustomfiles_set.count()
+                    return obj.institution.institutioncustomfiles_set.count()
                 # Documenti IRCoT
                 return len(self.model.doc_type.field.choices)
             else:
@@ -918,12 +922,14 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if request.user.profile.trainer and p.owner == request.user:
             if p.course.need_institution and p.institution.use_custom_files:
                 extra_context['custom_institution_files'] = True
-                extra_context['object_custom_institution_files'] = p.institution.institutiocustomfiles_set.all()
-                f = p.institution.institutiocustomfiles_set.all()[0]
+                extra_context['object_custom_institution_files'] = p.institution.institutioncustomfiles_set.all()
+                f = p.institution.institutioncustomfiles_set.all()[0]
                 print(dir(f))
             else:
                 extra_context['attendance_register_view'] = True
                 extra_context['exam_reporte_view'] = True
+            if p.warning:
+                extra_context['integration_info_form'] = IntegrationInfoForm()
         return extra_context
     
     def _set_a_status_response_change(self, request, obj):
@@ -931,13 +937,15 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         """
         # print("ProtocolAdmin._set_a_status_response_change")
                 
-        text = info = ""        
+        text = info = ""
+        form = IntegrationInfoForm(request.POST)
         if request.POST.get("_terminaprotocol", False):
             # print("ProtocolAdmin._set_a_status_response_change _terminaprotocol")
             # Procede con lo status successivo di chiusura 't'
             obj.status = "t"
             obj.warning = False
             text = _("Set finish")
+            info = form['info'].value()
             pass
         if text:
             obj.save()

@@ -6,11 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from django.core.mail import EmailMessage, BadHeaderError
 from django.contrib import messages
 from django.http import JsonResponse
+from django.template.response import TemplateResponse
+
 
 from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, AccountResetPasswordForm
 from .models import TmpPassword, UsersPosition
 from companies.models import requestAssociatePending, Company
 from users.models import User
+from protocol.models import Protocol
 
 @login_required(login_url="/account/login/")
 def accountView(request):
@@ -158,3 +161,35 @@ def setPosition(request):
         pos.save()
         return JsonResponse({'save': True})
     return JsonResponse({'save': False})
+
+def certificateView(request, pk_protocol=None, user_id=None):
+        from utils.helper import qrcode_str2base64
+        from django.contrib.sites.shortcuts import get_current_site
+        # print("ProtocolAdmin.actions_view request",request)
+        if not pk_protocol == None:
+            protocol = Protocol.objects.get(pk=pk_protocol)
+            trainer = request.user
+            full_url = ''.join(
+                ['http://', get_current_site(request).domain, "protocol/", str(protocol.id), "/user/", str(trainer.id),
+                 "/check/"])
+
+            # todo: implementazione del codice qr del certificato
+            # if settings.DEBUG:
+            #     full_url = ''.join(
+            #         ['http://', "192.168.10.104:8000/", "protocol/", str(protocol.id), "/user/", str(trainer.id),
+            #          "/check/"])
+            # print("ProtocolAdmin.certificate_user full_url", full_url)
+
+            context = dict(
+                # Include common variables for rendering the admin template.
+                #self.admin_site.each_context(request),
+                # Anything else you want in the context...
+                trainer=trainer,
+                #opts=self.opts,
+                protocol=protocol,
+                #module_name=self.model._meta.model.__name__,
+                #media=self.media,
+                web_site="digisafe.ircot.co.uk",
+                qrcode_img=qrcode_str2base64(full_url)
+            )
+        return TemplateResponse(request, "protocol/certificate_user.html", context)

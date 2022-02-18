@@ -420,8 +420,8 @@ class Session(models.Model):
                                 (Q(start_time__gt=start_time) & Q(start_time__lt=end_time))
                                 |
                                 (Q(end_time__gt=start_time) & Q(end_time__lt=end_time)),
-                                subject_type="t", date=date,
-                                ).exclude(pk=self.pk)
+                                subject_type="t", date=date, pk=self.pk,
+                                )  #.exclude()
                                 
     def getDateTimeRange(self, trainer, date, start_time, end_time):
         "Impegni del Trainer diviso per data ed orario"

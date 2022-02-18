@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.files.storage import Storage, FileSystemStorage
+from django.utils.translation import gettext as _
 
 from courses.models import Courses
 
@@ -45,7 +46,7 @@ class Institution(models.Model):
                                storage=fs, blank=True,
                                validators=[validate_file_size, validate_file_extension],
                               )
-    use_custom_files = models.BooleanField(default=False)
+    use_custom_files = models.BooleanField(default=False, verbose_name=_("Use custom registry files"))
 
     def __str__(self):
         return self.name
@@ -80,7 +81,7 @@ class InstitutionCustomFiles(models.Model):
                                storage=fsCustomFiles, blank=False,
                                validators=[validate_file_size, validate_customfile_extension],
                               )
-    need = models.BooleanField(default=False)
+    need = models.BooleanField(default=False, help_text=_("Check that if this file is mandatory"))
     description = models.TextField(default='', blank=True)
 
     def __str__(self):

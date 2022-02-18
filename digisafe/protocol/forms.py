@@ -120,9 +120,12 @@ class LearnersForm(forms.ModelForm):
             pass
     
 
+class IntegrationInfoForm(forms.Form):
+    info = forms.CharField(widget=forms.Textarea, help_text=_("Write in the box to text integration information message"))
+
 class DeniedConfirmForm(forms.Form):
-    info_denied = forms.CharField(widget=forms.Textarea, help_text=_("Without fill this form doesn't chage the status in case of denied choise."))
-    
+    info_denied = forms.CharField(widget=forms.Textarea, help_text=_("Without fill this form doesn't chage the status in case of denied choise"))
+
 class FilesForm(forms.ModelForm):
     
     class Meta:
