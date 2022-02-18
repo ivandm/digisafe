@@ -217,7 +217,7 @@ if DEPLOY:
     EMAIL_PORT = 587
     EMAIL_HOST_USER = "noreply@ircot.net"
     EMAIL_HOST_PASSWORD = "DigiSafeeMail@01012022_*"
-    # EMAIL_USE_SSL = True
+    EMAIL_USE_SSL = True
     EMAIL_USE_TLS = True
 
 # SCSS compiler
