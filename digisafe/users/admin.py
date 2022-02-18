@@ -275,9 +275,9 @@ class UserAdmin(BaseUserAdmin):
             group = Group.objects.get(name='Trainer')
             q.groups.add(group)
             self.message_user(request, _(
-            '%s is a Trainer now.',
-        ) % q, messages.SUCCESS)
-        # queryset.update(trainer=True)
+                    '%s is a Trainer now',
+                ) % q, messages.SUCCESS)
+                # queryset.update(trainer=True)
     
     @admin.action(description='Mark director')
     def make_director(self, request, queryset):
@@ -287,9 +287,9 @@ class UserAdmin(BaseUserAdmin):
             group = Group.objects.get(name='Director')
             q.groups.add(group)
             self.message_user(request, _(
-            '%s is a director now.',
-        ) % q, messages.SUCCESS)
-        # queryset.update(trainer=True)
+                    '%s is a director now',
+                ) % q, messages.SUCCESS)
+                # queryset.update(trainer=True)
     
     @admin.action(description='Mark administrator')
     def make_administrator(self, request, queryset):
@@ -299,9 +299,9 @@ class UserAdmin(BaseUserAdmin):
             group = Group.objects.get(name='Administrator')
             q.groups.add(group)
             self.message_user(request, _(
-            '%s is an administrator now.',
-        ) % q, messages.SUCCESS)
-        # queryset.update(trainer=True)
+                    '%s is an administrator now',
+                ) % q, messages.SUCCESS)
+                # queryset.update(trainer=True)
     
     @admin.action(description='Mark institution')
     def make_institution(self, request, queryset):
@@ -316,9 +316,9 @@ class UserAdmin(BaseUserAdmin):
             group = Group.objects.get(name='Institution')
             q.groups.add(group)
             self.message_user(request, _(
-            '%s is an institution now.',
-        ) % q, messages.SUCCESS)
-        # queryset.update(trainer=True)
+                            '%s is an institution now',
+                        ) % q, messages.SUCCESS)
+                        # queryset.update(trainer=True)
     
     @admin.action(description='Mark log')
     def make_log(self, request, queryset):
@@ -326,12 +326,10 @@ class UserAdmin(BaseUserAdmin):
         for q in queryset:
             group = Group.objects.get(name='Log')
             q.groups.add(group)
-        self.message_user(request, ngettext(
-        '%d user is log now.',
-        '%d users are log now.',
-        update,
-        ) % update, messages.SUCCESS)
-        # queryset.update(trainer=True)
+        self.message_user(request, _(
+            '%d user is log now',
+            ) % update, messages.SUCCESS)
+            # queryset.update(trainer=True)
     
     
 # Register Custom UserAdmin
