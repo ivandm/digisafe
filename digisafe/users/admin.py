@@ -131,7 +131,7 @@ class UserAdmin(BaseUserAdmin):
         "profile__administrator",
     )
     list_editable = ("is_staff",)
-    actions = ['make_trainer','make_director','make_administrator','make_institution','make_staff',]
+    actions = ['make_trainer','make_director','make_administrator','make_institution','make_log',]
     # prepopulated_fields = {"username": ("first_name", "last_name")}
     
     class Media:
@@ -320,15 +320,15 @@ class UserAdmin(BaseUserAdmin):
         ) % q, messages.SUCCESS)
         # queryset.update(trainer=True)
     
-    @admin.action(description='Mark staff')
-    def make_staff(self, request, queryset):
-        update = queryset.update(is_staff=True)
+    @admin.action(description='Mark log')
+    def make_log(self, request, queryset):
+        #update = queryset.update(is_log=True)
         for q in queryset:
-            group = Group.objects.get(name='Staff')
+            group = Group.objects.get(name='Log')
             q.groups.add(group)
         self.message_user(request, ngettext(
-        '%d user is staff now.',
-        '%d users are staff now.',
+        '%d user is log now.',
+        '%d users are log now.',
         update,
         ) % update, messages.SUCCESS)
         # queryset.update(trainer=True)
