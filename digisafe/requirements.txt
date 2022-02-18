@@ -5,16 +5,16 @@
 # sudo apt-get install -y libgdk-pixbuf2.0-dev
 # sudo apt install pango1.0-toolsatialite
 # pip install -r requirements.txt
-django-tinymce
 PyPDF2
 numpy
 qrcode
+Pillow
+reportlab
+jsonfield
 django-weasyprint
 django-leaflet
 django-geojson
-jsonfield
-Pillow
-reportlab
+django-tinymce
 django_compressor
 django-libsass
 

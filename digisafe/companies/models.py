@@ -27,8 +27,8 @@ class Company(models.Model):
         html = "".join(res)
         return mark_safe(html)
 
-def file_path_name_center(instance):
-    file_name, prefix = "logo_company"
+def file_path_name_center(instance, file_name):
+    prefix = "logo_company"
     file_root, file_ext = os.path.splitext(file_name)
     return "{}_{}_{}".format(prefix, instance.id, file_ext)
 
