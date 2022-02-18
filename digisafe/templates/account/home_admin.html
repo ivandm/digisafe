@@ -13,12 +13,11 @@
       <h1 class="bg-primary text-white p-2 fs-2">{% translate 'Dashboard Companies' %}</h1>
       <div class="tab-pane fade show active" id="nav-associate" role="tabpanel" aria-labelledby="nav-associate-tab">
         <p>{% translate 'List companies you are admin' %}</p>
-          <div class="m-3">
             {% for company in company_list %}
-            {{company.name}} <a href="{% url 'companies:company-view' company.id %}" class="btn btn-primary">{% translate 'Open' %}</a>
-            {% endfor %}
-        </div>
-
+                <div class="m-3">
+                {{company.name}} <a href="{% url 'companies:company-view' company.id %}" class="btn btn-primary">{% translate 'Open' %}</a>
+                </div>
+          {% endfor %}
       </div>
       <div class="tab-pane fade" id="nav-listusers" role="tabpanel" aria-labelledby="nav-listusers-tab">
         bbb
