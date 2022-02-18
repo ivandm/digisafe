@@ -153,7 +153,7 @@ def setPosition(request):
     lon=request.POST.get("lon")
     user = request.user
     if lat and lon:
-        pos = UsersPosition.objects.get(user=request.user)
+        pos, created = UsersPosition.objects.get_or_create(user=request.user)
         pos.setGeom(lon, lat)
         pos.save()
         return JsonResponse({'save': True})

@@ -78,6 +78,7 @@ function savePositionFunc(){
         success: function(data){
            //do something
 //           console.log(data);
+            alert("New position saved");
         },
         error: function(error){
           alert('error; '+ eval(error));

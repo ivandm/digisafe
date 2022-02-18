@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["digisafe.ircot.net", "127.0.0.1", "localhost", "192.168.10.104", "192.168.8.101"]
+ALLOWED_HOSTS = ["digisafe.ircot.net", "127.0.0.1", "localhost", "192.168.10.104", "192.168.8.101", "192.168.43.249"]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
