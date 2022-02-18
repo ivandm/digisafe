@@ -265,11 +265,18 @@ class Protocol(models.Model):
         # print("Learners.checkNumTrainer min_trainer", min_trainer, 
                                         # "Num trainer ok?", int(trainers) >= int(min_trainer) )
         return (int(trainers) >= int(min_trainer)) 
-    
+
+    def getMaxLearnersTheory(self):
+        typeCourse = self.type
+        return getattr(self.course, typeCourse).max_learners_theory
+
+    def getMaxLearnersPractice(self):
+        return self.getPracticeLearnersPerTainer()
+
     def getPracticeLearnersPerTainer(self):
         typeCourse = self.type
         return getattr(self.course, typeCourse).max_learners_practice
-    
+
     def getAuthorizationMessage(self):
         if self.course.need_institution:
             return  _("Training project authorized by the trainer {0} with protocol {1} ​​of {2}.".format(self.institution, "xxx", "YYY"))

@@ -31,7 +31,9 @@ class CenterAdmin(admin.ModelAdmin):
             # return qs.filter(profile__administrator=1)
 
         # Model Protocol
-        if not request.user.is_superuser and app_label=="protocol" and model_name=="protocol" and field_name=="center":
+        if request.user.is_superuser:
+            return super().get_queryset(request)
+        if app_label=="protocol" and model_name=="protocol" and field_name=="center":
             # print("CenterAdmin.get_queryset qs", qs.filter(trainingcenter__user=request.user))
             return qs.filter(trainingcenter__user=request.user)
             

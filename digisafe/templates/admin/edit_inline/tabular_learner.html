@@ -70,8 +70,8 @@
           {% for line in fieldset %}
             {% for field in line %}
               {% if field.field.name == 'inst_cert' %}
-                {% if inline_admin_form.original.passed %}
                 <td class="{% if field.field.name %}field-{{ field.field.name }}{% endif %}{% if field.field.is_hidden %} hidden{% endif %}">
+                {% if inline_admin_form.original.passed %}
                   {% if field.is_readonly %}
                       <p>
                       {{ field.contents }}
@@ -80,8 +80,10 @@
                       {{ field.field.errors.as_ul }}
                       {{ field.field }}
                   {% endif %}
-                  </td>
+                {%else%}
+                    <p>{% translate 'No certification' %}</p>
                 {% endif %}
+                </td>
               {% else %}
               <td class="{% if field.field.name %}field-{{ field.field.name }}{% endif %}{% if field.field.is_hidden %} hidden{% endif %}">
               {% if field.is_readonly %}

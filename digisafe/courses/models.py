@@ -68,7 +68,7 @@ class Courses(models.Model):
         ht,mt=timedelta_to_hm(self.new.theory)
         hp,mp=timedelta_to_hm(self.new.practice)
         return ht+hp
-    
+
 
 class Feature(models.Model):
     course  = models.OneToOneField(

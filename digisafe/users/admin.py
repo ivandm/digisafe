@@ -255,15 +255,23 @@ class UserAdmin(BaseUserAdmin):
             return qs.filter(owner=request.user)
             
         return super().get_queryset(request)
-    
+
+    def get_actions(self, request):
+        #solo il super utente (e forse qualcun altro) ha i permessi per le azioni, pertanto ha senso che le veda
+        actions = super().get_actions(request)
+        if not request.user.is_superuser:
+            self.actions = []
+            # del actions['make_trainer']
+        return actions
+
     # Actions
     @admin.action(description='Mark trainer')
     def make_trainer(self, request, queryset):
         for q in queryset:
-            print("q: ", q, "q.profile.trainer" ,q.profile.trainer)
+            # print("q: ", q, "q.profile.trainer" ,q.profile.trainer)
             q.profile.trainer = True
             q.profile.save()
-            print("q: ", q, "q.profile.trainer" ,q.profile.trainer)
+            # print("q: ", q, "q.profile.trainer" ,q.profile.trainer)
             group = Group.objects.get(name='Trainer')
             q.groups.add(group)
             self.message_user(request, _(
@@ -297,7 +305,6 @@ class UserAdmin(BaseUserAdmin):
     
     @admin.action(description='Mark institution')
     def make_institution(self, request, queryset):
-
         for q in queryset:
             try:
                 q.profile.institution = True
