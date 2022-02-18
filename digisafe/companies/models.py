@@ -27,7 +27,7 @@ class Company(models.Model):
         html = "".join(res)
         return mark_safe(html)
 
-def file_path_name_center(instance, file_name):
+def file_path_name_company(instance, file_name):
     prefix = "logo_company"
     file_root, file_ext = os.path.splitext(file_name)
     return "{}_{}_{}".format(prefix, instance.id, file_ext)
@@ -51,7 +51,7 @@ class Profile(models.Model):
     )
     address = models.CharField(max_length=255)
     logo = models.FileField(
-                    upload_to=storage.file_path_name_center,
+                    upload_to=file_path_name_company,
                     storage=storage.FileSystemStorage(location='static/imgs/', base_url="/imgs"),
                     validators=[storage.validate_file_size, storage.validate_file_extension_img],
                   )

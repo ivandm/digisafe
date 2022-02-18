@@ -20,8 +20,8 @@ def validate_file_extension_img(value):
         raise ValidationError(_("Unsupported file extension. Valid extetions are '{0}'".format(".png .jpg .jpeg")))
 
 
-def file_path_name_center(instance):
-    file_name, prefix = "file"
+def file_path_name_center(instance, file_name):
+    prefix = "file"
     file_root, file_ext = os.path.splitext(file_name)
     return "{}_{}_{}".format(prefix, instance.id, file_ext)
 
