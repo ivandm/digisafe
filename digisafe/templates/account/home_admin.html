@@ -15,7 +15,7 @@
         <p>{% translate 'List companies you are admin' %}</p>
             {% for company in company_list %}
                 <div class="m-3">
-                {{company.name}} <a href="{% url 'companies:company-view' company.id %}" class="btn btn-primary">{% translate 'Open' %}</a>
+                <a href="{% url 'companies:company-view' company.id %}" class="btn btn-primary">{% translate 'Open' %}</a> {{company.name}}
                 </div>
           {% endfor %}
       </div>
