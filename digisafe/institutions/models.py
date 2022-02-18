@@ -69,7 +69,7 @@ def customfile_path_name_institution(instance, file_name):
 
 
 fsCustomFiles = InstitutionFileSystemStorage(location='files/', base_url="/document")
-class InstitutioCustomFiles(models.Model):
+class InstitutionCustomFiles(models.Model):
     "Files specifici dell'Ente"
     institution = models.ForeignKey(
             Institution,

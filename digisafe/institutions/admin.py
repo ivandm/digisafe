@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Institution, InstitutioCustomFiles, CoursesAdmitedInstitution
+from .models import Institution, InstitutionCustomFiles, CoursesAdmitedInstitution
 
 
-class InstitutioCustomFilesInline(admin.StackedInline):
-    model = InstitutioCustomFiles
+class InstitutionCustomFilesInline(admin.StackedInline):
+    model = InstitutionCustomFiles
     extra = 1
 
 class CoursesInline(admin.StackedInline):
@@ -19,7 +19,7 @@ class CoursesInline(admin.StackedInline):
 class InstitutionAdmin(admin.ModelAdmin):
     search_fields = ("name", )
     ordering = ['name'] 
-    inlines = (InstitutioCustomFilesInline, CoursesInline,)
+    inlines = (InstitutionCustomFilesInline, CoursesInline,)
     
     def get_queryset(self, request):
         # print("InstitutionAdmin.get_queryset")
