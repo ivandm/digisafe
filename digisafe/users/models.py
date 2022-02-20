@@ -240,28 +240,7 @@ class Subjects(models.Model):
                                                         last_name=self.user.last_name, 
                                                         first_name=self.user.first_name)
                                                         
-class TrainingCenter(models.Model):
-    """Centri di formazione associati"""
-    user = models.OneToOneField(
-            settings.AUTH_USER_MODEL,
-            on_delete=models.CASCADE,
-            # related_name = "centers"
-        )
-    centers = models.ManyToManyField(
-                Center,
-                blank=True,
-                help_text="Centri associati"
-            )
-    note = models.TextField(default='', blank=True)
-    
-    class Meta:
-        pass
-        
-    def __str__(self):
-        return "{last_name} {first_name} ".format(
-                                                        last_name=self.user.last_name, 
-                                                        first_name=self.user.first_name)
-                                                        
+
 class Institutions(models.Model):
     """Enti esterni associati"""
     

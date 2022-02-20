@@ -1,9 +1,10 @@
 from django.db import models
+from django.conf import settings
 from django.core.files.storage import Storage, FileSystemStorage
 from django.utils.translation import gettext as _
 
 from courses.models import Courses
-
+from centers.models import Center
 
 ### Manage files ### 
 import os
@@ -41,13 +42,22 @@ class InstitutionFileSystemStorage(FileSystemStorage):
 
 fs = InstitutionFileSystemStorage(location='static/imgs/', base_url="/imgs")
 class Institution(models.Model):
+    admin   = models.ForeignKey(
+                        settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE,
+                        blank=True, null=True,
+                    )
     name    = models.CharField(max_length=255, blank=True, default='')
     logo    = models.FileField(upload_to=file_path_name_institution, 
                                storage=fs, blank=True,
                                validators=[validate_file_size, validate_file_extension],
                               )
     use_custom_files = models.BooleanField(default=False, verbose_name=_("Use custom registry files"))
-
+    centers = models.ManyToManyField(
+                        Center,
+                        blank=True,
+                        related_name="associate_institutions"
+                    )
     def __str__(self):
         return self.name
         

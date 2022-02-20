@@ -544,7 +544,8 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if obj.pk:
             return HttpResponseRedirect("../%s/change/"%obj.pk)
         return super().response_add(request, obj, post_url_continue)
-        
+
+    # INIZIO extra views
     def get_urls(self):
         from django.urls import path
         urls = super().get_urls()
@@ -640,7 +641,8 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                qrcode_img= qrcode_str2base64(full_url)
             )
         return TemplateResponse(request, "protocol/certificate_user.html", context)
-        
+    # FINE extra views
+
     def get_form(self, request, obj=None, **kwargs):
         # print("ProtocolAdmin.get_form kwargs", kwargs)
         kwargs = self._set_status_form(request, obj=None, **kwargs)
@@ -683,6 +685,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         return inlines
     
     def get_queryset(self, request):
+        # Filtra la lista dei protocolli in base al tipo di utente loggato
         # print("ProtocolAdmin.get_queryset")
         u_superuser = request.user.is_superuser
         tab = userprofile2bit(request.user)
@@ -696,8 +699,9 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             if protocol_perm(request.user, DIR):
                 #visualizza i protocolli creati + centri da direttore
                 try:
-                    own_centers = request.user.trainingcenter.centers.all()
-                    query_list.append(query.filter(Q(center__in=own_centers)))
+                    own_centers = request.user.associate_centers.all()
+                    # print(own_centers)
+                    query_list.append(query.filter(Q(center__in=own_centers)|Q(center__director=request.user)))
                 except ObjectDoesNotExist:
                     pass
             if protocol_perm(request.user, INS):
@@ -749,6 +753,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         formset.save_m2m()
         
     def setAction(self, protocol, owner, text, info=""):
+        # salva nella tabella l'azione eseguita sul protocollo
         if protocol:
             a = Action(protocol=protocol, owner=owner, text=text, info=info)
             a.save()

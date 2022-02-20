@@ -10,7 +10,7 @@ from django.contrib import messages
 from leaflet.admin import LeafletGeoAdmin
 
 from account.models import UsersPosition
-from .models import User, Anagrafica, Profile, Subjects, TrainingCenter, Institutions
+from .models import User, Anagrafica, Profile, Subjects, Institutions
 from .forms import AnagraficaForm, UserForm, UserCreationForm
 
     
@@ -76,13 +76,7 @@ class SubjectsInline(admin.StackedInline):
     verbose_name_plural = 'Subjects'
     filter_horizontal = ("subjects",)
 
-class CentersInLine(admin.StackedInline):
-    model = TrainingCenter
-    can_delete = False
-    show_change_link = False
-    verbose_name_plural = 'Training Centers'
-    filter_horizontal = ("centers",)
-    
+
 class InstitutionsInLine(admin.StackedInline):
     model = Institutions
     can_delete = False
@@ -95,7 +89,7 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserForm
     # model = User
-    inlines_superuser = (AnagraficaInline, ProfileInline, SubjectsInline, CentersInLine, InstitutionsInLine)
+    inlines_superuser = (AnagraficaInline, ProfileInline, SubjectsInline, InstitutionsInLine)
     inlines = (AnagraficaInline,)
     ordering = ['-pk']
     list_per_page = 20

@@ -50,6 +50,16 @@ class Center(models.Model):
                                storage=fs, blank=True,
                                validators=[validate_file_size, validate_file_extension],
                               )
+    staff   = models.ManyToManyField(
+                        settings.AUTH_USER_MODEL,
+                        blank=True,
+                        related_name="associate_staff"
+                    )
+    trainers = models.ManyToManyField(
+                        settings.AUTH_USER_MODEL,
+                        blank=True,
+                        related_name="associate_centers"
+                    )
     def __str__(self):
         return self.name
     
@@ -71,3 +81,6 @@ class CoursesAdmitedCenter(models.Model):
                 help_text="Corsi gestiti"
             )
     note = models.TextField(default='', blank=True)
+
+    def __str__(self):
+        return "{}".format(self.center)
