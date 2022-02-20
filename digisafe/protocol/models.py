@@ -294,7 +294,7 @@ class Protocol(models.Model):
         return qual.replace(year = qual.year + years)
 
     def expired(self):
-        print(type(self.getExpiration()))
+        # print(type(self.getExpiration()))
         now = datetime.date.today()
         return self.getExpiration() < now
 

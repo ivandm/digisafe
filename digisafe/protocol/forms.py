@@ -95,12 +95,14 @@ class LearnersForm(forms.ModelForm):
         # print("LearnersForm.clean")
         if self.instance:
             cleaned_data = super().clean()
-            
-            # cancella il file associato quando si spunta il checkbox 'clear'
+
             upload    = cleaned_data.get("inst_cert")
             import os
-            if not upload and self.instance.inst_cert:
+            if upload == False and self.instance.inst_cert:
+                # cancella il file associato quando si spunta il checkbox 'clear'
                 if os.path.os.path.lexists(self.instance.inst_cert.path):
+                    # cancella solo il file se esiste
+                    # print("Cancella file")
                     self.instance.inst_cert.delete(False)
                     pass
             
