@@ -306,6 +306,8 @@ class FilesInline(admin.TabularInline, StatusManager):
         
     def get_max_num(self, request, obj=None, **kwargs):
         # print("FilesInline.get_max_num", obj)
+        if request.user.is_superuser:
+            return super(FilesInline, self).get_max_num(request, obj, **kwargs)
         if obj:
             if obj.owner == request.user and obj.status == 'a':
                 # Documenti dell'Ente
@@ -319,6 +321,8 @@ class FilesInline(admin.TabularInline, StatusManager):
         
     def get_readonly_fields(self, request, obj=None):
         # print("FilesInline.get_readonly_fields")
+        if request.user.is_superuser:
+            return super(FilesInline, self).get_readonly_fields(request, obj)
         if obj:
             status = obj.status
             if obj.owner == request.user and status == 'a':
@@ -333,6 +337,8 @@ class FilesInline(admin.TabularInline, StatusManager):
         # print("FilesInline.get_formset kwargs", kwargs)
         # self.readonly_fields = ()
         # self._set_status_form(request, obj, **kwargs)
+        if request.user.is_superuser:
+            return super(FilesInline, self).get_formset(request, obj, **kwargs)
         self.obj = obj
         if obj:
             if obj.owner == request.user and obj.status == 'a':
@@ -356,6 +362,8 @@ class AuthorizationsInline(admin.TabularInline, StatusManager):
     
     def get_max_num(self, request, obj=None, **kwargs):
         # print("AuthorizationsInline.get_max_num", len(self.model.doc_type.field.choices), self.model.doc_type.field.choices, dir(self.model.doc_type.field.choices))
+        if request.user.is_superuser:
+            return super(AuthorizationsInline, self).get_max_num(request, obj, **kwargs)
         if obj:
             if request.user.profile.institution and obj.status == 'c':
                 return len(self.model.doc_type.field.choices)

@@ -47,8 +47,8 @@ import io, shutil
 class ProtocolFileSystemStorage(FileSystemStorage):
     def _save(self, name, content):
         # print("ProtocolFileSystemStorage._save name", name)
-        # file_root, file_ext = os.path.splitext(name)
-        # name = self.get_alternative_name(file_root, file_ext)
+        file_root, file_ext = os.path.splitext(name)
+        name = self.get_alternative_name(file_root, file_ext)
         # print("ProtocolFileSystemStorage._save name", name)
         return super()._save(name, content)
     
@@ -512,6 +512,7 @@ class Learners(models.Model):
     
     #todo: cancella il file se cancello il record
     # def delete(.....)
+
 
 class Files(models.Model):
     protocol    = models.ForeignKey(
