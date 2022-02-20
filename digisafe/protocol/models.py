@@ -16,7 +16,7 @@ from users.models import User
 from countries.models import Country, City
 from centers.models import Center
 from institutions.models import Institution
-
+from digisafe.storage import FileInstCertStorage
 
 ### Manage files ###
 import os
@@ -469,7 +469,7 @@ class Learners(models.Model):
             )
     passed      = models.BooleanField(default=False)
     inst_cert   = models.FileField(upload_to=file_path_name_learner, 
-                                   storage=FileSystemStorage(location='files/', base_url="/document"), 
+                                   storage=FileInstCertStorage(location='files/', base_url="/document"),
                                    blank=True,
                                    validators=[validate_file_size, validate_file_extension],
                                    verbose_name=_("Certificate Institution")

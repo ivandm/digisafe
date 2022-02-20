@@ -19,7 +19,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from protocol.views import ProtocolAutocompleteJsonView, protocol_download_file, protocol_download_sign_file
-
 from users.views import CheckExistObjJsonView
 
 urlpatterns = [

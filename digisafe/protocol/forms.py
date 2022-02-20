@@ -34,6 +34,7 @@ class ProtocolForm(forms.ModelForm):
                             params={'learners': maxlearnsers},
                         )
 
+
 class SessionForm(ChainedCountryForm):
 
     class Meta:
@@ -75,7 +76,8 @@ class SessionForm(ChainedCountryForm):
                         code='invalid',
                         params={'date': date, 'start_time':start_time.strftime("%H:%M"), 'end_time':end_time.strftime("%H:%M")},
                     )
-        
+
+
 class LearnersForm(forms.ModelForm):
    
     def __init__(self, *args, **kwargs):
@@ -123,8 +125,10 @@ class LearnersForm(forms.ModelForm):
 class IntegrationInfoForm(forms.Form):
     info = forms.CharField(widget=forms.Textarea, help_text=_("Write in the box to text integration information message"))
 
+
 class DeniedConfirmForm(forms.Form):
     info_denied = forms.CharField(widget=forms.Textarea, help_text=_("Without fill this form doesn't chage the status in case of denied choise"))
+
 
 class FilesForm(forms.ModelForm):
     

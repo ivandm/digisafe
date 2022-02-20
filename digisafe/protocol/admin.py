@@ -287,6 +287,7 @@ class LearnersInline(admin.TabularInline, StatusManager):
     def get_ordering(self, request):
         return ['pk']
 
+
 class FilesInline(admin.TabularInline, StatusManager):
     model = Files
     # form = FilesForm

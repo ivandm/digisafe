@@ -39,10 +39,13 @@ class FileSystemStorage(FS):
         # print("ProtocolFileSystemStorage.delete name", name)
         super().delete(name)
 
-# esempio di utilizzo:
+# esempio di utilizzo FileSystemStorage:
 #       fs = FileSystemStorage(location='static/imgs/', base_url="/imgs")
 #
 # nel modello:
 #       logo    = models.FileField(upload_to=file_path_name_center,
 #                    storage=fs, validators=[validate_file_size, validate_file_extension],
 #                   )
+
+class FileInstCertStorage(FileSystemStorage):
+    pass
