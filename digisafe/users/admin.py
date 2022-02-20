@@ -93,7 +93,7 @@ class UserAdmin(BaseUserAdmin):
     inlines = (AnagraficaInline,)
     ordering = ['-pk']
     list_per_page = 20
-    search_fields = ["username", "last_name", "first_name", "anagrafica__fiscal_code", "trainingcenter__centers__name"]
+    search_fields = ["username", "last_name", "first_name", "anagrafica__fiscal_code", "associate_centers__name", "center__name"]
     autocomplete_fields = ['owner',]
     # filter_horizontal = BaseUserAdmin.filter_horizontal + ("subjects",)
     fieldsets = (
