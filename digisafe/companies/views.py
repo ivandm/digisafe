@@ -13,7 +13,7 @@ def companyDetailView(request, pk=None):
     if pk:
         c = Company.objects.get(pk=pk)
         # print(c.associates.all())
-        qs_results = UsersPosition.objects.all()
+        qs_results = UsersPosition.objects.filter(user__associates_company=c)
         request.session["company_id"] = pk
         context.update(company=c)
         context.update(qs_results=qs_results)
