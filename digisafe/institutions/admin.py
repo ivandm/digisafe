@@ -13,7 +13,16 @@ class CoursesInline(admin.StackedInline):
     show_change_link = False
     verbose_name_plural = 'Courses'
     filter_horizontal = ("courses",)
+    readonly_fields = ("courses", "note")
 
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.is_superuser:
+            return []
+        if obj:
+            if obj.admin == request.user:
+                return []
+
+        return super(CoursesInline, self).get_readonly_fields(request, obj)
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
@@ -38,5 +47,7 @@ class InstitutionAdmin(admin.ModelAdmin):
             # print(" qs", qs.filter(centers_=request.user.center_set.all()))
             return qs.filter(centers__director=request.user)
 
-        return qs.filter(admin=request.user)
-        
+        # return qs.filter(admin=request.user)
+        return qs
+
+

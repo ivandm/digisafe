@@ -115,3 +115,6 @@ class CoursesAdmitedInstitution(models.Model):
                 help_text="Corsi gestiti"
             )
     note = models.TextField(default='', blank=True)
+
+    def __str__(self):
+        return "{}".format(self.institution)

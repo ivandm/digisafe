@@ -959,7 +959,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             obj.status = "t"
             obj.warning = False
             text = _("Set finish")
-            info = form['info'].value()
+            info = form['info'].value() or ""
             pass
         if text:
             obj.save()
