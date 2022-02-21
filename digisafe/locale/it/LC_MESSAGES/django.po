@@ -1,0 +1,1220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-21 17:12+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: account/forms.py:25
+msgid "Repeat passord"
+msgstr "Ripeti password"
+
+#: account/forms.py:34
+msgid "Passwords aren't the same."
+msgstr "Le password non sono le stesse."
+
+#: account/models.py:23
+msgid "Last update"
+msgstr "Ultimo aggiornamento"
+
+#: account/views.py:48
+msgid "Invalid username or password."
+msgstr "Username o password non valide."
+
+#: account/views.py:74
+#, python-brace-format
+msgid "New auth code was sent to {0}."
+msgstr "Il nuovo auth code è stato inviato a {0}."
+
+#: account/views.py:75
+msgid "Check your email. Beware it's not in spam."
+msgstr "Controlla la tua email. Attenzione che non sia nello spam."
+
+#: account/views.py:79
+msgid "Digi.Safe. new credentials"
+msgstr "Nuove credenziali Digi.Safe."
+
+#: account/views.py:87
+#, python-brace-format
+msgid "Email {0} doesn't check into database."
+msgstr "Email {0} non trovata nel database."
+
+#: account/views.py:106
+msgid "Error in request. Check your auth code and try again."
+msgstr "Errore nella richiesta. Controlla il tuo auth code e riprova."
+
+#: account/views.py:108 account/views.py:135
+msgid "Password has been changed."
+msgstr "La password è stata cambiata."
+
+#: account/views.py:113 account/views.py:141
+msgid "Digi.Safe. new password"
+msgstr "Nuova passowrd Digi.Safe."
+
+#: account/views.py:121 account/views.py:148
+msgid "Invalid header found."
+msgstr "Header non valido."
+
+#: centers/models.py:13 digisafe/storage.py:10 institutions/models.py:15
+#: protocol/models.py:27 users/models.py:97
+#, python-brace-format
+msgid "The maximum file size that can be uploaded is {0}"
+msgstr "Massima dimensione del file da caricare {0}"
+
+#: centers/models.py:21 digisafe/storage.py:20 institutions/models.py:23
+#: institutions/models.py:75 protocol/models.py:35
+#, python-brace-format
+msgid "Unsupported file extension. Valid extension are '{0}'"
+msgstr "Estenzione del file non supportata. Estenzione valida '{0}'"
+
+#: companies/views.py:34
+msgid "No users matches the given query."
+msgstr "Nessun utente corrispondente alla ricerca."
+
+#: courses/models.py:84
+msgid "Low"
+msgstr "Basso"
+
+#: courses/models.py:85
+msgid "Medium"
+msgstr "Medio"
+
+#: courses/models.py:86
+msgid "Higth"
+msgstr "Alto"
+
+#: courses/models.py:112 courses/models.py:143
+msgid "Per course"
+msgstr "Per corso"
+
+#: courses/models.py:113 courses/models.py:144
+msgid "Per trainer"
+msgstr "Per docente"
+
+#: digisafe/settings.py:241
+msgid "Italian"
+msgstr "Italiano"
+
+#: digisafe/settings.py:242
+msgid "English"
+msgstr "Inglese"
+
+#: institutions/models.py:55
+msgid "Use custom registry files"
+msgstr "Utilizza file personali"
+
+#: institutions/models.py:94
+msgid "Check that if this file is mandatory"
+msgstr "Controlla se il file è richiesto"
+
+#: protocol/admin.py:283
+#, python-brace-format
+msgid "{0} File documentation have not been signed yet."
+msgstr "{0} file non firmato ancora."
+
+#: protocol/admin.py:730
+msgid "Create new protocol"
+msgstr ""
+
+#: protocol/admin.py:821
+msgid "Set request"
+msgstr "Assegnata richiesta"
+
+#: protocol/admin.py:857
+#, python-brace-format
+msgid "{0} Need an institution. Choice one. Status wasn't change."
+msgstr "{0} necessita di un ente. Scegline uno. Stato non cambiato."
+
+#: protocol/admin.py:860
+msgid "Set load by director"
+msgstr "Assegnato in carico dal direttore"
+
+#: protocol/admin.py:866
+msgid "Set authorized by director"
+msgstr "Assegnato autorizzato dal direttore"
+
+#: protocol/admin.py:874
+msgid "Set denied by director"
+msgstr "Assegnato rifiutato dal direttore"
+
+#: protocol/admin.py:911
+msgid "Set authorized from institution"
+msgstr "Assegnato autorizzato dall'ente"
+
+#: protocol/admin.py:919
+msgid "Set denied from institution. Return modify."
+msgstr "Assegnato rifiutato dall'ente. Ritorna alla modifica."
+
+#: protocol/admin.py:961
+msgid "Set finish"
+msgstr "Assegnato terminato"
+
+#: protocol/admin.py:1011
+msgid "Set close"
+msgstr "Assegnato chiuso"
+
+#: protocol/admin.py:1019
+msgid "Request integration."
+msgstr "Richiesta integrazione."
+
+#: protocol/admin.py:1028
+#, python-brace-format
+msgid "{0}'s Certificate has not been loaded yet."
+msgstr "Il certificato di {0} non è stato ancora caricato."
+
+#: protocol/forms.py:32
+#, python-format
+msgid "Learnser number error: Max admited is %(learners)s (Min is 0)."
+msgstr ""
+
+#: protocol/forms.py:54
+#, python-format
+msgid "Invalid user: %(user)s. The user is a learner."
+msgstr ""
+
+#: protocol/forms.py:62
+#, python-format
+msgid ""
+"Invalid time: End time %(end_time)s is lower than start time %(start_time)s."
+msgstr ""
+
+#: protocol/forms.py:68
+#, python-format
+msgid ""
+"Invalid date for user: %(user)s. The user is busy on %(date)s from "
+"%(start_time)s and %(end_time)s."
+msgstr ""
+
+#: protocol/forms.py:75
+#, python-format
+msgid ""
+"Invalid time for date: %(date)s. The time from %(start_time)s and "
+"%(end_time)s is busy on theory session."
+msgstr ""
+
+#: protocol/forms.py:112
+#, python-format
+msgid ""
+"User busy: %(user)s. The user is busies in other course on these date and "
+"time session."
+msgstr ""
+
+#: protocol/forms.py:118
+#, python-format
+msgid "Invalid user: %(user)s. The user is a trainer."
+msgstr ""
+
+#: protocol/forms.py:128
+msgid "Write in the box to text integration information message"
+msgstr ""
+
+#: protocol/forms.py:132
+msgid ""
+"Without fill this form doesn't chage the status in case of denied choise"
+msgstr ""
+
+#: protocol/models.py:167
+msgid "New"
+msgstr ""
+
+#: protocol/models.py:168 templates/protocol/certificate_content.html:12
+msgid "Update"
+msgstr ""
+
+#: protocol/models.py:282
+#, python-brace-format
+msgid ""
+"Training project authorized by the trainer {0} with protocol {1} ​​of {2}."
+msgstr ""
+
+#: protocol/models.py:283
+msgid ""
+"Activities planned by the employer and provided through a qualified person "
+"pursuant to the D.M. March 6, 2013."
+msgstr ""
+
+#: protocol/models.py:286
+#, python-brace-format
+msgid "Qualification update within {0} years."
+msgstr ""
+
+#: protocol/models.py:378 templates/admin/edit_inline/check_block.html:12
+#: templates/protocol/register_print_signpage.html:47
+#: templates/protocol/register_print_signpage.html:58
+#: templates/protocol/register_print_signpage.html:69
+msgid "Theory"
+msgstr ""
+
+#: protocol/models.py:379 templates/admin/edit_inline/check_block.html:23
+#: templates/protocol/register_print_signpage.html:47
+#: templates/protocol/register_print_signpage.html:58
+#: templates/protocol/register_print_signpage.html:69
+msgid "Practice"
+msgstr ""
+
+#: protocol/models.py:387
+msgid "In presence"
+msgstr ""
+
+#: protocol/models.py:388
+msgid "On the web"
+msgstr ""
+
+#: protocol/models.py:404
+#, python-brace-format
+msgid "Session {data} {inizio}/{fine}"
+msgstr ""
+
+#: protocol/models.py:475
+msgid "Certificate Institution"
+msgstr ""
+
+#: protocol/models.py:483
+#, python-brace-format
+msgid "User: {nome} {cognome} ({user}) "
+msgstr ""
+
+#: protocol/models.py:529 templates/admin/change_form_object_tools.html:14
+#: templates/protocol/register_print_firstpage.html:7
+msgid "Attendance register"
+msgstr ""
+
+#: protocol/models.py:530 templates/admin/change_form_object_tools.html:19
+#: templates/protocol/exam_print_firstpage.html:7
+#: templates/protocol/exam_print_firstpage.html:20
+msgid "Exam reporter"
+msgstr ""
+
+#: protocol/models.py:531
+msgid "Privacy"
+msgstr ""
+
+#: protocol/models.py:532
+msgid "Other"
+msgstr ""
+
+#: protocol/models.py:596 templates/protocol/exam_print_firstpage.html:41
+#: templates/protocol/exam_print_signpage.html:26
+#: templates/protocol/register_print_firstpage.html:97
+#: templates/protocol/register_print_signpage.html:54
+#: templates/protocol/register_print_signpage.html:65
+#: templates/protocol/register_print_signpage.html:76
+#: templates/protocol/register_print_signpage.html:85
+msgid "Sign"
+msgstr ""
+
+#: protocol/models.py:616
+msgid "Authorization"
+msgstr ""
+
+#: protocol/views.py:150
+#, python-brace-format
+msgid "Prot_{0}_register"
+msgstr ""
+
+#: templates/account/change_password.html:14 templates/account/login.html:12
+#: templates/account/reset_password.html:14
+#: templates/admin/change_form_protocol.html:58
+msgid "Please correct the error below."
+msgstr ""
+
+#: templates/account/change_password.html:14 templates/account/login.html:12
+#: templates/account/reset_password.html:14
+#: templates/admin/change_form_protocol.html:58
+msgid "Please correct the errors below."
+msgstr ""
+
+#: templates/account/change_password.html:31
+#: templates/account/reset_password.html:35
+msgid "Send"
+msgstr ""
+
+#: templates/account/home_admin.html:4
+msgid "Company Admin Panel"
+msgstr ""
+
+#: templates/account/home_admin.html:8
+msgid "Company list"
+msgstr ""
+
+#: templates/account/home_admin.html:13
+msgid "Dashboard Companies"
+msgstr ""
+
+#: templates/account/home_admin.html:15
+msgid "List companies you are admin"
+msgstr "Lista aziende amministrate"
+
+#: templates/account/home_admin.html:18
+msgid "Open"
+msgstr "Apri"
+
+#: templates/account/home_courses.html:4
+msgid "Owner Courses Panel"
+msgstr "Pannello corsi personali"
+
+#: templates/account/home_courses.html:28
+msgid "Digital certificate"
+msgstr "Certificato digitale"
+
+#: templates/account/home_courses.html:35
+msgid "Institution certificate"
+msgstr ""
+
+#: templates/account/home_courses.html:43
+msgid "Not passed"
+msgstr ""
+
+#: templates/account/home_profile.html:4
+msgid "Personal Profile Panel"
+msgstr "Pannelo del profilo personale"
+
+#: templates/account/home_profile.html:8
+msgid "Pending request"
+msgstr ""
+
+#: templates/account/home_profile.html:13
+msgid "Accept"
+msgstr ""
+
+#: templates/account/home_profile.html:14
+msgid "Refuse"
+msgstr ""
+
+#: templates/account/home_profile.html:45
+msgid "Accepted"
+msgstr ""
+
+#: templates/account/home_profile.html:49
+msgid "Refused"
+msgstr ""
+
+#: templates/account/index.html:14
+msgid "PROFILES PAGE"
+msgstr ""
+
+#: templates/account/login.html:31
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/account/login.html:51
+msgid "Forgotten your password or username?"
+msgstr ""
+
+#: templates/account/login.html:55
+msgid "Log in"
+msgstr ""
+
+#: templates/account/lost_login.html:21
+#: templates/admin/edit_inline/check_block.html:38
+#: templates/companies/get_user_list_detail.html:11
+msgid "Request"
+msgstr ""
+
+#: templates/admin/auth/user/add_form.html:6
+msgid ""
+"First, enter a fiscal code to chek user exist. Then, you’ll be able to edit "
+"more user options."
+msgstr ""
+
+#: templates/admin/auth/user/add_form.html:8
+msgid "Enter a username and password."
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:7
+#: templates/protocol/certificate_protocol_list.html:16
+msgid "Certificate list"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:35
+msgid "Sign exam"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:40
+msgid "Sign register"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:46
+#: templates/protocol/action_list.html:12
+msgid "Actions"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:52
+msgid "History"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:54
+#: templates/admin/edit_inline/tabular_files.html:39
+#: templates/admin/edit_inline/tabular_learner.html:46
+#: templates/admin/edit_inline/tabular_trainer.html:39
+msgid "View on site"
+msgstr ""
+
+#: templates/admin/change_form_protocol.html:21
+#: templates/admin/denied_confirm.html:8 templates/protocol/action_list.html:8
+#: templates/protocol/certificate_protocol_list.html:12
+#: templates/protocol/sign_file.html:42
+msgid "Home"
+msgstr ""
+
+#: templates/admin/change_form_protocol.html:24
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: templates/admin/change_form_protocol.html:31
+msgid "Warning. Request integration. See Actions"
+msgstr ""
+
+#: templates/admin/change_form_protocol.html:34
+msgid "Last actions"
+msgstr ""
+
+#: templates/admin/change_form_protocol.html:82
+msgid "Denied information"
+msgstr ""
+
+#: templates/admin/change_form_protocol.html:91
+msgid "Response information"
+msgstr ""
+
+#: templates/admin/denied_confirm.html:12
+msgid "Denied confirm"
+msgstr ""
+
+#: templates/admin/denied_confirm.html:26
+msgid "Conferma Declina"
+msgstr ""
+
+#: templates/admin/denied_confirm.html:27
+msgid "No, take me back"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:4
+msgid "Check course"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:6
+msgid "Course features"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:7
+msgid "Course type"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:8
+msgid "Max course learners"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:9
+msgid "Max practice learners per trainer"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:14
+msgid "Provided hours"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:15
+msgid "Request hours"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:17
+msgid "Missing hours"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:26
+msgid "Provided trainers enough"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:28
+msgid "Provided trainers NOT enough"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:34
+msgid "Practice hours enough"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:36
+msgid "Practice hours NOT enough"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:37
+msgid "Provided"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:39
+msgid "Missing"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:48
+msgid "Check passed"
+msgstr ""
+
+#: templates/admin/edit_inline/check_block.html:52
+msgid "Check NOT passed"
+msgstr ""
+
+#: templates/admin/edit_inline/tabular_files.html:23
+#: templates/admin/edit_inline/tabular_learner.html:30
+#: templates/admin/edit_inline/tabular_trainer.html:23
+msgid "Delete?"
+msgstr ""
+
+#: templates/admin/edit_inline/tabular_files.html:37
+#: templates/admin/edit_inline/tabular_learner.html:44
+#: templates/admin/edit_inline/tabular_trainer.html:37
+msgid "Change"
+msgstr ""
+
+#: templates/admin/edit_inline/tabular_files.html:37
+#: templates/admin/edit_inline/tabular_learner.html:44
+#: templates/admin/edit_inline/tabular_trainer.html:37
+msgid "View"
+msgstr ""
+
+#: templates/admin/edit_inline/tabular_learner.html:84
+msgid "No certification"
+msgstr ""
+
+#: templates/admin/submit_line.html:5
+msgid "Save"
+msgstr ""
+
+#: templates/admin/submit_line.html:8
+msgid "Delete"
+msgstr ""
+
+#: templates/admin/submit_line.html:10
+msgid "Save as new"
+msgstr ""
+
+#: templates/admin/submit_line.html:11
+msgid "Save and add another"
+msgstr ""
+
+#: templates/admin/submit_line.html:12 templates/admin/submit_line.html:52
+msgid "Save and continue editing"
+msgstr ""
+
+#: templates/admin/submit_line.html:12 templates/admin/submit_line.html:52
+msgid "Save and view"
+msgstr ""
+
+#: templates/admin/submit_line.html:14
+msgid "Insert request"
+msgstr ""
+
+#: templates/admin/submit_line.html:17
+msgid "Close"
+msgstr ""
+
+#: templates/admin/submit_line.html:20
+msgid "Load to institution"
+msgstr ""
+
+#: templates/admin/submit_line.html:21 templates/admin/submit_line.html:26
+#: templates/admin/submit_line.html:31 templates/admin/submit_line.html:44
+#: templates/admin/submit_line.html:51
+msgid "Denied"
+msgstr ""
+
+#: templates/admin/submit_line.html:25 templates/admin/submit_line.html:30
+msgid "Authorize"
+msgstr ""
+
+#: templates/admin/submit_line.html:32 templates/admin/submit_line.html:37
+msgid "Update and continue editing"
+msgstr ""
+
+#: templates/admin/submit_line.html:32 templates/admin/submit_line.html:37
+msgid "Update and view"
+msgstr ""
+
+#: templates/admin/submit_line.html:36
+msgid "Finish"
+msgstr ""
+
+#: templates/admin/submit_line.html:42 templates/admin/submit_line.html:49
+msgid "Ok and Close"
+msgstr ""
+
+#: templates/companies/associate_user.html:6
+#: templates/companies/associate_user.html:17
+#: templates/companies/user_to_associate.html:6
+#: templates/companies/user_to_associate.html:17
+#: templates/protocol/action_list_objects.html:6
+msgid "User"
+msgstr ""
+
+#: templates/companies/associate_user.html:11
+#: templates/companies/user_to_associate.html:11
+#: templates/maps/searchplace.html:19
+msgid "Search"
+msgstr ""
+
+#: templates/companies/associate_user.html:18
+#: templates/companies/user_to_associate.html:18
+#: templates/protocol/action_list_objects.html:8
+msgid "Info"
+msgstr ""
+
+#: templates/companies/associate_user.html:19
+#: templates/companies/associate_user.html:27
+#: templates/protocol/action_list_objects.html:7
+msgid "Action"
+msgstr ""
+
+#: templates/companies/index.html:14
+msgid "Dashboard panel"
+msgstr ""
+
+#: templates/companies/index.html:18 templates/companies/index.html:33
+msgid "Associate users"
+msgstr ""
+
+#: templates/companies/index.html:19
+msgid "Seacrh users"
+msgstr ""
+
+#: templates/companies/index.html:20 templates/companies/index.html:39
+msgid "Maps"
+msgstr ""
+
+#: templates/companies/index.html:26
+msgid "Users available"
+msgstr ""
+
+#: templates/companies/public_view.html:11
+msgid "Detail public view"
+msgstr ""
+
+#: templates/companies/user_to_associate.html:19
+msgid "Associate"
+msgstr ""
+
+#: templates/companies/user_to_associate.html:55
+msgid "Pending..."
+msgstr ""
+
+#: templates/error_pages/email_404.html:10
+msgid "Error"
+msgstr ""
+
+#: templates/error_pages/email_404.html:12
+msgid "Check carefully. Email doesn't exist"
+msgstr ""
+
+#: templates/home/base.html:46
+msgid "Welcome,"
+msgstr ""
+
+#: templates/home/base.html:51
+msgid "View site"
+msgstr ""
+
+#: templates/home/base.html:55
+msgid "Change password"
+msgstr ""
+
+#: templates/home/base.html:58
+msgid "Admin"
+msgstr ""
+
+#: templates/home/base.html:60
+msgid "Log out"
+msgstr "Esci"
+
+#: templates/home/home_base.html:6
+msgid "Digi.Safe."
+msgstr ""
+
+#: templates/maps/searchplace.html:11
+msgid "Select center"
+msgstr ""
+
+#: templates/maps/searchplace.html:13
+msgid "Save position"
+msgstr ""
+
+#: templates/maps/searchplace.html:16
+msgid "Address Lookup"
+msgstr ""
+
+#: templates/protocol/action_list.html:23
+msgid ""
+"This object doesn’t have a actions history. It probably wasn’t added via "
+"this admin site."
+msgstr ""
+
+#: templates/protocol/action_list_objects.html:5
+msgid "Date/time"
+msgstr ""
+
+#: templates/protocol/certificate_content.html:7
+msgid "Training"
+msgstr ""
+
+#: templates/protocol/certificate_content.html:8
+#: templates/protocol/certificate_content.html:13
+msgid "Theory hours"
+msgstr ""
+
+#: templates/protocol/certificate_content.html:9
+#: templates/protocol/certificate_content.html:14
+msgid "Practice hours"
+msgstr ""
+
+#: templates/protocol/certificate_protocol_list.html:21
+msgid "Certificate list download"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:35
+#: templates/protocol/register_print_firstpage.html:77
+msgid "Training center"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:48
+msgid "Certificate check"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:57
+msgid "Certificate"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:60
+msgid "We certify that"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:72
+msgid "Birth"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:74
+#: templates/protocol/exam_print_signpage.html:22
+#: templates/protocol/register_print_listpage.html:23 users/forms.py:29
+msgid "Fiscal code"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:80
+msgid "attended the training course"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:89
+msgid "Typology (new/update)"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:93
+msgid "Risk"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:101
+msgid "Country"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:111
+msgid "Place"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:112
+#: templates/protocol/exam_print_firstpage.html:69
+#: templates/protocol/register_print_firstpage.html:58
+#: templates/protocol/register_print_firstpage.html:94
+msgid "Date"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:113
+msgid "Time"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:114
+#: templates/protocol/exam_print_firstpage.html:31
+#: templates/protocol/register_print_firstpage.html:38
+#: templates/protocol/register_print_firstpage.html:59
+#: templates/protocol/sign_file.html:56
+msgid "Type"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:140
+msgid "Training project authorized by the subject"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:148
+msgid "Qualification date"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:149
+msgid "Qualification expire date"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:157
+msgid "Institution"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:159
+msgid "Center"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:185
+msgid "Certificate protocol"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:191
+msgid "Verify the authenticity of this certificate with the QRCODE shown above"
+msgstr ""
+
+#: templates/protocol/certificate_user.html:192
+msgid "Otherwise on the web site"
+msgstr ""
+
+#: templates/protocol/certificate_user_check.html:5
+#: templates/protocol/certificate_user_check_http404.html:5
+msgid "Check user"
+msgstr ""
+
+#: templates/protocol/certificate_user_check_http404.html:29
+msgid "Unknown request"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:9
+msgid "Exam center provider"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:24
+msgid "Training project"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:26
+#: templates/protocol/exam_print_signpage.html:9
+#: templates/protocol/register_print_firstpage.html:30
+#: templates/protocol/register_print_listpage.html:10
+#: templates/protocol/register_print_signpage.html:11
+msgid "Course protocol"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:37
+msgid "Commission"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:39
+msgid "Examiner name"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:40
+msgid "Members"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:45
+msgid "Chairman"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:50
+#: templates/protocol/exam_print_firstpage.html:55
+#: templates/protocol/exam_print_firstpage.html:60
+#: templates/protocol/exam_print_firstpage.html:65
+msgid "Component"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:71
+msgid "Director sign"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:79
+msgid "METHOD OF VERIFICATION CARRIED OUT"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:80
+msgid "MULTIPLE ANSWER TEST"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:81
+msgid "OPEN ANSWER TEST"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:82
+msgid "ORAL EXAM"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:83
+msgid "PRACTICE TEST"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:84
+msgid "OTHERS"
+msgstr ""
+
+#: templates/protocol/exam_print_firstpage.html:91
+#: templates/protocol/exam_print_signpage.html:79
+#: templates/protocol/register_print_firstpage.html:101
+#: templates/protocol/register_print_listpage.html:56
+#: templates/protocol/register_print_signpage.html:105
+msgid "Page"
+msgstr ""
+
+#: templates/protocol/exam_print_signpage.html:11
+msgid "Exam attendances list"
+msgstr ""
+
+#: templates/protocol/exam_print_signpage.html:21
+msgid "Name"
+msgstr ""
+
+#: templates/protocol/exam_print_signpage.html:23
+msgid "Birth & Place"
+msgstr ""
+
+#: templates/protocol/exam_print_signpage.html:24
+#, python-format
+msgid "%% Hours"
+msgstr ""
+
+#: templates/protocol/exam_print_signpage.html:25
+msgid "Result (pos/neg)"
+msgstr ""
+
+#: templates/protocol/popup_document.html:3
+msgid "Popup closing…"
+msgstr ""
+
+#: templates/protocol/print_obj.html:49
+msgid "Remember. You can download pdf by your browser print processor."
+msgstr ""
+
+#: templates/protocol/print_obj.html:50
+msgid "Browser tested: Chrome, Edge, Opera"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:10
+msgid "Institution name"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:12
+msgid "Traininig provider"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:34
+msgid "Code course"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:45
+msgid "Title"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:49
+msgid "Description"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:51
+msgid "Law"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:55
+msgid "Training sessions"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:57
+msgid "PLACE"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:60
+#: templates/protocol/register_print_signpage.html:17
+#: templates/protocol/register_print_signpage.html:53
+#: templates/protocol/register_print_signpage.html:64
+#: templates/protocol/register_print_signpage.html:75
+msgid "Trainer"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:75
+msgid "Institution delegate"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:82
+msgid "Center name"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:86
+msgid "Director name"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:95
+msgid "Stamp"
+msgstr ""
+
+#: templates/protocol/register_print_firstpage.html:101
+#: templates/protocol/register_print_listpage.html:56
+#: templates/protocol/register_print_signpage.html:105
+msgid "of"
+msgstr ""
+
+#: templates/protocol/register_print_listpage.html:10
+#: templates/protocol/register_print_signpage.html:11
+msgid "Course code"
+msgstr ""
+
+#: templates/protocol/register_print_listpage.html:13
+msgid "Attendance list page"
+msgstr ""
+
+#: templates/protocol/register_print_listpage.html:22
+msgid "Surname, fisrt name"
+msgstr ""
+
+#: templates/protocol/register_print_listpage.html:24
+msgid "Birth place and date "
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:15
+msgid "Sign page on"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:29
+msgid "Time IN"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:30
+msgid "Time OUT"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:31
+msgid "Sing IN"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:32
+msgid "Sing OUT"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:45
+msgid "Topics"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:52
+#: templates/protocol/register_print_signpage.html:63
+#: templates/protocol/register_print_signpage.html:74
+msgid "Hours from"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:52
+#: templates/protocol/register_print_signpage.html:63
+#: templates/protocol/register_print_signpage.html:74
+msgid "to"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:80
+msgid "NOTE"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:88
+msgid "Attendance"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:89
+msgid "Presents"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:90
+msgid "Absents"
+msgstr ""
+
+#: templates/protocol/register_print_signpage.html:93
+msgid "Director Sign"
+msgstr ""
+
+#: templates/protocol/sign_file.html:46
+msgid "Sign file"
+msgstr ""
+
+#: templates/protocol/sign_file.html:83
+msgid "Double ckick on file to insert sign"
+msgstr ""
+
+#: users/admin.py:272
+#, python-format
+msgid "%s is a Trainer now"
+msgstr ""
+
+#: users/admin.py:284
+#, python-format
+msgid "%s is a director now"
+msgstr ""
+
+#: users/admin.py:296
+#, python-format
+msgid "%s is an administrator now"
+msgstr ""
+
+#: users/admin.py:313
+#, python-format
+msgid "%s is an institution now"
+msgstr ""
+
+#: users/admin.py:324
+#, python-format
+msgid "%d user is log now"
+msgstr ""
+
+#: users/forms.py:16
+msgid "Username"
+msgstr ""
+
+#: users/forms.py:19
+msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr ""
+
+#: users/forms.py:22
+msgid "A user with that username already exists."
+msgstr ""
+
+#: users/forms.py:25
+msgid "Password1"
+msgstr ""
+
+#: users/forms.py:26
+msgid "Password2"
+msgstr ""
+
+#: users/forms.py:27
+msgid "First name"
+msgstr ""
+
+#: users/forms.py:28
+msgid "Last name"
+msgstr ""
+
+#: users/forms.py:61
+msgid "Invalid value: Fiscal code is used from other users."
+msgstr ""
+
+#: users/models.py:89
+#, python-brace-format
+msgid "Max size is {0}x{1}px (w,h). You try load image size of {2}x{3}px"
+msgstr ""
+
+#: users/models.py:91
+msgid ""
+"Your sign file needs trasparency in background. We have not check it. Your "
+"file should be in .png and trasparence."
+msgstr ""
+
+#: users/models.py:105
+#, python-brace-format
+msgid "Unsupported file extension. Valid extetion is '{0}'"
+msgstr ""
+
+#: users/models.py:231
+msgid "Permitted courses"
+msgstr ""
