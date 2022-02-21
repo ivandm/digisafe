@@ -62,6 +62,10 @@ os.system(cmd)
 #print(cmd)
 #os.system(cmd)
 
+cmd = 'django-admin compilemessages'
+print(cmd)
+os.system(cmd)
+
 print("Sincronizzare il Services Plans Assoclinica")
 cmd = 'plesk bin service_plan --update "Digisafe"'
 print(cmd)
