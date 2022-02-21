@@ -232,7 +232,7 @@ msgstr "Nuovo"
 
 #: protocol/models.py:168 templates/protocol/certificate_content.html:12
 msgid "Update"
-msgstr "Aggiorna"
+msgstr "Aggiornamento"
 
 #: protocol/models.py:282
 #, python-brace-format

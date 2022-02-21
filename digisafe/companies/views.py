@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404
 from django.utils.translation import gettext as _
@@ -13,13 +13,17 @@ def companyDetailView(request, pk=None):
     # print("companyDetailView")
     context = {}
     if pk:
-        c = Company.objects.get(pk=pk)
+        u = request.user
+        c = Company.objects.filter(pk=pk, admins=u)
         # print(c.associates.all())
-        qs_results = UsersPosition.objects.filter(user__associates_company=c)
-        request.session["company_id"] = pk
-        context.update(company=c)
-        context.update(qs_results=qs_results)
-    return render(request, "companies/index.html", context)
+        if c:
+            c = c[0]
+            qs_results = UsersPosition.objects.filter(user__associates_company=c)
+            request.session["company_id"] = pk
+            context.update(company=c)
+            context.update(qs_results=qs_results)
+            return render(request, "companies/index.html", context)
+    return redirect("account:index")
 
 @login_required(login_url="/account/login/")
 def retrieve_users_to_associate(request):
@@ -36,7 +40,7 @@ def retrieve_users_to_associate(request):
             return render(request, template_name='companies/get_user_list_detail.html', context={'object_list': user_list})
         raise Http404(_("No users matches the given query."))
 
-@login_required(login_url="/account/login/")
+# @login_required(login_url="/account/login/")
 def companyPublicDetailView(request, pk=None):
     context = {}
     if pk:
@@ -53,13 +57,14 @@ def requestAssociateAction(request):
         r = requestAssociatePending.objects.get(pk=request_id)
         c = r.company
         u = r.user
-        if action == "accept":
-            c.associates.add(u)
-            r.delete()
-            return JsonResponse({'accept': 'ok'})
-        elif action == "refuse":
-            r.delete()
-            return JsonResponse({'refuse': 'ok'})
+        if u == request.user:
+            if action == "accept":
+                c.associates.add(u)
+                r.delete()
+                return JsonResponse({'accept': 'ok'})
+            elif action == "refuse":
+                r.delete()
+                return JsonResponse({'refuse': 'ok'})
 
     return JsonResponse({'nothing': 'ok'})
 
@@ -70,10 +75,13 @@ def requestAssociateToUser(request):
     company_id = request.session.get("company_id")
     if user_id and company_id:
         u = User.objects.get(pk=user_id)
-        c = Company.objects.get(pk=company_id)
-        r = requestAssociatePending(user=u, company=c, company_req=True)
-        r.save()
-        return JsonResponse({'save': 'ok'})
+        admin_u = request.user
+        c = Company.objects.filter(pk=company_id, admins=admin_u)
+        if c:
+            c = c[0]
+            r = requestAssociatePending(user=u, company=c, company_req=True)
+            r.save()
+            return JsonResponse({'save': 'ok'})
     return JsonResponse({})
 
 @login_required(login_url="/account/login/")

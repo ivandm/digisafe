@@ -27,13 +27,11 @@
 <script>
 window.onload = function() {
     document.getElementById('search_button').addEventListener('click', search_user);
-    
-    
     function response_from_html(response){
         var body = document.getElementById('body_result');
         body.innerHTML = response;
         $("button#user_click").each(function(el){
-            console.log(el);
+            //console.log(el);
             $(this).click(function(e) {
                 console.log( $(this) );
                 var that = this;
