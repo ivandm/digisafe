@@ -30,7 +30,8 @@ def accountView(request):
     if request.user.learners_set.count():
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/index.html", context=context)
-    
+
+
 def loginView(request):
     if request.method == 'POST':
         form = AccountAuthenticationForm(request.POST)
@@ -50,6 +51,7 @@ def loginView(request):
     form = AccountAuthenticationForm()
     return render(request, "account/login.html", context={'form':form})
 
+@login_required(login_url="/account/login/")
 def logoutView(request):
     logout(request)
     return redirect(reverse('home:index'))
@@ -122,7 +124,8 @@ def resetPasswordView(request):
         return render(request, "account/reset_password.html", context={'form':form})
     form = AccountResetPasswordForm()
     return render(request, "account/reset_password.html", context={'form':form})
-    
+
+@login_required(login_url="/account/login/")
 def changePasswordView(request):
     if request.method == 'POST':
         form = AccountChangePasswordForm(request.POST)
@@ -151,6 +154,7 @@ def changePasswordView(request):
         form = AccountChangePasswordForm()
         return render(request, "account/change_password.html", context={'form':form})
 
+@login_required(login_url="/account/login/")
 def setPosition(request):
     lat=request.POST.get("lat")
     lon=request.POST.get("lon")
@@ -162,6 +166,7 @@ def setPosition(request):
         return JsonResponse({'save': True})
     return JsonResponse({'save': False})
 
+@login_required(login_url="/account/login/")
 def certificateView(request, pk_protocol=None, user_id=None):
         from utils.helper import qrcode_str2base64
         from django.contrib.sites.shortcuts import get_current_site

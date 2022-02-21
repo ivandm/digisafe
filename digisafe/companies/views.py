@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404
 from django.utils.translation import gettext as _
 from django.db.models import Q
@@ -7,6 +8,7 @@ from users.models import User
 from account.models import UsersPosition
 from .models import Company, requestAssociatePending
 
+@login_required(login_url="/account/login/")
 def companyDetailView(request, pk=None):
     # print("companyDetailView")
     context = {}
@@ -19,6 +21,7 @@ def companyDetailView(request, pk=None):
         context.update(qs_results=qs_results)
     return render(request, "companies/index.html", context)
 
+@login_required(login_url="/account/login/")
 def retrieve_users_to_associate(request):
         print("retrieve_users_to_associate.retrieve", request)
         slug = request.POST.get('slug')
@@ -32,7 +35,8 @@ def retrieve_users_to_associate(request):
             print(user_list)
             return render(request, template_name='companies/get_user_list_detail.html', context={'object_list': user_list})
         raise Http404(_("No users matches the given query."))
-        
+
+@login_required(login_url="/account/login/")
 def companyPublicDetailView(request, pk=None):
     context = {}
     if pk:
@@ -41,6 +45,7 @@ def companyPublicDetailView(request, pk=None):
         context.update(company=c)
     return render(request, "companies/public_view.html", context)
 
+@login_required(login_url="/account/login/")
 def requestAssociateAction(request):
     request_id = request.POST.get("request_id")
     action     = request.POST.get("action") # accept/refuse
@@ -57,7 +62,8 @@ def requestAssociateAction(request):
             return JsonResponse({'refuse': 'ok'})
 
     return JsonResponse({'nothing': 'ok'})
-    
+
+@login_required(login_url="/account/login/")
 def requestAssociateToUser(request):
     # Company chiede associazione ad un utente
     user_id = request.GET.get("user_id")
@@ -69,7 +75,8 @@ def requestAssociateToUser(request):
         r.save()
         return JsonResponse({'save': 'ok'})
     return JsonResponse({})
-    
+
+@login_required(login_url="/account/login/")
 def requestAssociateToCompany(request):
     # Utente chiede associazione ad una Company
     user_id = request.GET.get("user_id")
