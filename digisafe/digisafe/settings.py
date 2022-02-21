@@ -233,6 +233,7 @@ COMPRESS_PRECOMPILERS = (
 # To reexamine all source code and templates for new translation strings and update all message files for all locale, run this:
 # django-admin makemessages -a
 # The script should be run from one of two places: The root directory of your Django project or The root directory of your Django project
+# django-admin compilemessages per compilare i messaggi
 LOCALE_PATHS = [
     BASE_DIR / "locale/",
     # BASE_DIR / "digisafe/locale",
