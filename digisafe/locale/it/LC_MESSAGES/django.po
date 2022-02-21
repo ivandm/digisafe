@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-21 17:12+0100\n"
+"POT-Creation-Date: 2022-02-21 19:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,11 +104,11 @@ msgstr "Per corso"
 msgid "Per trainer"
 msgstr "Per docente"
 
-#: digisafe/settings.py:241
+#: digisafe/settings.py:242
 msgid "Italian"
 msgstr "Italiano"
 
-#: digisafe/settings.py:242
+#: digisafe/settings.py:243
 msgid "English"
 msgstr "Inglese"
 
@@ -127,7 +127,7 @@ msgstr "{0} file non firmato ancora."
 
 #: protocol/admin.py:730
 msgid "Create new protocol"
-msgstr ""
+msgstr "Crea nuovo protocollo"
 
 #: protocol/admin.py:821
 msgid "Set request"
@@ -228,11 +228,11 @@ msgstr ""
 
 #: protocol/models.py:167
 msgid "New"
-msgstr ""
+msgstr "Nuovo"
 
 #: protocol/models.py:168 templates/protocol/certificate_content.html:12
 msgid "Update"
-msgstr ""
+msgstr "Aggiorna"
 
 #: protocol/models.py:282
 #, python-brace-format
@@ -344,19 +344,19 @@ msgstr ""
 
 #: templates/account/home_admin.html:4
 msgid "Company Admin Panel"
-msgstr ""
+msgstr "Pannello amministrazione aziendale"
 
 #: templates/account/home_admin.html:8
 msgid "Company list"
-msgstr ""
+msgstr "Lista aziende"
 
 #: templates/account/home_admin.html:13
 msgid "Dashboard Companies"
-msgstr ""
+msgstr "Dashboard aziende"
 
 #: templates/account/home_admin.html:15
 msgid "List companies you are admin"
-msgstr "Lista aziende amministrate"
+msgstr "Lista aziende gestite"
 
 #: templates/account/home_admin.html:18
 msgid "Open"
@@ -384,27 +384,40 @@ msgstr "Pannelo del profilo personale"
 
 #: templates/account/home_profile.html:8
 msgid "Pending request"
-msgstr ""
+msgstr "Richiesta in attesa"
 
 #: templates/account/home_profile.html:13
 msgid "Accept"
-msgstr ""
+msgstr "Accetta"
 
 #: templates/account/home_profile.html:14
 msgid "Refuse"
-msgstr ""
+msgstr "Rifiuta"
 
 #: templates/account/home_profile.html:45
 msgid "Accepted"
-msgstr ""
+msgstr "Accettato"
 
 #: templates/account/home_profile.html:49
 msgid "Refused"
-msgstr ""
+msgstr "Rifiutato"
 
 #: templates/account/index.html:14
 msgid "PROFILES PAGE"
-msgstr ""
+msgstr "PAGINA PROFILI"
+
+#: templates/account/index.html:19
+#, fuzzy
+msgid "Personal profile"
+msgstr "Profilo personale"
+
+#: templates/account/index.html:22
+msgid "Owner courses"
+msgstr "Corsi personali"
+
+#: templates/account/index.html:26
+msgid "Admin profile"
+msgstr "Profilo amministratore"
 
 #: templates/account/login.html:31
 #, python-format
@@ -419,13 +432,13 @@ msgstr ""
 
 #: templates/account/login.html:55
 msgid "Log in"
-msgstr ""
+msgstr "Entra"
 
 #: templates/account/lost_login.html:21
 #: templates/admin/edit_inline/check_block.html:38
 #: templates/companies/get_user_list_detail.html:11
 msgid "Request"
-msgstr ""
+msgstr "Richiesta"
 
 #: templates/admin/auth/user/add_form.html:6
 msgid ""
@@ -435,36 +448,36 @@ msgstr ""
 
 #: templates/admin/auth/user/add_form.html:8
 msgid "Enter a username and password."
-msgstr ""
+msgstr "Digita username e passowrd"
 
 #: templates/admin/change_form_object_tools.html:7
 #: templates/protocol/certificate_protocol_list.html:16
 msgid "Certificate list"
-msgstr ""
+msgstr "Lista certificati"
 
 #: templates/admin/change_form_object_tools.html:35
 msgid "Sign exam"
-msgstr ""
+msgstr "Firma verbale"
 
 #: templates/admin/change_form_object_tools.html:40
 msgid "Sign register"
-msgstr ""
+msgstr "Firma registro"
 
 #: templates/admin/change_form_object_tools.html:46
 #: templates/protocol/action_list.html:12
 msgid "Actions"
-msgstr ""
+msgstr "Azioni"
 
 #: templates/admin/change_form_object_tools.html:52
 msgid "History"
-msgstr ""
+msgstr "Cronologia"
 
 #: templates/admin/change_form_object_tools.html:54
 #: templates/admin/edit_inline/tabular_files.html:39
 #: templates/admin/edit_inline/tabular_learner.html:46
 #: templates/admin/edit_inline/tabular_trainer.html:39
 msgid "View on site"
-msgstr ""
+msgstr "Vedi sul sito"
 
 #: templates/admin/change_form_protocol.html:21
 #: templates/admin/denied_confirm.html:8 templates/protocol/action_list.html:8
@@ -476,7 +489,7 @@ msgstr ""
 #: templates/admin/change_form_protocol.html:24
 #, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "Aggiungi %(name)s"
 
 #: templates/admin/change_form_protocol.html:31
 msgid "Warning. Request integration. See Actions"
@@ -602,7 +615,7 @@ msgstr ""
 
 #: templates/admin/submit_line.html:10
 msgid "Save as new"
-msgstr ""
+msgstr "Salva come nuovo"
 
 #: templates/admin/submit_line.html:11
 msgid "Save and add another"
@@ -626,33 +639,33 @@ msgstr ""
 
 #: templates/admin/submit_line.html:20
 msgid "Load to institution"
-msgstr ""
+msgstr "Caricato all'ente"
 
 #: templates/admin/submit_line.html:21 templates/admin/submit_line.html:26
 #: templates/admin/submit_line.html:31 templates/admin/submit_line.html:44
 #: templates/admin/submit_line.html:51
 msgid "Denied"
-msgstr ""
+msgstr "Rifiutato"
 
 #: templates/admin/submit_line.html:25 templates/admin/submit_line.html:30
 msgid "Authorize"
-msgstr ""
+msgstr "Autorizza"
 
 #: templates/admin/submit_line.html:32 templates/admin/submit_line.html:37
 msgid "Update and continue editing"
-msgstr ""
+msgstr "Aggiorna e continua la modifica"
 
 #: templates/admin/submit_line.html:32 templates/admin/submit_line.html:37
 msgid "Update and view"
-msgstr ""
+msgstr "Aggiorna e vedi"
 
 #: templates/admin/submit_line.html:36
 msgid "Finish"
-msgstr ""
+msgstr "Fine"
 
 #: templates/admin/submit_line.html:42 templates/admin/submit_line.html:49
 msgid "Ok and Close"
-msgstr ""
+msgstr "Ok e Chiudi"
 
 #: templates/companies/associate_user.html:6
 #: templates/companies/associate_user.html:17
@@ -660,13 +673,13 @@ msgstr ""
 #: templates/companies/user_to_associate.html:17
 #: templates/protocol/action_list_objects.html:6
 msgid "User"
-msgstr ""
+msgstr "Utente"
 
 #: templates/companies/associate_user.html:11
 #: templates/companies/user_to_associate.html:11
 #: templates/maps/searchplace.html:19
 msgid "Search"
-msgstr ""
+msgstr "Cerca"
 
 #: templates/companies/associate_user.html:18
 #: templates/companies/user_to_associate.html:18
@@ -678,27 +691,27 @@ msgstr ""
 #: templates/companies/associate_user.html:27
 #: templates/protocol/action_list_objects.html:7
 msgid "Action"
-msgstr ""
+msgstr "Azione"
 
 #: templates/companies/index.html:14
 msgid "Dashboard panel"
-msgstr ""
+msgstr "Dashboard"
 
 #: templates/companies/index.html:18 templates/companies/index.html:33
 msgid "Associate users"
-msgstr ""
+msgstr "Utenti associati"
 
 #: templates/companies/index.html:19
 msgid "Seacrh users"
-msgstr ""
+msgstr "Cerca utenti"
 
 #: templates/companies/index.html:20 templates/companies/index.html:39
 msgid "Maps"
-msgstr ""
+msgstr "Mappe"
 
 #: templates/companies/index.html:26
 msgid "Users available"
-msgstr ""
+msgstr "Utenti disponibili"
 
 #: templates/companies/public_view.html:11
 msgid "Detail public view"
@@ -724,19 +737,19 @@ msgstr ""
 msgid "Welcome,"
 msgstr ""
 
-#: templates/home/base.html:51
+#: templates/home/base.html:53
 msgid "View site"
 msgstr ""
 
-#: templates/home/base.html:55
+#: templates/home/base.html:56
 msgid "Change password"
 msgstr ""
 
-#: templates/home/base.html:58
+#: templates/home/base.html:59
 msgid "Admin"
 msgstr ""
 
-#: templates/home/base.html:60
+#: templates/home/base.html:61
 msgid "Log out"
 msgstr "Esci"
 
@@ -744,17 +757,21 @@ msgstr "Esci"
 msgid "Digi.Safe."
 msgstr ""
 
+#: templates/maps/searchplace.html:6
+msgid "Map"
+msgstr "Mappa"
+
 #: templates/maps/searchplace.html:11
 msgid "Select center"
-msgstr ""
+msgstr "Seleziona per centrare"
 
 #: templates/maps/searchplace.html:13
 msgid "Save position"
-msgstr ""
+msgstr "Salva la posizione"
 
 #: templates/maps/searchplace.html:16
 msgid "Address Lookup"
-msgstr ""
+msgstr "Ricerca indirizzo"
 
 #: templates/protocol/action_list.html:23
 msgid ""
@@ -764,21 +781,21 @@ msgstr ""
 
 #: templates/protocol/action_list_objects.html:5
 msgid "Date/time"
-msgstr ""
+msgstr "Data/ora"
 
 #: templates/protocol/certificate_content.html:7
 msgid "Training"
-msgstr ""
+msgstr "Lezioni"
 
 #: templates/protocol/certificate_content.html:8
 #: templates/protocol/certificate_content.html:13
 msgid "Theory hours"
-msgstr ""
+msgstr "Ore di teoria"
 
 #: templates/protocol/certificate_content.html:9
 #: templates/protocol/certificate_content.html:14
 msgid "Practice hours"
-msgstr ""
+msgstr "Ore di pratica"
 
 #: templates/protocol/certificate_protocol_list.html:21
 msgid "Certificate list download"
@@ -817,30 +834,30 @@ msgstr ""
 
 #: templates/protocol/certificate_user.html:89
 msgid "Typology (new/update)"
-msgstr ""
+msgstr "Tipologia (Nuovo/Aggiornamento)"
 
 #: templates/protocol/certificate_user.html:93
 msgid "Risk"
-msgstr ""
+msgstr "Rischio"
 
 #: templates/protocol/certificate_user.html:101
 msgid "Country"
-msgstr ""
+msgstr "Stato"
 
 #: templates/protocol/certificate_user.html:111
 msgid "Place"
-msgstr ""
+msgstr "Luogo"
 
 #: templates/protocol/certificate_user.html:112
 #: templates/protocol/exam_print_firstpage.html:69
 #: templates/protocol/register_print_firstpage.html:58
 #: templates/protocol/register_print_firstpage.html:94
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: templates/protocol/certificate_user.html:113
 msgid "Time"
-msgstr ""
+msgstr "Ora"
 
 #: templates/protocol/certificate_user.html:114
 #: templates/protocol/exam_print_firstpage.html:31
@@ -848,7 +865,7 @@ msgstr ""
 #: templates/protocol/register_print_firstpage.html:59
 #: templates/protocol/sign_file.html:56
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: templates/protocol/certificate_user.html:140
 msgid "Training project authorized by the subject"
@@ -864,15 +881,15 @@ msgstr ""
 
 #: templates/protocol/certificate_user.html:157
 msgid "Institution"
-msgstr ""
+msgstr "Ente"
 
 #: templates/protocol/certificate_user.html:159
 msgid "Center"
-msgstr ""
+msgstr "Centro"
 
 #: templates/protocol/certificate_user.html:185
 msgid "Certificate protocol"
-msgstr ""
+msgstr "Protocollo certificato"
 
 #: templates/protocol/certificate_user.html:191
 msgid "Verify the authenticity of this certificate with the QRCODE shown above"
@@ -897,7 +914,7 @@ msgstr ""
 
 #: templates/protocol/exam_print_firstpage.html:24
 msgid "Training project"
-msgstr ""
+msgstr "Progetto formativo"
 
 #: templates/protocol/exam_print_firstpage.html:26
 #: templates/protocol/exam_print_signpage.html:9
@@ -905,58 +922,58 @@ msgstr ""
 #: templates/protocol/register_print_listpage.html:10
 #: templates/protocol/register_print_signpage.html:11
 msgid "Course protocol"
-msgstr ""
+msgstr "Protocollo corso"
 
 #: templates/protocol/exam_print_firstpage.html:37
 msgid "Commission"
-msgstr ""
+msgstr "Commissione"
 
 #: templates/protocol/exam_print_firstpage.html:39
 msgid "Examiner name"
-msgstr ""
+msgstr "Nome esaminatore"
 
 #: templates/protocol/exam_print_firstpage.html:40
 msgid "Members"
-msgstr ""
+msgstr "Membro"
 
 #: templates/protocol/exam_print_firstpage.html:45
 msgid "Chairman"
-msgstr ""
+msgstr "Presidente"
 
 #: templates/protocol/exam_print_firstpage.html:50
 #: templates/protocol/exam_print_firstpage.html:55
 #: templates/protocol/exam_print_firstpage.html:60
 #: templates/protocol/exam_print_firstpage.html:65
 msgid "Component"
-msgstr ""
+msgstr "Componente"
 
 #: templates/protocol/exam_print_firstpage.html:71
 msgid "Director sign"
-msgstr ""
+msgstr "Firma direttore"
 
 #: templates/protocol/exam_print_firstpage.html:79
 msgid "METHOD OF VERIFICATION CARRIED OUT"
-msgstr ""
+msgstr "Metodo di verifica"
 
 #: templates/protocol/exam_print_firstpage.html:80
 msgid "MULTIPLE ANSWER TEST"
-msgstr ""
+msgstr "Test a risposta multipla"
 
 #: templates/protocol/exam_print_firstpage.html:81
 msgid "OPEN ANSWER TEST"
-msgstr ""
+msgstr "Test a risposta aperta"
 
 #: templates/protocol/exam_print_firstpage.html:82
 msgid "ORAL EXAM"
-msgstr ""
+msgstr "Esame orale"
 
 #: templates/protocol/exam_print_firstpage.html:83
 msgid "PRACTICE TEST"
-msgstr ""
+msgstr "Test pratico"
 
 #: templates/protocol/exam_print_firstpage.html:84
 msgid "OTHERS"
-msgstr ""
+msgstr "Altro"
 
 #: templates/protocol/exam_print_firstpage.html:91
 #: templates/protocol/exam_print_signpage.html:79
@@ -964,28 +981,28 @@ msgstr ""
 #: templates/protocol/register_print_listpage.html:56
 #: templates/protocol/register_print_signpage.html:105
 msgid "Page"
-msgstr ""
+msgstr "Pagina"
 
 #: templates/protocol/exam_print_signpage.html:11
 msgid "Exam attendances list"
-msgstr ""
+msgstr "Lista esame discenti"
 
 #: templates/protocol/exam_print_signpage.html:21
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: templates/protocol/exam_print_signpage.html:23
 msgid "Birth & Place"
-msgstr ""
+msgstr "Data e luogo di nascita"
 
 #: templates/protocol/exam_print_signpage.html:24
 #, python-format
 msgid "%% Hours"
-msgstr ""
+msgstr "%% Ore"
 
 #: templates/protocol/exam_print_signpage.html:25
 msgid "Result (pos/neg)"
-msgstr ""
+msgstr "Risul. (pos/neg)"
 
 #: templates/protocol/popup_document.html:3
 msgid "Popup closing…"
@@ -1001,35 +1018,35 @@ msgstr ""
 
 #: templates/protocol/register_print_firstpage.html:10
 msgid "Institution name"
-msgstr ""
+msgstr "Nome ente"
 
 #: templates/protocol/register_print_firstpage.html:12
 msgid "Traininig provider"
-msgstr ""
+msgstr "Centro di formazione"
 
 #: templates/protocol/register_print_firstpage.html:34
 msgid "Code course"
-msgstr ""
+msgstr "Codice corso"
 
 #: templates/protocol/register_print_firstpage.html:45
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: templates/protocol/register_print_firstpage.html:49
 msgid "Description"
-msgstr ""
+msgstr "Descrizione"
 
 #: templates/protocol/register_print_firstpage.html:51
 msgid "Law"
-msgstr ""
+msgstr "Normativa"
 
 #: templates/protocol/register_print_firstpage.html:55
 msgid "Training sessions"
-msgstr ""
+msgstr "Sessioni formative"
 
 #: templates/protocol/register_print_firstpage.html:57
 msgid "PLACE"
-msgstr ""
+msgstr "LUOGO"
 
 #: templates/protocol/register_print_firstpage.html:60
 #: templates/protocol/register_print_signpage.html:17
@@ -1037,34 +1054,34 @@ msgstr ""
 #: templates/protocol/register_print_signpage.html:64
 #: templates/protocol/register_print_signpage.html:75
 msgid "Trainer"
-msgstr ""
+msgstr "Docente"
 
 #: templates/protocol/register_print_firstpage.html:75
 msgid "Institution delegate"
-msgstr ""
+msgstr "Ente delegato"
 
 #: templates/protocol/register_print_firstpage.html:82
 msgid "Center name"
-msgstr ""
+msgstr "Nome del centro"
 
 #: templates/protocol/register_print_firstpage.html:86
 msgid "Director name"
-msgstr ""
+msgstr "Nome del direttore"
 
 #: templates/protocol/register_print_firstpage.html:95
 msgid "Stamp"
-msgstr ""
+msgstr "Timbro"
 
 #: templates/protocol/register_print_firstpage.html:101
 #: templates/protocol/register_print_listpage.html:56
 #: templates/protocol/register_print_signpage.html:105
 msgid "of"
-msgstr ""
+msgstr "di"
 
 #: templates/protocol/register_print_listpage.html:10
 #: templates/protocol/register_print_signpage.html:11
 msgid "Course code"
-msgstr ""
+msgstr "Codice corso"
 
 #: templates/protocol/register_print_listpage.html:13
 msgid "Attendance list page"
