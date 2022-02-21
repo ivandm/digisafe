@@ -22,7 +22,8 @@ from protocol.views import ProtocolAutocompleteJsonView, protocol_download_file,
 from users.views import CheckExistObjJsonView
 
 urlpatterns = [
-    path('', include(('home.urls', 'home'), namespace='home')),   
+    path('', include(('home.urls', 'home'), namespace='home')),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('account/', include(('account.urls', 'account'), namespace='account')),
     path('company/', include(('companies.urls', 'companies'), namespace='companies')),
     path('institutions/', include(('institutions.urls', 'institutions'), namespace='institutions')),

@@ -4,6 +4,8 @@
 # sudo apt-get install libcairo2-dev
 # sudo apt-get install -y libgdk-pixbuf2.0-dev
 # sudo apt install pango1.0-toolsatialite
+# sudo apt-get install -y gettext
+# sudo apt-get install -y gettext
 # pip install -r requirements.txt
 PyPDF2
 numpy

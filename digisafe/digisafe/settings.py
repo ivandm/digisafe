@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 import socket
 hostname = socket.gethostname()
@@ -71,6 +71,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -225,4 +226,16 @@ STATICFILES_FINDERS = ['compressor.finders.CompressorFinder','django.contrib.sta
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
+
+# settings for i18
+# To create or update a message file, run this command:
+# django-admin makemessages -l it
+# The script should be run from one of two places: The root directory of your Django project or The root directory of your Django project
+LOCALE_PATHS = [
+    BASE_DIR / "languages",
+]
+LANGUAGES = [
+    ('it', _('Italian')),
+    ('en', _('English')),
+]
 
