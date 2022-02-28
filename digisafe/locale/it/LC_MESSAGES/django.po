@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-28 13:41+0100\n"
+"POT-Creation-Date: 2022-02-28 17:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -382,10 +382,8 @@ msgid "Owner Courses Panel"
 msgstr "Pannello corsi personali"
 
 #: templates/account/home_courses.html:9
-#, fuzzy
-#| msgid "Course code"
 msgid "Course"
-msgstr "Codice corso"
+msgstr "Corso"
 
 #: templates/account/home_courses.html:14
 #: templates/companies/associate_user.html:11
@@ -394,17 +392,26 @@ msgstr "Codice corso"
 msgid "Search"
 msgstr "Cerca"
 
-#: templates/account/home_courses_object.html:31
+#: templates/account/home_courses_object.html:9
+msgid "Valid"
+msgstr "Valido"
+
+#: templates/account/home_courses_object.html:11
+msgid "Expired"
+msgstr "Scaduto"
+
+#: templates/account/home_courses_object.html:13
+#: templates/account/home_courses_object.html:53
+msgid "Not passed"
+msgstr "Non superato"
+
+#: templates/account/home_courses_object.html:38
 msgid "Digital certificate"
 msgstr "Certificato digitale"
 
-#: templates/account/home_courses_object.html:38
+#: templates/account/home_courses_object.html:45
 msgid "Institution certificate"
 msgstr "Attestato ente"
-
-#: templates/account/home_courses_object.html:46
-msgid "Not passed"
-msgstr "Non superato"
 
 #: templates/account/home_profile.html:4
 msgid "Profile Panel"

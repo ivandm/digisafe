@@ -5,6 +5,13 @@
         <div class="{% if course.passed and course.protocol.expired %} bg-secondary text-blue{% endif %}">
             <div class="col-md">
                 {{ course.protocol }}
+                {% if course.passed and not course.protocol.expired %}
+                ( {% translate 'Valid' %} )
+                {% elif course.passed and course.protocol.expired %}
+                ( {% translate 'Expired' %} )
+                {% elif not course.passed %}
+                ( {% translate 'Not passed' %} )
+                {% endif %}
             </div>
             <div class="col-md">
                 {{ course.protocol.title }}
