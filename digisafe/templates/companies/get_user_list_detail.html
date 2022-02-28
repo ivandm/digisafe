@@ -6,7 +6,7 @@
     <div class="col">{{u.email}}</div>
     {% pending_request request u as pending %}
     {% if pending %}
-    <div class="col-2">Pending...</div>
+    <div class="col-2">{% translate 'Pending...' %}</div>
     {% else %}
     <div class="col-2"><button id="user_click" class="btn btn-primary" user_id="{{u.id}}">{% translate "Request" %}</button></div>
     {% endif %}

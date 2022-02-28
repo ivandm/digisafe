@@ -9,7 +9,10 @@
 <DIV class="m-2">
 <h1 class="bg-primary text-white fs-1 p-2">{{company.name}}</h1>
 <h3 class="bg-primary bg-opacity-25 text-dark fs-3 p-2">{% translate 'Detail public view' %}</h3>
-...
-
+    <img src="{% static company.profile.logo.url %}" alt="{% translate 'Logo not upload' %}"></img>
+    <p>{{company.profile.country}}</p>
+    <p>{{company.profile.city}}</p>
+    <p>{{company.profile.address}}</p>
+    <p>{{company.profile.desc}}</p>
 </DIV>
 {% endblock %}

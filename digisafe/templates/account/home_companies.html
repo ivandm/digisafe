@@ -1,0 +1,43 @@
+{% load i18n static accounttags %}
+
+<div class="m-2">
+    <h1><span class="bg-primary fw-bold p-1">{% translate 'Associate companies' %}</span></h1>
+    <div class="container overflow-hidden">
+        {% for object in companies %}
+            {% if forloop.first %}
+                <div class="row">
+                    <div class="col text-capitalize fw-bold">
+                        {% translate 'Action' %}
+                    </div>
+                    {% for fieldname in object.keys %}
+                        <div class="col text-capitalize fw-bold">
+                            {% translate fieldname %}
+                        </div>
+                   {% endfor %}
+                </div>
+            {% endif %}
+            {% if forloop.first %}
+                <div class="row">
+<!--                    <div class="col text-capitalize fw-bold">-->
+<!--                        - -->
+<!--                    </div>-->
+                    {% for fieldname in object.keys %}
+<!--                        <div class="col">-->
+<!--                            <input type="text" class="form-control form-control-sm" id="{{fieldname}}" >-->
+<!--                        </div>-->
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="row gy-5">
+                {% for value in object.values %}
+                {% if forloop.first %}
+                    <div class="col  text-capitalize fw-bold">
+                        <a href="{% url 'account:dissociate' object.id %}" class="btn btn-primary">{% translate 'Dissociate' %}</a>
+                    </div>
+                {% endif %}
+                <div class="col"><a href="{% url 'companies:company-public-view' object.id %}">{{ value }}</a></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

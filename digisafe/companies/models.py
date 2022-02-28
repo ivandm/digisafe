@@ -51,6 +51,7 @@ class Profile(models.Model):
         # blank=True
     )
     address = models.CharField(max_length=255)
+    desc = models.TextField(default="")
     logo = models.FileField(
                     upload_to=file_path_name_company,
                     storage=storage.FileSystemStorage(location='static/imgs/', base_url="/imgs"),

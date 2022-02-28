@@ -14,7 +14,6 @@ const { degrees, PDFDocument, rgb, StandardFonts } = PDFLib
     
     async function modifyPdf() {
       // Fetch an existing PDF document
-      <!-- const url = 'url' -->
       const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
 
       // Load a PDFDocument from the existing PDF bytes
@@ -46,11 +45,11 @@ const { degrees, PDFDocument, rgb, StandardFonts } = PDFLib
       <!-- document.getElementById('pdf').src = "data:image/png;base64, "+pdfDataUri; -->
       document.getElementById('pdf').setAttribute("height", height);
       
-      <!-- download the pdf file -->
+//      <!-- download the pdf file -->
       // Serialize the PDFDocument to bytes (a Uint8Array)
-      <!-- const pdfBytes = await pdfDoc.save() -->
+//      <!-- const pdfBytes = await pdfDoc.save() -->
       // Trigger the browser to download the PDF document
-      <!-- download(pdfBytes, "filename", "application/pdf"); -->
+//      <!-- download(pdfBytes, "filename", "application/pdf"); -->
       Geeks();
     }
     

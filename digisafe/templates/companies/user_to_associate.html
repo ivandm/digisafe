@@ -33,7 +33,7 @@ window.onload = function() {
         $("button#user_click").each(function(el){
             //console.log(el);
             $(this).click(function(e) {
-                console.log( $(this) );
+                //console.log( $(this) );
                 var that = this;
                 var user_id = $(this).attr("user_id");
                 url = "{% url 'companies:company-request-user' %}";
@@ -46,7 +46,7 @@ window.onload = function() {
                     data: data,
                     success: function (response) {
                         // on successfull creating object
-                        console.log(response);
+                        //console.log(response);
                         if (response.save == 'ok'){
                             $(that).attr("disabled");
                             $(that).addClass("disabled");
@@ -68,7 +68,7 @@ window.onload = function() {
     }
     
     function search_user(e){
-        console.log("search_user");
+        //console.log("search_user");
         e.preventDefault();
         var slug = document.getElementById('user').value;
         var url = "{% url 'companies:company-user-search' %}";

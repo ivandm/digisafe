@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-21 19:07+0100\n"
+"POT-Creation-Date: 2022-02-28 13:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,41 +30,41 @@ msgstr "Le password non sono le stesse."
 msgid "Last update"
 msgstr "Ultimo aggiornamento"
 
-#: account/views.py:48
+#: account/views.py:69
 msgid "Invalid username or password."
 msgstr "Username o password non valide."
 
-#: account/views.py:74
+#: account/views.py:96
 #, python-brace-format
 msgid "New auth code was sent to {0}."
 msgstr "Il nuovo auth code è stato inviato a {0}."
 
-#: account/views.py:75
+#: account/views.py:97
 msgid "Check your email. Beware it's not in spam."
 msgstr "Controlla la tua email. Attenzione che non sia nello spam."
 
-#: account/views.py:79
+#: account/views.py:101
 msgid "Digi.Safe. new credentials"
 msgstr "Nuove credenziali Digi.Safe."
 
-#: account/views.py:87
+#: account/views.py:109
 #, python-brace-format
 msgid "Email {0} doesn't check into database."
 msgstr "Email {0} non trovata nel database."
 
-#: account/views.py:106
+#: account/views.py:128
 msgid "Error in request. Check your auth code and try again."
 msgstr "Errore nella richiesta. Controlla il tuo auth code e riprova."
 
-#: account/views.py:108 account/views.py:135
+#: account/views.py:130 account/views.py:158
 msgid "Password has been changed."
 msgstr "La password è stata cambiata."
 
-#: account/views.py:113 account/views.py:141
+#: account/views.py:135 account/views.py:164
 msgid "Digi.Safe. new password"
 msgstr "Nuova passowrd Digi.Safe."
 
-#: account/views.py:121 account/views.py:148
+#: account/views.py:143 account/views.py:171
 msgid "Invalid header found."
 msgstr "Header non valido."
 
@@ -80,7 +80,7 @@ msgstr "Massima dimensione del file da caricare {0}"
 msgid "Unsupported file extension. Valid extension are '{0}'"
 msgstr "Estenzione del file non supportata. Estenzione valida '{0}'"
 
-#: companies/views.py:34
+#: companies/views.py:39
 msgid "No users matches the given query."
 msgstr "Nessun utente corrispondente alla ricerca."
 
@@ -104,11 +104,11 @@ msgstr "Per corso"
 msgid "Per trainer"
 msgstr "Per docente"
 
-#: digisafe/settings.py:242
+#: digisafe/settings.py:244
 msgid "Italian"
 msgstr "Italiano"
 
-#: digisafe/settings.py:243
+#: digisafe/settings.py:245
 msgid "English"
 msgstr "Inglese"
 
@@ -228,7 +228,7 @@ msgstr ""
 
 #: protocol/models.py:167
 msgid "New"
-msgstr "Nuovo"
+msgstr "Formazione"
 
 #: protocol/models.py:168 templates/protocol/certificate_content.html:12
 msgid "Update"
@@ -280,12 +280,12 @@ msgstr ""
 
 #: protocol/models.py:475
 msgid "Certificate Institution"
-msgstr ""
+msgstr "Attestato Ente"
 
 #: protocol/models.py:483
 #, python-brace-format
 msgid "User: {nome} {cognome} ({user}) "
-msgstr ""
+msgstr "Utente: {nome} {cognome} ({user}) "
 
 #: protocol/models.py:529 templates/admin/change_form_object_tools.html:14
 #: templates/protocol/register_print_firstpage.html:7
@@ -362,24 +362,52 @@ msgstr "Lista aziende gestite"
 msgid "Open"
 msgstr "Apri"
 
+#: templates/account/home_companies.html:4 templates/account/index.html:22
+msgid "Associate companies"
+msgstr "Aziende associate"
+
+#: templates/account/home_companies.html:10
+#: templates/companies/associate_user.html:19
+#: templates/protocol/action_list_objects.html:7
+msgid "Action"
+msgstr "Azione"
+
+#: templates/account/home_companies.html:35
+#: templates/companies/associate_user.html:28
+msgid "Dissociate"
+msgstr "Dissocia"
+
 #: templates/account/home_courses.html:4
 msgid "Owner Courses Panel"
 msgstr "Pannello corsi personali"
 
-#: templates/account/home_courses.html:28
+#: templates/account/home_courses.html:9
+#, fuzzy
+#| msgid "Course code"
+msgid "Course"
+msgstr "Codice corso"
+
+#: templates/account/home_courses.html:14
+#: templates/companies/associate_user.html:11
+#: templates/companies/user_to_associate.html:11
+#: templates/maps/searchplace.html:19
+msgid "Search"
+msgstr "Cerca"
+
+#: templates/account/home_courses_object.html:31
 msgid "Digital certificate"
 msgstr "Certificato digitale"
 
-#: templates/account/home_courses.html:35
+#: templates/account/home_courses_object.html:38
 msgid "Institution certificate"
-msgstr ""
+msgstr "Attestato ente"
 
-#: templates/account/home_courses.html:43
+#: templates/account/home_courses_object.html:46
 msgid "Not passed"
-msgstr ""
+msgstr "Non superato"
 
 #: templates/account/home_profile.html:4
-msgid "Personal Profile Panel"
+msgid "Profile Panel"
 msgstr "Pannelo del profilo personale"
 
 #: templates/account/home_profile.html:8
@@ -407,15 +435,14 @@ msgid "PROFILES PAGE"
 msgstr "PAGINA PROFILI"
 
 #: templates/account/index.html:19
-#, fuzzy
 msgid "Personal profile"
 msgstr "Profilo personale"
 
-#: templates/account/index.html:22
+#: templates/account/index.html:26
 msgid "Owner courses"
 msgstr "Corsi personali"
 
-#: templates/account/index.html:26
+#: templates/account/index.html:30
 msgid "Admin profile"
 msgstr "Profilo amministratore"
 
@@ -675,23 +702,22 @@ msgstr "Ok e Chiudi"
 msgid "User"
 msgstr "Utente"
 
-#: templates/companies/associate_user.html:11
-#: templates/companies/user_to_associate.html:11
-#: templates/maps/searchplace.html:19
-msgid "Search"
-msgstr "Cerca"
-
 #: templates/companies/associate_user.html:18
 #: templates/companies/user_to_associate.html:18
 #: templates/protocol/action_list_objects.html:8
 msgid "Info"
 msgstr ""
 
-#: templates/companies/associate_user.html:19
-#: templates/companies/associate_user.html:27
-#: templates/protocol/action_list_objects.html:7
-msgid "Action"
-msgstr "Azione"
+#: templates/companies/associate_user.html:57
+#, fuzzy
+#| msgid "Associate users"
+msgid "Dissociated"
+msgstr "Utenti associati"
+
+#: templates/companies/get_user_list_detail.html:9
+#: templates/companies/user_to_associate.html:53
+msgid "Pending..."
+msgstr "In attesa..."
 
 #: templates/companies/index.html:14
 msgid "Dashboard panel"
@@ -715,27 +741,27 @@ msgstr "Utenti disponibili"
 
 #: templates/companies/public_view.html:11
 msgid "Detail public view"
-msgstr ""
+msgstr "Dettagli pubblici"
+
+#: templates/companies/public_view.html:12
+msgid "Logo not upload"
+msgstr "Logo non caricato"
 
 #: templates/companies/user_to_associate.html:19
 msgid "Associate"
-msgstr ""
-
-#: templates/companies/user_to_associate.html:55
-msgid "Pending..."
-msgstr ""
+msgstr "Associa"
 
 #: templates/error_pages/email_404.html:10
 msgid "Error"
-msgstr ""
+msgstr "Errore"
 
 #: templates/error_pages/email_404.html:12
 msgid "Check carefully. Email doesn't exist"
-msgstr ""
+msgstr "Cerca attentamente. Email inesistente"
 
 #: templates/home/base.html:46
 msgid "Welcome,"
-msgstr ""
+msgstr "Benvenuto,"
 
 #: templates/home/base.html:53
 msgid "View site"
@@ -755,6 +781,10 @@ msgstr "Esci"
 
 #: templates/home/home_base.html:6
 msgid "Digi.Safe."
+msgstr ""
+
+#: templates/home/index.html:14
+msgid "Professional and Technician Organization"
 msgstr ""
 
 #: templates/maps/searchplace.html:6
@@ -1177,16 +1207,16 @@ msgstr ""
 #: users/admin.py:313
 #, python-format
 msgid "%s is an institution now"
-msgstr ""
+msgstr "%s è un ente ora"
 
 #: users/admin.py:324
 #, python-format
 msgid "%d user is log now"
-msgstr ""
+msgstr "Utente %d è loggato"
 
 #: users/forms.py:16
 msgid "Username"
-msgstr ""
+msgstr "Nome utente"
 
 #: users/forms.py:19
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."

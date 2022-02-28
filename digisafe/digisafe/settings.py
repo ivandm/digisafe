@@ -230,6 +230,8 @@ COMPRESS_PRECOMPILERS = (
 # settings for i18
 # To create or update a message file, run this command:
 # django-admin makemessages -l it
+# Creating message files from JavaScript source code
+# django-admin makemessages -d djangojs -l it
 # To reexamine all source code and templates for new translation strings and update all message files for all locale, run this:
 # django-admin makemessages -a
 # The script should be run from one of two places: The root directory of your Django project or The root directory of your Django project

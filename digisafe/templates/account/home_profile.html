@@ -1,10 +1,10 @@
 {% load i18n static leaflet_tags geojson_tags %}
 
 <DIV class="m-2">
-<h1>{% translate 'Personal Profile Panel' %}</h1>
+    <h1 class=""><span class="bg-primary fw-bold p-1">{% translate 'Profile Panel' %}</span></h1>
 
 {% if pending %}
-    <div>
+    <div class="p-2 mb-2 border bg-info">
         <h3>{% translate 'Pending request' %}</h3>
         {% for p in pending %}
         <div>
@@ -17,7 +17,7 @@
         {% endfor %}
     </div>
 {% endif %}
-    <div>
+    <div class="">
         <script type='text/javascript' >
             var csrfmiddlewaretoken = "{{ csrf_token }}";
             var url_save_position = "{%  url "account:setposition" %}";

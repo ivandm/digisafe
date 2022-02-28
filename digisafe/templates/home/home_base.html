@@ -11,8 +11,12 @@
 <div class="">
   <nav class="navbar navbar-dark bg-dark">
     <div class="px-1">
+      {% if user.is_anonymous %}
       <a class="navbar-brand" href="{% url 'home:index' %}">Home</a>
+      <a class="navbar-brand" href="{% url 'account:index' %}">Login</a>
+      {% else %}
       <a class="navbar-brand" href="{% url 'account:index' %}">Account</a>
+      {% endif %}
     </div>
   </nav>
 </div>

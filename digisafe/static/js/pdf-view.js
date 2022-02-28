@@ -66,6 +66,7 @@ function renderPage(pageNum){
   
 }
 
+
 function drawPdf(loadingTask){
     loadingTask.promise.then(function(pdf_) {
       // console.log('PDF loaded');
@@ -196,8 +197,8 @@ function delLastSign(){
 
 
 function saveFilePdf(){
-    console.log(JSON.stringify(signsDict));
-    console.log(csrftoken);
+//    console.log(JSON.stringify(signsDict));
+//    console.log(csrftoken);
     if (confirm("Are you sure? Process irreverible!") == true) {
         var serializedData = JSON.stringify(
                         {
@@ -233,6 +234,7 @@ function saveFilePdf(){
         });
     }
 }
+
 
 function removeAllSignsFunc(){
     if (confirm("Are you sure remove? Process irreverible!") == true) {

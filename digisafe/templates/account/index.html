@@ -11,12 +11,16 @@
 {% block content %}
 
 <div class="container">
-    <h1>{% translate 'PROFILES PAGE' %}</h1>
+    <h1 class="bg-info p-2 fw-bold">{% translate 'PROFILES PAGE' %}</h1>
     
     <nav>
       <div class="nav nav-pills" id="nav-account-tab" role="tablist">
         <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">
             {% translate 'Personal profile' %}</button>
+        {% if companies %}
+          <button class="nav-link" id="nav-companies-tab" data-bs-toggle="tab" data-bs-target="#nav-companies" type="button" role="tab" aria-controls="nav-companies" aria-selected="false">
+            {% translate 'Associate companies' %}</button>
+        {% endif %}
         {% if courses %}
           <button class="nav-link"        id="nav-courses-tab" data-bs-toggle="tab" data-bs-target="#nav-courses" type="button" role="tab" aria-controls="nav-courses" aria-selected="false">
             {% translate 'Owner courses' %}</button>
@@ -31,6 +35,11 @@
         <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             {% include 'account/home_profile.html' %}
         </div>
+        {% if companies %}
+        <div class="tab-pane fade" id="nav-companies" role="tabpanel" aria-labelledby="nav-companies-tab">
+            {% include 'account/home_companies.html' %}
+        </div>
+        {% endif %}
         {% if courses %}
         <div class="tab-pane fade" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
             {% include 'account/home_courses.html' %}

@@ -4,7 +4,7 @@ register = template.Library()
 
 
 # @register.simple_tag
-# def get_dir(obj):
-    # print(obj.__class__.__name__)
-    # print(dir(obj))
-    # return ""
+# def make_heads(obj):
+#     print(obj)
+#     print(dir(obj))
+#     return ""

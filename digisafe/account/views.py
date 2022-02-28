@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage, BadHeaderError
 from django.contrib import messages
 from django.http import JsonResponse
 from django.template.response import TemplateResponse
-
+from django.db.models import Q
 
 from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, AccountResetPasswordForm
 from .models import TmpPassword, UsersPosition
@@ -19,6 +19,7 @@ from protocol.models import Protocol
 def accountView(request):
     context = {
         'pending': request.user.requestassociatepending_set.filter(user_req=False),
+        'companies': request.user.associates_company.filter(active=True).order_by("name").values("id", "name")
     }
     if request.user.profile.administrator:
         c = Company.objects.filter(admins=request.user)
@@ -31,6 +32,25 @@ def accountView(request):
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/index.html", context=context)
 
+def searchCourseView(request):
+    slug = request.POST.get("slug")
+    print(slug)
+    context = {}
+    if request.user.learners_set.count() and slug:
+        context.update(courses=request.user.learners_set.filter( \
+            Q(protocol__course__feature__title__icontains=slug)\
+            # Q(protocol__course__feature__title__icontains=slug) \
+                ).order_by('-protocol__course__id'))
+    else:
+        context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
+    return render(request, "account/home_courses_object.html", context=context)
+
+def dissociateCompanyView(request, pk):
+    # print(request.user.associates_company.filter(pk=pk))
+    c = request.user.associates_company.filter(pk=pk)
+    if c:
+        c[0].associates.remove(request.user)
+    return redirect(reverse('account:index'))
 
 def loginView(request):
     if request.method == 'POST':

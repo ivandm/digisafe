@@ -27,16 +27,14 @@ def companyDetailView(request, pk=None):
 
 @login_required(login_url="/account/login/")
 def retrieve_users_to_associate(request):
-        print("retrieve_users_to_associate.retrieve", request)
+        # print("retrieve_users_to_associate.retrieve", request)
         slug = request.POST.get('slug')
         company_id = request.session.get("company_id")
         if company_id and slug:
             c = Company.objects.get(pk=company_id)
-            print(c.associates.all())
-            user_list = User.objects.filter( 
+            user_list = User.objects.filter(
                                              Q(last_name__icontains=slug) | Q(first_name__icontains=slug)
                                             ).exclude(id__in=c.associates.all())
-            print(user_list)
             return render(request, template_name='companies/get_user_list_detail.html', context={'object_list': user_list})
         raise Http404(_("No users matches the given query."))
 
@@ -67,6 +65,18 @@ def requestAssociateAction(request):
                 return JsonResponse({'refuse': 'ok'})
 
     return JsonResponse({'nothing': 'ok'})
+
+@login_required(login_url="/account/login/")
+def requestDissociateAction(request, pk):
+    company_id = pk
+    user_id    = request.POST.get("user_id")
+    if company_id:
+        c = Company.objects.get(pk=company_id)
+        u = c.associates.filter(pk=user_id)
+        if u:
+            c.associates.remove(u[0])
+            return JsonResponse({'dissociate': True})
+    return JsonResponse({'dissociate': False})
 
 @login_required(login_url="/account/login/")
 def requestAssociateToUser(request):
