@@ -1,7 +1,7 @@
 {% load i18n static accounttags %}
 
 <div class="m-2">
-    <h1><span class="bg-primary fw-bold p-1">{% translate 'Associate companies' %}</span></h1>
+    <h1 class="bg-primary bg-opacity-25 text-dark fs-3 p-2"><span class="">{% translate 'Associate companies' %}</span></h1>
     <div class="container overflow-hidden">
         {% for object in companies %}
             {% if forloop.first %}
