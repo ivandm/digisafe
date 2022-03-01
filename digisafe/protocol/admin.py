@@ -434,7 +434,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         css = {
             'all': (
             'css/digisafe.css',
-            "/static/admin/css/forms.css",
+            # "/static/admin/css/forms.css",
             "/static/css/site.css",
             )
             }

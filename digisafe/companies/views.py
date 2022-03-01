@@ -38,7 +38,6 @@ def retrieve_users_to_associate(request):
             return render(request, template_name='companies/get_user_list_detail.html', context={'object_list': user_list})
         raise Http404(_("No users matches the given query."))
 
-# @login_required(login_url="/account/login/")
 def companyPublicDetailView(request, pk=None):
     context = {}
     if pk:

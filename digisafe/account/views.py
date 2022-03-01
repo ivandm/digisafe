@@ -32,6 +32,7 @@ def accountView(request):
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/index.html", context=context)
 
+@login_required(login_url="/account/login/")
 def searchCourseView(request):
     slug = request.POST.get("slug")
     print(slug)
@@ -45,6 +46,7 @@ def searchCourseView(request):
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/home_courses_object.html", context=context)
 
+@login_required(login_url="/account/login/")
 def dissociateCompanyView(request, pk):
     # print(request.user.associates_company.filter(pk=pk))
     c = request.user.associates_company.filter(pk=pk)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-28 17:12+0100\n"
+"POT-Creation-Date: 2022-03-01 19:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,41 +30,41 @@ msgstr "Le password non sono le stesse."
 msgid "Last update"
 msgstr "Ultimo aggiornamento"
 
-#: account/views.py:69
+#: account/views.py:71
 msgid "Invalid username or password."
 msgstr "Username o password non valide."
 
-#: account/views.py:96
+#: account/views.py:98
 #, python-brace-format
 msgid "New auth code was sent to {0}."
 msgstr "Il nuovo auth code è stato inviato a {0}."
 
-#: account/views.py:97
+#: account/views.py:99
 msgid "Check your email. Beware it's not in spam."
 msgstr "Controlla la tua email. Attenzione che non sia nello spam."
 
-#: account/views.py:101
+#: account/views.py:103
 msgid "Digi.Safe. new credentials"
 msgstr "Nuove credenziali Digi.Safe."
 
-#: account/views.py:109
+#: account/views.py:111
 #, python-brace-format
 msgid "Email {0} doesn't check into database."
 msgstr "Email {0} non trovata nel database."
 
-#: account/views.py:128
+#: account/views.py:130
 msgid "Error in request. Check your auth code and try again."
 msgstr "Errore nella richiesta. Controlla il tuo auth code e riprova."
 
-#: account/views.py:130 account/views.py:158
+#: account/views.py:132 account/views.py:160
 msgid "Password has been changed."
 msgstr "La password è stata cambiata."
 
-#: account/views.py:135 account/views.py:164
+#: account/views.py:137 account/views.py:166
 msgid "Digi.Safe. new password"
 msgstr "Nuova passowrd Digi.Safe."
 
-#: account/views.py:143 account/views.py:171
+#: account/views.py:145 account/views.py:173
 msgid "Invalid header found."
 msgstr "Header non valido."
 
@@ -256,27 +256,27 @@ msgstr ""
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Theory"
-msgstr ""
+msgstr "Teorica"
 
 #: protocol/models.py:379 templates/admin/edit_inline/check_block.html:23
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Practice"
-msgstr ""
+msgstr "Pratica"
 
 #: protocol/models.py:387
 msgid "In presence"
-msgstr ""
+msgstr "In presenza"
 
 #: protocol/models.py:388
 msgid "On the web"
-msgstr ""
+msgstr "Sul web"
 
 #: protocol/models.py:404
 #, python-brace-format
 msgid "Session {data} {inizio}/{fine}"
-msgstr ""
+msgstr "Sessione {data} {inizio}/{fine}"
 
 #: protocol/models.py:475
 msgid "Certificate Institution"
@@ -290,13 +290,13 @@ msgstr "Utente: {nome} {cognome} ({user}) "
 #: protocol/models.py:529 templates/admin/change_form_object_tools.html:14
 #: templates/protocol/register_print_firstpage.html:7
 msgid "Attendance register"
-msgstr ""
+msgstr "Registro presenze"
 
 #: protocol/models.py:530 templates/admin/change_form_object_tools.html:19
 #: templates/protocol/exam_print_firstpage.html:7
 #: templates/protocol/exam_print_firstpage.html:20
 msgid "Exam reporter"
-msgstr ""
+msgstr "Verbale esami"
 
 #: protocol/models.py:531
 msgid "Privacy"
@@ -304,7 +304,7 @@ msgstr ""
 
 #: protocol/models.py:532
 msgid "Other"
-msgstr ""
+msgstr "Altro"
 
 #: protocol/models.py:596 templates/protocol/exam_print_firstpage.html:41
 #: templates/protocol/exam_print_signpage.html:26
@@ -314,11 +314,11 @@ msgstr ""
 #: templates/protocol/register_print_signpage.html:76
 #: templates/protocol/register_print_signpage.html:85
 msgid "Sign"
-msgstr ""
+msgstr "Firma"
 
 #: protocol/models.py:616
 msgid "Authorization"
-msgstr ""
+msgstr "Autorizzazione"
 
 #: protocol/views.py:150
 #, python-brace-format
@@ -340,7 +340,7 @@ msgstr ""
 #: templates/account/change_password.html:31
 #: templates/account/reset_password.html:35
 msgid "Send"
-msgstr ""
+msgstr "Invia"
 
 #: templates/account/home_admin.html:4
 msgid "Company Admin Panel"
@@ -555,97 +555,101 @@ msgstr ""
 
 #: templates/admin/edit_inline/check_block.html:4
 msgid "Check course"
-msgstr ""
+msgstr "Controllo inserimento"
 
 #: templates/admin/edit_inline/check_block.html:6
 msgid "Course features"
-msgstr ""
+msgstr "Parametri corso"
 
 #: templates/admin/edit_inline/check_block.html:7
 msgid "Course type"
-msgstr ""
+msgstr "Tipo di corso"
 
 #: templates/admin/edit_inline/check_block.html:8
 msgid "Max course learners"
-msgstr ""
+msgstr "N. max discenti per corso"
 
 #: templates/admin/edit_inline/check_block.html:9
 msgid "Max practice learners per trainer"
-msgstr ""
+msgstr "Max discenti/formatore pratica "
 
 #: templates/admin/edit_inline/check_block.html:14
 msgid "Provided hours"
-msgstr ""
+msgstr "Ore fornite"
 
 #: templates/admin/edit_inline/check_block.html:15
 msgid "Request hours"
-msgstr ""
+msgstr "Ore richieste"
 
 #: templates/admin/edit_inline/check_block.html:17
 msgid "Missing hours"
-msgstr ""
+msgstr "Ore mancanti"
 
 #: templates/admin/edit_inline/check_block.html:26
 msgid "Provided trainers enough"
-msgstr ""
+msgstr "Formatori forniti sufficienti"
 
 #: templates/admin/edit_inline/check_block.html:28
 msgid "Provided trainers NOT enough"
-msgstr ""
+msgstr "Formatori forniti NON sufficienti "
 
 #: templates/admin/edit_inline/check_block.html:34
 msgid "Practice hours enough"
-msgstr ""
+msgstr "Ore pratica sufficienti"
 
 #: templates/admin/edit_inline/check_block.html:36
 msgid "Practice hours NOT enough"
-msgstr ""
+msgstr "Ore pratica NON sufficienti"
 
 #: templates/admin/edit_inline/check_block.html:37
 msgid "Provided"
-msgstr ""
+msgstr "Fornito"
 
 #: templates/admin/edit_inline/check_block.html:39
 msgid "Missing"
-msgstr ""
+msgstr "Mancante"
+
+#: templates/admin/edit_inline/check_block.html:45
+msgid "Check all"
+msgstr "Controllo generale"
 
 #: templates/admin/edit_inline/check_block.html:48
 msgid "Check passed"
-msgstr ""
+msgstr "Controllo passato"
 
 #: templates/admin/edit_inline/check_block.html:52
 msgid "Check NOT passed"
-msgstr ""
+msgstr "Controllo NON passato"
 
 #: templates/admin/edit_inline/tabular_files.html:23
 #: templates/admin/edit_inline/tabular_learner.html:30
 #: templates/admin/edit_inline/tabular_trainer.html:23
 msgid "Delete?"
-msgstr ""
+msgstr "Elimina?"
 
 #: templates/admin/edit_inline/tabular_files.html:37
 #: templates/admin/edit_inline/tabular_learner.html:44
 #: templates/admin/edit_inline/tabular_trainer.html:37
 msgid "Change"
-msgstr ""
+msgstr "Cambia"
 
 #: templates/admin/edit_inline/tabular_files.html:37
 #: templates/admin/edit_inline/tabular_learner.html:44
 #: templates/admin/edit_inline/tabular_trainer.html:37
 msgid "View"
-msgstr ""
+msgstr "Vedi"
 
 #: templates/admin/edit_inline/tabular_learner.html:84
 msgid "No certification"
-msgstr ""
+msgstr "Nessuna certificazione"
 
 #: templates/admin/submit_line.html:5
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: templates/admin/submit_line.html:8
 msgid "Delete"
-msgstr ""
+msgstr "Elimina"
 
 #: templates/admin/submit_line.html:10
 msgid "Save as new"
@@ -653,23 +657,23 @@ msgstr "Salva come nuovo"
 
 #: templates/admin/submit_line.html:11
 msgid "Save and add another"
-msgstr ""
+msgstr "Salva e aggiungi"
 
 #: templates/admin/submit_line.html:12 templates/admin/submit_line.html:52
 msgid "Save and continue editing"
-msgstr ""
+msgstr "Salva e continua"
 
 #: templates/admin/submit_line.html:12 templates/admin/submit_line.html:52
 msgid "Save and view"
-msgstr ""
+msgstr "Salva e vedi"
 
 #: templates/admin/submit_line.html:14
 msgid "Insert request"
-msgstr ""
+msgstr "Inserisci richiesta"
 
 #: templates/admin/submit_line.html:17
 msgid "Close"
-msgstr ""
+msgstr "Chiudi"
 
 #: templates/admin/submit_line.html:20
 msgid "Load to institution"
@@ -845,29 +849,29 @@ msgstr ""
 
 #: templates/protocol/certificate_user.html:48
 msgid "Certificate check"
-msgstr ""
+msgstr "Controllo certificato"
 
 #: templates/protocol/certificate_user.html:57
 msgid "Certificate"
-msgstr ""
+msgstr "Certificato"
 
 #: templates/protocol/certificate_user.html:60
 msgid "We certify that"
-msgstr ""
+msgstr "Si certifica che"
 
 #: templates/protocol/certificate_user.html:72
 msgid "Birth"
-msgstr ""
+msgstr "Data nascita"
 
 #: templates/protocol/certificate_user.html:74
 #: templates/protocol/exam_print_signpage.html:22
 #: templates/protocol/register_print_listpage.html:23 users/forms.py:29
 msgid "Fiscal code"
-msgstr ""
+msgstr "Codice fiscale"
 
 #: templates/protocol/certificate_user.html:80
 msgid "attended the training course"
-msgstr ""
+msgstr "partecipanti al corso di formazione"
 
 #: templates/protocol/certificate_user.html:89
 msgid "Typology (new/update)"
@@ -939,15 +943,15 @@ msgstr ""
 #: templates/protocol/certificate_user_check.html:5
 #: templates/protocol/certificate_user_check_http404.html:5
 msgid "Check user"
-msgstr ""
+msgstr "Controllo utente"
 
 #: templates/protocol/certificate_user_check_http404.html:29
 msgid "Unknown request"
-msgstr ""
+msgstr "Richiesta sconosciuta"
 
 #: templates/protocol/exam_print_firstpage.html:9
 msgid "Exam center provider"
-msgstr ""
+msgstr "Esame centro di formazione"
 
 #: templates/protocol/exam_print_firstpage.html:24
 msgid "Training project"
