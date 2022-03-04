@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 19:46+0100\n"
+"POT-Creation-Date: 2022-03-02 16:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,62 +251,62 @@ msgstr ""
 msgid "Qualification update within {0} years."
 msgstr ""
 
-#: protocol/models.py:378 templates/admin/edit_inline/check_block.html:12
+#: protocol/models.py:381 templates/admin/edit_inline/check_block.html:22
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Theory"
 msgstr "Teorica"
 
-#: protocol/models.py:379 templates/admin/edit_inline/check_block.html:23
+#: protocol/models.py:382 templates/admin/edit_inline/check_block.html:33
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Practice"
 msgstr "Pratica"
 
-#: protocol/models.py:387
+#: protocol/models.py:390
 msgid "In presence"
 msgstr "In presenza"
 
-#: protocol/models.py:388
+#: protocol/models.py:391
 msgid "On the web"
 msgstr "Sul web"
 
-#: protocol/models.py:404
+#: protocol/models.py:407
 #, python-brace-format
 msgid "Session {data} {inizio}/{fine}"
 msgstr "Sessione {data} {inizio}/{fine}"
 
-#: protocol/models.py:475
+#: protocol/models.py:478
 msgid "Certificate Institution"
 msgstr "Attestato Ente"
 
-#: protocol/models.py:483
+#: protocol/models.py:486
 #, python-brace-format
 msgid "User: {nome} {cognome} ({user}) "
 msgstr "Utente: {nome} {cognome} ({user}) "
 
-#: protocol/models.py:529 templates/admin/change_form_object_tools.html:14
+#: protocol/models.py:532 templates/admin/change_form_object_tools.html:14
 #: templates/protocol/register_print_firstpage.html:7
 msgid "Attendance register"
 msgstr "Registro presenze"
 
-#: protocol/models.py:530 templates/admin/change_form_object_tools.html:19
+#: protocol/models.py:533 templates/admin/change_form_object_tools.html:19
 #: templates/protocol/exam_print_firstpage.html:7
 #: templates/protocol/exam_print_firstpage.html:20
 msgid "Exam reporter"
 msgstr "Verbale esami"
 
-#: protocol/models.py:531
+#: protocol/models.py:534
 msgid "Privacy"
 msgstr ""
 
-#: protocol/models.py:532
+#: protocol/models.py:535
 msgid "Other"
 msgstr "Altro"
 
-#: protocol/models.py:596 templates/protocol/exam_print_firstpage.html:41
+#: protocol/models.py:599 templates/protocol/exam_print_firstpage.html:41
 #: templates/protocol/exam_print_signpage.html:26
 #: templates/protocol/register_print_firstpage.html:97
 #: templates/protocol/register_print_signpage.html:54
@@ -316,7 +316,7 @@ msgstr "Altro"
 msgid "Sign"
 msgstr "Firma"
 
-#: protocol/models.py:616
+#: protocol/models.py:619
 msgid "Authorization"
 msgstr "Autorizzazione"
 
@@ -469,7 +469,7 @@ msgid "Log in"
 msgstr "Entra"
 
 #: templates/account/lost_login.html:21
-#: templates/admin/edit_inline/check_block.html:38
+#: templates/admin/edit_inline/check_block.html:48
 #: templates/companies/get_user_list_detail.html:11
 msgid "Request"
 msgstr "Richiesta"
@@ -573,51 +573,64 @@ msgstr "N. max discenti per corso"
 msgid "Max practice learners per trainer"
 msgstr "Max discenti/formatore pratica "
 
+#: templates/admin/edit_inline/check_block.html:12
+#: templates/protocol/certificate_user.html:159
+msgid "Center"
+msgstr "Centro"
+
 #: templates/admin/edit_inline/check_block.html:14
+msgid "Provided center"
+msgstr "Centro di formazione selezionato"
+
+#: templates/admin/edit_inline/check_block.html:16
+msgid "Missing center"
+msgstr "Centro di formazione NON selezionato"
+
+#: templates/admin/edit_inline/check_block.html:24
 msgid "Provided hours"
 msgstr "Ore fornite"
 
-#: templates/admin/edit_inline/check_block.html:15
+#: templates/admin/edit_inline/check_block.html:25
 msgid "Request hours"
 msgstr "Ore richieste"
 
-#: templates/admin/edit_inline/check_block.html:17
+#: templates/admin/edit_inline/check_block.html:27
 msgid "Missing hours"
 msgstr "Ore mancanti"
 
-#: templates/admin/edit_inline/check_block.html:26
+#: templates/admin/edit_inline/check_block.html:36
 msgid "Provided trainers enough"
 msgstr "Formatori forniti sufficienti"
 
-#: templates/admin/edit_inline/check_block.html:28
+#: templates/admin/edit_inline/check_block.html:38
 msgid "Provided trainers NOT enough"
 msgstr "Formatori forniti NON sufficienti "
 
-#: templates/admin/edit_inline/check_block.html:34
+#: templates/admin/edit_inline/check_block.html:44
 msgid "Practice hours enough"
 msgstr "Ore pratica sufficienti"
 
-#: templates/admin/edit_inline/check_block.html:36
+#: templates/admin/edit_inline/check_block.html:46
 msgid "Practice hours NOT enough"
 msgstr "Ore pratica NON sufficienti"
 
-#: templates/admin/edit_inline/check_block.html:37
+#: templates/admin/edit_inline/check_block.html:47
 msgid "Provided"
 msgstr "Fornito"
 
-#: templates/admin/edit_inline/check_block.html:39
+#: templates/admin/edit_inline/check_block.html:49
 msgid "Missing"
 msgstr "Mancante"
 
-#: templates/admin/edit_inline/check_block.html:45
+#: templates/admin/edit_inline/check_block.html:55
 msgid "Check all"
 msgstr "Controllo generale"
 
-#: templates/admin/edit_inline/check_block.html:48
+#: templates/admin/edit_inline/check_block.html:58
 msgid "Check passed"
 msgstr "Controllo passato"
 
-#: templates/admin/edit_inline/check_block.html:52
+#: templates/admin/edit_inline/check_block.html:62
 msgid "Check NOT passed"
 msgstr "Controllo NON passato"
 
@@ -677,7 +690,7 @@ msgstr "Chiudi"
 
 #: templates/admin/submit_line.html:20
 msgid "Load to institution"
-msgstr "Caricato all'ente"
+msgstr "Notifica all'ente"
 
 #: templates/admin/submit_line.html:21 templates/admin/submit_line.html:26
 #: templates/admin/submit_line.html:31 templates/admin/submit_line.html:44
@@ -923,10 +936,6 @@ msgstr ""
 #: templates/protocol/certificate_user.html:157
 msgid "Institution"
 msgstr "Ente"
-
-#: templates/protocol/certificate_user.html:159
-msgid "Center"
-msgstr "Centro"
 
 #: templates/protocol/certificate_user.html:185
 msgid "Certificate protocol"

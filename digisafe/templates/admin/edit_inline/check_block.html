@@ -9,6 +9,17 @@
         <div>{% translate 'Max practice learners per trainer' %}: {{protocol.getMaxLearnersPractice}}</div>
     </div>
     <div class="check">
+        <h4><b>{% translate 'Center' %}</b></h4>
+        <div class="{%if protocol.checkCenter%}success{%else%}danger{%endif%}">
+            {% if protocol.checkCenter %}
+            {% translate 'Provided center' %}: {{protocol.center}}
+            {% else %}
+            <span>{% translate 'Missing center' %}</span>
+            {%endif%}
+        </div>
+    </div>
+
+    <div class="check">
         <h4><b>{% translate 'Theory' %}</b> </h4>
         <div class="{%if protocol.checkHoursTheory%}success{%else%}danger{%endif%}">
             {% translate 'Provided hours' %}: {{protocol.getHoursTheory}} /

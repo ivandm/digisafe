@@ -68,7 +68,17 @@ class Center(models.Model):
             return static(self.logo.url)
         else:
             return ""
-            
+
+    def sendEmailDirector(self, subject='', msg=''):
+        # print("model Center")
+        print(self.director.sendSystemEmail(subject, msg))
+
+    def sendEmailStaff(self, subject='', msg=''):
+        # print("model Center")
+        for u in self.staff.all():
+            print(u.sendSystemEmail(subject, msg))
+
+
 class CoursesAdmitedCenter(models.Model):
     """Corsi gestiti"""
     center = models.OneToOneField(

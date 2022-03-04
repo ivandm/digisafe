@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.conf import settings
 from django.utils.translation import gettext as _
+from django.core.mail import send_mail
 
 from countries.models import Country, City
 from courses.models import Courses
@@ -39,7 +40,16 @@ class User(AbstractUser):
     
     def getFullName(self):
         return "{0} {1}".format(self.first_name, self.last_name)
-        
+
+    def sendSystemEmail(self, subject, msg):
+        send_mail(
+            subject,
+            msg,
+            None, #'from@example.com',
+            [self.email],
+            fail_silently=False,
+        )
+
 class Anagrafica(models.Model):
     user        = models.OneToOneField(
                         settings.AUTH_USER_MODEL,

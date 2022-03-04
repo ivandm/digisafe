@@ -9,6 +9,14 @@ class ChainedCountryForm(ModelForm):
         fields = "__all__"
     
     def __init__(self, *args, **kwargs):
+        # print("ChainedCountryForm")
+        prefix = kwargs.get('prefix')
+        data = kwargs.get('data')
+        country_id = None
+        # city_id = None
+        if prefix and data:
+            country_id = data.get(prefix+'-country')
+            # city_id = data.get(prefix+'-city')
         super(ChainedCountryForm, self).__init__(*args, **kwargs)
         
         # se i campi non sono modificabili
@@ -18,6 +26,7 @@ class ChainedCountryForm(ModelForm):
         try:
             self.initial['country'] = kwargs['instance'].country.id
         except:
+            # non esiste ancora istanza dell'oggetto
             pass
         country_list = [('', '---------')] + [(i.id, i.name) for i in Country.objects.all()]
         
@@ -28,30 +37,41 @@ class ChainedCountryForm(ModelForm):
             )]
         except:
             city_init_form = [('', '---------')]
-            
+            pass
+
         # Override the form, add onchange attribute to call the ajax function
         self.fields['country'].widget = forms.Select(
             attrs={
                 'id': 'id_country',
                 'onchange': 'getCities(this)',
+                # 'onload': 'onload_func(this)', # onload non implementato su select
                 # 'style': 'width:200px'
             },
             choices=country_list,
         )
-        
-        try:
+
+        if country_id:
+            # print("istanza non esistente")
+            city_init_form = [('', '---------')]
+            city_init_form_append = [
+                (i.id, "%s (%s)" % (i.name, i.sigla_prov)) for i in City.objects.filter(
+                    country=Country.objects.get(pk=country_id)).order_by('name')
+            ]
+            city_init_form = city_init_form + city_init_form_append
+        elif self.initial.get('city'): #
+            # print("istanza esistente")
             self.initial['city'] = kwargs['instance'].city.id
-            city_init_form = [(i.id, "%s (%s)"%(i.name,i.sigla_prov)) for i in City.objects.filter(
+            city_init_form = [(i.id, "%s (%s)" % (i.name, i.sigla_prov)) for i in City.objects.filter(
                 country=kwargs['instance'].country
             )]
-            
-        except:
+
+        else:
             city_init_form = [('', '---------')]
             city_init_form_append = []
             if self.initial.get('country'):
                 city_init_form_append = [
                         (i.id, "%s (%s)"%(i.name,i.sigla_prov)) for i in City.objects.filter(
-                        country=kwargs['instance'].country)
+                        country=kwargs['instance'].country).order_by('name')
                         ]
             city_init_form = city_init_form + city_init_form_append
             

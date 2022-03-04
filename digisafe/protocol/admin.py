@@ -429,7 +429,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     readonly_fields_add = ("owner", "status", "center", "institution")
     readonly_fields_default = ("owner", "status")
     readonly_fields_all     = ["owner", "status"]  + ["course","type","learners_request","status","center", "institution"]
-    
+
     class Media:
         css = {
             'all': (
@@ -471,6 +471,8 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             
             if obj.status == "m" and request.user.profile.trainer:
                 fields = readonly_fields_default
+            if obj.status == "m" and request.user.profile.trainer and obj.session_set.count() > 0:
+                fields = readonly_fields_all
             if obj.status == "m" and request.user.profile.director:
                 fields = readonly_fields_all
             if obj.status == "m" and request.user.profile.institution:
@@ -644,9 +646,9 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     # FINE extra views
 
     def get_form(self, request, obj=None, **kwargs):
-        # print("ProtocolAdmin.get_form kwargs", kwargs)
-        kwargs = self._set_status_form(request, obj=None, **kwargs)
-        # print("ProtocolAdmin.get_form kwargs", kwargs)
+        # print("ProtocolAdmin.get_form kwargs", obj)
+        kwargs = self._set_status_form(request, obj, **kwargs)
+        if obj: request.session['protocol_id'] = obj.pk
         return super().get_form(request, obj, **kwargs)
         
     def get_inline_instances(self, request, obj=None):
@@ -661,10 +663,11 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if obj:
             # Trainer user
             if request.user.profile.trainer:
+                if not obj.center is None:
+                    return [inline(self.model, self.admin_site) for inline in [SessionInline,]]
                 if obj.status in status_full and obj.session_set.count() > 0:
                     return [inline(self.model, self.admin_site) for inline in inlines_full]
-                else:
-                    return [inline(self.model, self.admin_site) for inline in [SessionInline,]]
+
             
             # Director user
             if request.user.profile.director:
@@ -758,6 +761,19 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             a = Action(protocol=protocol, owner=owner, text=text, info=info)
             a.save()
 
+    def notifyToCenter(self, obj, subject=_("Notify protocol"), msg=""):
+        c = obj.center
+        c.sendEmailDirector(subject, msg)
+        c.sendEmailStaff(subject, msg)
+
+    def notifyToInstitution(self, obj, subject=_("Notify protocol"), msg=""):
+        c = obj.institution
+        c.sendEmailDirector(subject, msg)
+        c.sendEmailStaff(subject, msg)
+
+    def notifyToOwner(self, obj, subject=_("Notify protocol"), msg=""):
+       obj.owner.sendSystemEmail(subject, msg)
+
     # status 'default'        
     def _set_status_response_change_default(self, request, obj):
         return
@@ -823,6 +839,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if text:
             obj.save()
             self.setAction(obj, request.user, text)
+            self.notifyToCenter(obj, _("New protocol request: {}".format(obj.id)),  _("New protocol request: {}".format(obj.id)) )
             
     # status 'r'
     def _set_r_status_form(self, request, obj, **kwargs):
@@ -858,12 +875,15 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                     return
             obj.status = "c"
             text = _("Set load by director")
+            self.notifyToInstitution(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
+            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
             pass
         elif request.POST.get("_autorizzaprotocol", False) and obj.course.need_institution == False:
             # print("ProtocolAdmin._set_r_status_response_change _caricaprotocol")
             # Procede con lo status successivo 'c'
             obj.status = "a"
             text = _("Set authorized by director")
+            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
             pass
         elif request.POST.get("_declinaprotocol", False):
             # print("ProtocolAdmin._set_r_status_response_change _declinaprotocol")
@@ -873,6 +893,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                 info = form.cleaned_data['info_denied']
                 text = _("Set denied by director")
                 obj.status = "m"
+                self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
         if text:
             obj.save()
             self.setAction(obj, request.user, text, info)
@@ -909,6 +930,11 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             obj.status = "a"
             # obj.institution = request.user
             text = _("Set authorized from institution")
+            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                               _("Notify protocol {}. {}".format(obj.id, text)))
+            self.notifyToCenter(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                               _("Notify protocol {}. {}".format(obj.id, text)))
+
             pass
         elif request.POST.get("_negaprotocol", False):
             # print("ProtocolAdmin._set_c_status_response_change _negaprotocol")
@@ -918,6 +944,11 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                 info = form.cleaned_data['info_denied']
                 text = _("Set denied from institution. Return modify.")
                 obj.status = "m"
+            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                               _("Notify protocol {}. {}".format(obj.id, text)))
+            self.notifyToCenter(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                                _("Notify protocol {}. {}".format(obj.id, text)))
+
         if text:
             obj.save()
             self.setAction(obj, request.user, text, info)
@@ -960,7 +991,8 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             obj.warning = False
             text = _("Set finish")
             info = form['info'].value() or ""
-            pass
+            self.notifyToCenter(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                                _("Notify protocol {}. {}".format(obj.id, text)))
         if text:
             obj.save()
             self.setAction(obj, request.user, text, info)
@@ -1009,12 +1041,19 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             # Procede con lo status successivo di chiusura 'h'
             obj.status = "h"
             text = _("Set close")
-            pass
+            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                                _("Notify protocol {}. {}".format(obj.id, text)))
         if request.POST.get("_negaprotocol", False): #in caso di richiesta integrazione
             # print("ProtocolAdmin._set_a_status_response_change _negaprotocol")
             # Procede con lo status successivo di chiusura 'h'
-            if request.user.profile.director: obj.status = "a"
-            if request.user.profile.institution: obj.status = "t"
+            if request.user.profile.director:
+                obj.status = "a"
+                self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                                   _("Notify protocol {}. {}".format(obj.id, text)))
+            if request.user.profile.institution:
+                obj.status = "t"
+                self.notifyToCenter(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                                   _("Notify protocol {}. {}".format(obj.id, text)))
             
             text = _("Request integration.")
             info = form['info_denied'].value()

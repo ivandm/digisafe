@@ -1,4 +1,16 @@
 'use strict';
+//window.addEventListener("load",function(){
+//    let $ = django.jQuery;
+//    $('select#id_country').each(function(index, value) {
+//      alert(`div${index}: ${this.id}`);
+//      var obj = this;
+//      var obj_set_id = obj.name.replace("-country", "");
+//      var city = $('#id_city[name="'+obj_set_id+'-city"]');
+//      console.log(city[0].value);
+//      getCities(this);
+//    });
+//},false);
+
 function getCities(obj) {
     let $ = django.jQuery;
     var obj_set_id = obj.name.replace("-country", "");

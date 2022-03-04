@@ -37,6 +37,10 @@ class ProtocolForm(forms.ModelForm):
 
 class SessionForm(ChainedCountryForm):
 
+    def __init__(self, *args, **kwargs):
+        print("SessionForm")
+        super(SessionForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = Session
         fields = "__all__"

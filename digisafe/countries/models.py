@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext as _
 
 #stati del mondo
 class Country(models.Model):
@@ -6,7 +7,7 @@ class Country(models.Model):
     code = models.CharField(max_length=2, default='')
     
     class Meta:
-        verbose_name_plural = "countries"
+        verbose_name_plural = _("countries")
         ordering = ['name']
         
     def __str__(self):
@@ -24,8 +25,8 @@ class City(models.Model):
     sigla_prov = models.CharField(max_length=10, default='')
     
     class Meta:
-        verbose_name_plural = "cities"
+        verbose_name_plural = _("cities")
         
     def __str__(self):
-        return "{name} ({prov}) [{country}]".format(name=self.name, prov=self.sigla_prov,country=self.country.code)
+        return "{name} ({prov}) [{country}]".format(name=self.name, prov=self.sigla_prov, country=self.country.code)
    

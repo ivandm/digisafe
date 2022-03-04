@@ -3,6 +3,8 @@ from django.contrib import admin
 from .models import Center, CoursesAdmitedCenter
 from .forms import CenterForm
 from users.models import User
+from protocol.models import Protocol
+
 
 class CoursesInline(admin.StackedInline):
     model = CoursesAdmitedCenter
@@ -32,8 +34,13 @@ class CenterAdmin(admin.ModelAdmin):
             return qs
         # Richieste dai campi autocomplete_fields
         if app_label=="protocol" and model_name=="protocol" and field_name=="center":
-            # print("CenterAdmin.get_queryset qs", qs.filter(trainingcenter__user=request.user))
-            return qs.filter(trainers=request.user)
+            protocol_id = request.session.get('protocol_id')
+            if protocol_id:
+                p = Protocol.objects.get(pk=protocol_id)
+                course = p.course
+                return qs.filter(trainers=request.user, coursesadmitedcenter__courses=course)
+            else:
+                return qs.none()  # return empty query
             # return request.user.associate_centers.all()
 
         # print(qs)

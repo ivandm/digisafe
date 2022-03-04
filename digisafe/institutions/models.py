@@ -53,6 +53,11 @@ class Institution(models.Model):
                                validators=[validate_file_size, validate_file_extension],
                               )
     use_custom_files = models.BooleanField(default=False, verbose_name=_("Use custom registry files"))
+    staff = models.ManyToManyField(
+                        settings.AUTH_USER_MODEL,
+                        blank=True,
+                        related_name="institution_staff"
+                    )
     centers = models.ManyToManyField(
                         Center,
                         blank=True,
@@ -67,6 +72,14 @@ class Institution(models.Model):
         else:
             return None
 
+    def sendEmailAdmin(self, subject='', msg=''):
+        # print("model Institution")
+        print(self.admin.sendSystemEmail(subject, msg))
+
+    def sendEmailStaff(self, subject='', msg=''):
+        # print("model Institution")
+        for u in self.staff.all():
+            print(u.sendSystemEmail(subject, msg))
 
 def validate_customfile_extension(value):
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename

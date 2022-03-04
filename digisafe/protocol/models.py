@@ -328,10 +328,13 @@ class Protocol(models.Model):
         h,m = time.timedelta_to_hm(hours)
         # print("Protocol.getHoursPractice", h, hours)
         return h
-    
+
+    def checkCenter(self):
+        return self.center or False
+
     def checkAll(self):
         # print("Protocol.checkAll",self.checkHoursTheory , self.checkHoursPractice , self.checkNumTrainer)
-        return self.checkHoursTheory() and self.checkHoursPractice() and self.checkNumTrainer()
+        return self.checkHoursTheory() and self.checkHoursPractice() and self.checkNumTrainer() and self.checkCenter()
     
     def checkAllSignedFiles(self):
         # print(self.files_set.all())

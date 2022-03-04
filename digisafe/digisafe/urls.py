@@ -28,7 +28,7 @@ urlpatterns = [
     path('company/', include(('companies.urls', 'companies'), namespace='companies')),
     path('institutions/', include(('institutions.urls', 'institutions'), namespace='institutions')),
 
-    path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()),
+    path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()), #completamento automatico del campo
     path('admin/', admin.site.urls),
     
     path('tinymce/', include('tinymce.urls')),  # WYSIWYG editor

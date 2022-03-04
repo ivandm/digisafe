@@ -5,11 +5,12 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import ngettext, gettext as _
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.db.models import Q
 from django.contrib import messages
 from leaflet.admin import LeafletGeoAdmin
 
 from account.models import UsersPosition
+from protocol.models import Protocol
 from .models import User, Anagrafica, Profile, Subjects, Institutions
 from .forms import AnagraficaForm, UserForm, UserCreationForm
 
@@ -36,7 +37,7 @@ class AnagraficaInline(admin.StackedInline):
         )
     
     def formfield_for_dbfield(self, db_field, request, **kwargs):
-        """aggiunge la gli attributi ai campi della lista autocomplete_check_fields """
+        """aggiunge gli attributi ai campi della lista autocomplete_check_fields """
         # print("formfield_for_dbfield", db_field)
         if not hasattr(self, "autocomplete_check_fields"):
             self.autocomplete_check_fields = []
@@ -57,10 +58,11 @@ class AnagraficaInline(admin.StackedInline):
     def get_fieldsets(self, request, obj=None):
         # print("AnagraficaInline.get_fieldsets", obj)
         return super().get_fieldsets(request, obj)
-        if obj is None:
-            return self.add_fieldsets
-        else:
-            return super().get_fieldsets(request, obj)
+        # if obj is None:
+        #     return self.add_fieldsets
+        # else:
+        #     return super().get_fieldsets(request, obj)
+        pass
                     
 # which acts a bit like a singleton
 class ProfileInline(admin.TabularInline):
@@ -132,6 +134,11 @@ class UserAdmin(BaseUserAdmin):
         js = (
             'js/autocomplete_check_fields.js',
         )
+        css = {
+            'all': (
+                "/static/css/site.css",
+            )
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -243,7 +250,16 @@ class UserAdmin(BaseUserAdmin):
             return qs.order_by("last_name")
         # Model Session
         elif "not request.user.is_superuser" and app_label=="protocol" and model_name=="session" and field_name=="trainer":
-            return qs.filter(profile__trainer=1).order_by("last_name")
+            protocol_id = request.session.get('protocol_id')
+            if protocol_id:
+                p = Protocol.objects.get(pk=protocol_id)
+                course = p.course
+                center = p.center
+                # print(course)
+                # print(center)
+                return qs.filter(is_active=True, profile__trainer=1, materie__subjects=course, associate_centers=center).exclude(Q(associate_centers=None) | Q(materie__subjects=None)).order_by("last_name")
+            else:
+                return qs.none()  # return empty query
         # Others not superuser return only owner's users
         elif not request.user.is_superuser:
             return qs.filter(owner=request.user)

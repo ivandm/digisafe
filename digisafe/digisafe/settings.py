@@ -212,6 +212,7 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
 
 # PARAMETRI EMAIL
+DEFAULT_FROM_EMAIL = "noreply@ircot.net"
 if DEPLOY:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = "smtp.ionos.co.uk"

@@ -24,15 +24,18 @@ class CheckExistObjJsonView(View):
         """
         self.term, self.model, self.source_field = self.process_request(request)
 
-        # if not self.has_perm(request):
-            # raise PermissionDenied
-
-        self.object_list = self.get_queryset()
+        if self.term:
+            self.object_list = self.get_queryset()[:self.paginate_by]
+            return JsonResponse({
+                'results': [
+                    self.serialize_result(self.object_list)
+                ],
+            })
         return JsonResponse({
-            'results': [
-                self.serialize_result(self.object_list)
-            ],
-        })
+                'results': [
+                    {}
+                ],
+            })
 
     def serialize_result(self, objs):
         """
