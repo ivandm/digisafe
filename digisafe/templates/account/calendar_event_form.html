@@ -1,0 +1,44 @@
+{% load i18n %}
+
+{% block content %}
+<div class="modal-dialog modal-lg" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"> {{ item.object }} </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="checkbox" id="modify" name="modify" onclick="toggle_modal_inputs(this)">
+                <label for="modify">{% translate 'Modify' %}</label>
+            </div>
+            <div class="modal-body">
+                <form id="item_update_form" method='post' class="form" role="form" action="{% url 'account:calendar-edit' item.id year month day %}">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                    {% for field in form %}
+                        <div class="form-group">
+                            {% if field.errors %}
+                                <ul class="form-errors">
+                                {% for error in field.errors %}
+                                    <li><span class="fa fa-exclamation-triangle"></span> <strong>{{ error|escape }}</strong></li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}<div class="form-helptext">{{ field.help_text }}</div>{% endif %}
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" aria-label="Annulla" value="Annulla" />
+                        <input type="submit" class="btn btn-primary" value="save" style="margin-bottom: 5px;" />
+                    </div>
+                </form>
+            </div>
+
+        <a id="delete_button" class="btn btn-danger" href="{% url 'account:calendar-del' item.id %}">{% translate 'Delete' %}</a>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+{% endblock %}

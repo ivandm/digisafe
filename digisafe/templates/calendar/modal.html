@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div id="popup" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+</div>
+
+<script>
+
+$(window).on('load', function() {
+    $("a#calendar_edit_event").each(function(index) {
+        //console.log(index, $(this));
+        $(this).on("click", function (e) {
+            e.preventDefault();
+            //console.log("calendar_edit_event click", e);
+            //console.log("calendar_edit_event href", $(this).attr('href'));
+            var url = $(this).attr('href');
+            var popup = $('#popup');
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    //console.log(response);
+                    //modal.text( response );
+                    html = $.parseHTML( response );
+                    popup.html( html );
+                    //var my_modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                    var my_modal = new bootstrap.Modal(popup);
+                    my_modal.show();
+                    disable_modal_form();
+                },
+                error: function (response) {
+                    console.log("Error");
+                    //console.log(response["responseJSON"]["error"]);
+                    console.log(response);
+                }
+            });
+        });
+    });
+});
+
+function disable_modal_form(){
+    $("#item_update_form input").attr("disabled", "");
+    $("#item_update_form textarea").attr("disabled", "");
+    $("a#delete_button").addClass("disabled");
+}
+
+function toggle_modal_inputs(e){
+        var ischecked = e.checked;
+        if (ischecked){
+            $("#item_update_form input").removeAttr("disabled");
+            $("#item_update_form textarea").removeAttr("disabled");
+            $("a#delete_button").removeClass("disabled");
+        }
+        else{
+            $("#item_update_form input").attr("disabled", "");
+            $("#item_update_form textarea").attr("disabled", "");
+            $("a#delete_button").addClass("disabled");
+        };
+    };
+</script>

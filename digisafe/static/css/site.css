@@ -38,6 +38,8 @@
   --border-color: #ccc;
 
   --error-fg: #ba2121;
+  --error-field-fg: #fff;
+  --error-field-bg: #ba2121;
 
   --message-success-bg: #dfd;
   --message-warning-bg: #ffc;
@@ -656,8 +658,8 @@ ul.messagelist li.error {
 ul.errorlist {
     margin: 0 0 4px;
     padding: 0;
-    color: var(--error-fg);
-    background: var(--body-bg);
+    color: var(--error-field-fg);
+    background: var(--error-field-bg);
 }
 
 ul.errorlist li {

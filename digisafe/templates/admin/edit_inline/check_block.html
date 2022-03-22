@@ -7,6 +7,10 @@
         <div>{% translate 'Course type' %}: {{protocol.get_type_display}}</div>
         <div>{% translate 'Max course learners' %}: {{protocol.getMaxLearnersTheory}}</div>
         <div>{% translate 'Max practice learners per trainer' %}: {{protocol.getMaxLearnersPractice}}</div>
+        {% if protocol.course.need_institution and not protocol.is_authorized %}
+            <div>{% translate 'Days min before start course' %}: {{protocol.institution.pre_days}}</div>
+            <div>{% translate "You shouldn't start course before" %}: {{protocol.institution.get_date_to_insert}}</div>
+        {% endif %}
     </div>
     <div class="check">
         <h4><b>{% translate 'Center' %}</b></h4>

@@ -5,15 +5,20 @@ import uuid
 from djgeojson.fields import PointField
 
 class UsersPosition(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
     geom      = PointField()
     timestamp = models.DateTimeField(auto_now=True)
+    anonymous = models.BooleanField(default=False)
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    object = models.CharField(max_length=100, default="", blank=False)
+    description = models.TextField(max_length=500, default="", blank=True)
 
     def __str__(self):
-        return "{}".format(self.user)
+        return "UsersPosition {}".format(self.user)
 
     @property
     def popupContent(self):

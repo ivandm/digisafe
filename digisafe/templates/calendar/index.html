@@ -1,0 +1,81 @@
+{% extends "home/home_base.html" %}
+{% load i18n static accounttags %}
+
+{% block extrascript %}{{super}}
+{% endblock %}
+
+{% block extrastyle %}{{super}}
+<script src="{% static 'admin/js/calendar.js' %}"></script>
+<script src="{% static 'admin/js/admin/DateTimeShortcuts.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+{% include 'calendar/modal.html' %}
+
+<DIV class="m-2">
+    <h1 class="bg-primary bg-opacity-25 text-dark fs-3 p-2"><span class="">{% translate 'Agenda Panel' %}</span></h1>
+    <div class="calendar">
+        <h1 class="calendar-head text-center fs-1">
+            <div class="float-start"><a href="{% url 'account:calendar' %}"><i class="bi bi-calendar-event"></i></a></div>
+            {% calendar_before_month_name year month as before %}
+            {% calendar_next_month_name year month as next %}
+            <div class="d-inline "><a href="{% url 'account:calendar-set' before|date:'Y' before|date:'n' %}"><i class="bi bi-arrow-left-square"></i></a></div>
+            <div class="d-inline">{% calendar_month_name year month as date %}{{date|date:"F"}}, {{date|date:"Y"}}</div>
+            <div class="d-inline "><a href="{% url 'account:calendar-set' next|date:'Y' next|date:'n' %}"><i class="bi bi-arrow-right-square"></i></a></div>
+        </h1>
+
+        <div class="calendar-body">
+            <div class="row">
+            {% calendar_day_name as day_names %}
+            {% for day_name in day_names %}
+                <div class="col {% if day_name == 'Saturday' or day_name == 'Sunday' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}   fw-bold text-center border mb-1">{{day_name}}</div>
+            {% endfor %}
+            </div>
+            {% calendar_tmpl year month as weeks %}
+            {% for week in weeks %}
+            <div class="row">
+                {% for day in week %}
+                    {% calendar_event user day as events %}
+                    <div class="card col text-center border-start border-end p-0 {% if not events %} bg-success {% endif %}" style="min-height: 100px;">
+                        <div class="card-header {% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}  fw-bold p-0">
+                            <div class="float-start "><a class="{% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}" href="{% url 'account:calendar-add' year month day|date:'j' %}"><i class="bi bi-calendar-plus"></i></a></div>
+                            <div>{{ day|date:"d, M" }}</div>
+                        </div>
+                        <div class="card-body {% if day|date:'w'  == '0' or day|date:'w'  == '6' %}{% else %}{% endif %} p-0">
+                            {% for event in events %}
+                            <div>
+                                {% if event.anonymous %}
+                                <p>{% translate 'Busy' %}</p>
+                                {% else %}
+                                <p id="event_id_{{event.id}}" class="text-truncate">
+                                    <a id="calendar_edit_event" data-toggle="modal" href="{% url 'account:calendar-edit' event.id day.year day.month day.day %}" data-target="#modal" title="Edit event" data-tooltip>
+                                    {{event.object}}
+                                    </a>
+                                </p>
+
+                                {% endif %}
+                            </div>
+                            {% empty %}
+                            <div>
+                                <p>{% translate 'Free' %}</p>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="calendar-footer"></div>
+
+    </div>
+</DIV>
+
+</div>
+
+{% endblock %}

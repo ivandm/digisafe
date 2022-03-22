@@ -2,6 +2,22 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
+from django.contrib.admin.widgets import AdminSplitDateTime
+from .models import UsersPosition
+
+
+class CalendarFormEvent(forms.ModelForm):
+    class Meta:
+        model = UsersPosition
+        fields = ['anonymous', 'date_start', 'date_end', 'object', 'description']
+        widgets = {
+            'anonymous': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'date_start': forms.DateTimeInput(attrs={'class': 'form-control'}),
+            # 'date_start': AdminSplitDateTime(),
+            'date_end': forms.DateTimeInput(attrs={'class': 'form-control'}),
+            'object': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
 class AccountAuthenticationForm(forms.Form):
     """

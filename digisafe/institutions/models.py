@@ -2,6 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.core.files.storage import Storage, FileSystemStorage
 from django.utils.translation import gettext as _
+from django.core.validators import MinValueValidator
+
+import datetime
 
 from courses.models import Courses
 from centers.models import Center
@@ -39,7 +42,7 @@ class InstitutionFileSystemStorage(FileSystemStorage):
         print("InstitutionFileSystemStorage.delete name", name)
         super().delete(name)
 
-
+pre_days_valid_min = MinValueValidator(0, _("Min values is 0"))
 fs = InstitutionFileSystemStorage(location='static/imgs/', base_url="/imgs")
 class Institution(models.Model):
     admin   = models.ForeignKey(
@@ -53,6 +56,7 @@ class Institution(models.Model):
                                validators=[validate_file_size, validate_file_extension],
                               )
     use_custom_files = models.BooleanField(default=False, verbose_name=_("Use custom registry files"))
+    pre_days = models.IntegerField(default=0, validators=[pre_days_valid_min], help_text=_("Days before insert request"))
     staff = models.ManyToManyField(
                         settings.AUTH_USER_MODEL,
                         blank=True,
@@ -71,6 +75,11 @@ class Institution(models.Model):
             return static(self.logo.url)
         else:
             return None
+
+    def get_date_to_insert(self):
+        today = datetime.date.today()
+        end_date = today + datetime.timedelta(days=self.pre_days)
+        return end_date
 
     def sendEmailAdmin(self, subject='', msg=''):
         # print("model Institution")

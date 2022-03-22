@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-02 16:30+0100\n"
+"POT-Creation-Date: 2022-03-14 08:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,14 +68,14 @@ msgstr "Nuova passowrd Digi.Safe."
 msgid "Invalid header found."
 msgstr "Header non valido."
 
-#: centers/models.py:13 digisafe/storage.py:10 institutions/models.py:15
-#: protocol/models.py:27 users/models.py:97
+#: centers/models.py:13 digisafe/storage.py:10 institutions/models.py:18
+#: protocol/models.py:27 users/models.py:107
 #, python-brace-format
 msgid "The maximum file size that can be uploaded is {0}"
 msgstr "Massima dimensione del file da caricare {0}"
 
-#: centers/models.py:21 digisafe/storage.py:20 institutions/models.py:23
-#: institutions/models.py:75 protocol/models.py:35
+#: centers/models.py:21 digisafe/storage.py:20 institutions/models.py:26
+#: institutions/models.py:97 protocol/models.py:35
 #, python-brace-format
 msgid "Unsupported file extension. Valid extension are '{0}'"
 msgstr "Estenzione del file non supportata. Estenzione valida '{0}'"
@@ -83,6 +83,16 @@ msgstr "Estenzione del file non supportata. Estenzione valida '{0}'"
 #: companies/views.py:39
 msgid "No users matches the given query."
 msgstr "Nessun utente corrispondente alla ricerca."
+
+#: countries/models.py:10
+#, fuzzy
+#| msgid "Country"
+msgid "countries"
+msgstr "Stato"
+
+#: countries/models.py:28
+msgid "cities"
+msgstr ""
 
 #: courses/models.py:84
 msgid "Low"
@@ -104,124 +114,167 @@ msgstr "Per corso"
 msgid "Per trainer"
 msgstr "Per docente"
 
-#: digisafe/settings.py:244
+#: digisafe/settings.py:253
 msgid "Italian"
 msgstr "Italiano"
 
-#: digisafe/settings.py:245
+#: digisafe/settings.py:254
 msgid "English"
 msgstr "Inglese"
 
-#: institutions/models.py:55
+#: institutions/models.py:45
+msgid "Min values is 0"
+msgstr ""
+
+#: institutions/models.py:58
 msgid "Use custom registry files"
 msgstr "Utilizza file personali"
 
-#: institutions/models.py:94
+#: institutions/models.py:59
+#, fuzzy
+#| msgid "Insert request"
+msgid "Days before insert request"
+msgstr "Inserisci richiesta"
+
+#: institutions/models.py:116
 msgid "Check that if this file is mandatory"
 msgstr "Controlla se il file è richiesto"
 
-#: protocol/admin.py:283
+#: protocol/admin.py:290
 #, python-brace-format
 msgid "{0} File documentation have not been signed yet."
 msgstr "{0} file non firmato ancora."
 
-#: protocol/admin.py:730
+#: protocol/admin.py:740
 msgid "Create new protocol"
 msgstr "Crea nuovo protocollo"
 
-#: protocol/admin.py:821
+#: protocol/admin.py:771 protocol/admin.py:776 protocol/admin.py:781
+#, fuzzy
+#| msgid "Certificate protocol"
+msgid "Notify protocol"
+msgstr "Protocollo certificato"
+
+#: protocol/admin.py:845
 msgid "Set request"
 msgstr "Assegnata richiesta"
 
-#: protocol/admin.py:857
+#: protocol/admin.py:850
+msgid "New protocol request: {}"
+msgstr ""
+
+#: protocol/admin.py:882
 #, python-brace-format
 msgid "{0} Need an institution. Choice one. Status wasn't change."
 msgstr "{0} necessita di un ente. Scegline uno. Stato non cambiato."
 
-#: protocol/admin.py:860
+#: protocol/admin.py:885
 msgid "Set load by director"
 msgstr "Assegnato in carico dal direttore"
 
-#: protocol/admin.py:866
+#: protocol/admin.py:886 protocol/admin.py:887 protocol/admin.py:894
+#: protocol/admin.py:904 protocol/admin.py:941 protocol/admin.py:942
+#: protocol/admin.py:943 protocol/admin.py:944 protocol/admin.py:955
+#: protocol/admin.py:956 protocol/admin.py:957 protocol/admin.py:958
+#: protocol/admin.py:1002 protocol/admin.py:1003 protocol/admin.py:1052
+#: protocol/admin.py:1053 protocol/admin.py:1059 protocol/admin.py:1060
+#: protocol/admin.py:1063 protocol/admin.py:1064
+msgid "Notify protocol {}. {}"
+msgstr ""
+
+#: protocol/admin.py:893
 msgid "Set authorized by director"
 msgstr "Assegnato autorizzato dal direttore"
 
-#: protocol/admin.py:874
+#: protocol/admin.py:902
 msgid "Set denied by director"
 msgstr "Assegnato rifiutato dal direttore"
 
-#: protocol/admin.py:911
+#: protocol/admin.py:940
 msgid "Set authorized from institution"
 msgstr "Assegnato autorizzato dall'ente"
 
-#: protocol/admin.py:919
+#: protocol/admin.py:953
 msgid "Set denied from institution. Return modify."
 msgstr "Assegnato rifiutato dall'ente. Ritorna alla modifica."
 
-#: protocol/admin.py:961
+#: protocol/admin.py:1000
 msgid "Set finish"
 msgstr "Assegnato terminato"
 
-#: protocol/admin.py:1011
+#: protocol/admin.py:1051
 msgid "Set close"
 msgstr "Assegnato chiuso"
 
-#: protocol/admin.py:1019
+#: protocol/admin.py:1066
 msgid "Request integration."
 msgstr "Richiesta integrazione."
 
-#: protocol/admin.py:1028
+#: protocol/admin.py:1075
 #, python-brace-format
 msgid "{0}'s Certificate has not been loaded yet."
 msgstr "Il certificato di {0} non è stato ancora caricato."
 
-#: protocol/forms.py:32
+#: protocol/forms.py:36
 #, python-format
 msgid "Learnser number error: Max admited is %(learners)s (Min is 0)."
 msgstr ""
 
-#: protocol/forms.py:54
+#: protocol/forms.py:44
+#, fuzzy
+#| msgid "Center name"
+msgid "Center is mondatory"
+msgstr "Nome del centro"
+
+#: protocol/forms.py:77
 #, python-format
 msgid "Invalid user: %(user)s. The user is a learner."
 msgstr ""
 
-#: protocol/forms.py:62
+#: protocol/forms.py:89
+#, python-format
+msgid ""
+"Invalid date: Cannot insert request before %(date)s or change date if the "
+"course has been authorized"
+msgstr ""
+
+#: protocol/forms.py:97
 #, python-format
 msgid ""
 "Invalid time: End time %(end_time)s is lower than start time %(start_time)s."
 msgstr ""
 
-#: protocol/forms.py:68
+#: protocol/forms.py:103
 #, python-format
 msgid ""
 "Invalid date for user: %(user)s. The user is busy on %(date)s from "
 "%(start_time)s and %(end_time)s."
 msgstr ""
 
-#: protocol/forms.py:75
+#: protocol/forms.py:110
 #, python-format
 msgid ""
 "Invalid time for date: %(date)s. The time from %(start_time)s and "
 "%(end_time)s is busy on theory session."
 msgstr ""
 
-#: protocol/forms.py:112
+#: protocol/forms.py:147
 #, python-format
 msgid ""
 "User busy: %(user)s. The user is busies in other course on these date and "
 "time session."
 msgstr ""
 
-#: protocol/forms.py:118
+#: protocol/forms.py:153
 #, python-format
 msgid "Invalid user: %(user)s. The user is a trainer."
 msgstr ""
 
-#: protocol/forms.py:128
+#: protocol/forms.py:163
 msgid "Write in the box to text integration information message"
 msgstr ""
 
-#: protocol/forms.py:132
+#: protocol/forms.py:167
 msgid ""
 "Without fill this form doesn't chage the status in case of denied choise"
 msgstr ""
@@ -251,62 +304,62 @@ msgstr ""
 msgid "Qualification update within {0} years."
 msgstr ""
 
-#: protocol/models.py:381 templates/admin/edit_inline/check_block.html:22
+#: protocol/models.py:386 templates/admin/edit_inline/check_block.html:27
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Theory"
 msgstr "Teorica"
 
-#: protocol/models.py:382 templates/admin/edit_inline/check_block.html:33
+#: protocol/models.py:387 templates/admin/edit_inline/check_block.html:38
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Practice"
 msgstr "Pratica"
 
-#: protocol/models.py:390
+#: protocol/models.py:395
 msgid "In presence"
 msgstr "In presenza"
 
-#: protocol/models.py:391
+#: protocol/models.py:396
 msgid "On the web"
 msgstr "Sul web"
 
-#: protocol/models.py:407
+#: protocol/models.py:412
 #, python-brace-format
 msgid "Session {data} {inizio}/{fine}"
 msgstr "Sessione {data} {inizio}/{fine}"
 
-#: protocol/models.py:478
+#: protocol/models.py:499
 msgid "Certificate Institution"
 msgstr "Attestato Ente"
 
-#: protocol/models.py:486
+#: protocol/models.py:507
 #, python-brace-format
 msgid "User: {nome} {cognome} ({user}) "
 msgstr "Utente: {nome} {cognome} ({user}) "
 
-#: protocol/models.py:532 templates/admin/change_form_object_tools.html:14
+#: protocol/models.py:553 templates/admin/change_form_object_tools.html:14
 #: templates/protocol/register_print_firstpage.html:7
 msgid "Attendance register"
 msgstr "Registro presenze"
 
-#: protocol/models.py:533 templates/admin/change_form_object_tools.html:19
+#: protocol/models.py:554 templates/admin/change_form_object_tools.html:19
 #: templates/protocol/exam_print_firstpage.html:7
 #: templates/protocol/exam_print_firstpage.html:20
 msgid "Exam reporter"
 msgstr "Verbale esami"
 
-#: protocol/models.py:534
+#: protocol/models.py:555
 msgid "Privacy"
 msgstr ""
 
-#: protocol/models.py:535
+#: protocol/models.py:556
 msgid "Other"
 msgstr "Altro"
 
-#: protocol/models.py:599 templates/protocol/exam_print_firstpage.html:41
+#: protocol/models.py:620 templates/protocol/exam_print_firstpage.html:41
 #: templates/protocol/exam_print_signpage.html:26
 #: templates/protocol/register_print_firstpage.html:97
 #: templates/protocol/register_print_signpage.html:54
@@ -316,7 +369,7 @@ msgstr "Altro"
 msgid "Sign"
 msgstr "Firma"
 
-#: protocol/models.py:619
+#: protocol/models.py:640
 msgid "Authorization"
 msgstr "Autorizzazione"
 
@@ -469,7 +522,7 @@ msgid "Log in"
 msgstr "Entra"
 
 #: templates/account/lost_login.html:21
-#: templates/admin/edit_inline/check_block.html:48
+#: templates/admin/edit_inline/check_block.html:53
 #: templates/companies/get_user_list_detail.html:11
 msgid "Request"
 msgstr "Richiesta"
@@ -573,64 +626,72 @@ msgstr "N. max discenti per corso"
 msgid "Max practice learners per trainer"
 msgstr "Max discenti/formatore pratica "
 
+#: templates/admin/edit_inline/check_block.html:11
+msgid "Days min before start course"
+msgstr "Giorni di preavviso"
+
 #: templates/admin/edit_inline/check_block.html:12
+msgid "You shouldn't start course before"
+msgstr "Non puoi iniziare il corso prima del"
+
+#: templates/admin/edit_inline/check_block.html:16
 #: templates/protocol/certificate_user.html:159
 msgid "Center"
 msgstr "Centro"
 
-#: templates/admin/edit_inline/check_block.html:14
+#: templates/admin/edit_inline/check_block.html:19
 msgid "Provided center"
 msgstr "Centro di formazione selezionato"
 
-#: templates/admin/edit_inline/check_block.html:16
+#: templates/admin/edit_inline/check_block.html:21
 msgid "Missing center"
 msgstr "Centro di formazione NON selezionato"
 
-#: templates/admin/edit_inline/check_block.html:24
+#: templates/admin/edit_inline/check_block.html:29
 msgid "Provided hours"
 msgstr "Ore fornite"
 
-#: templates/admin/edit_inline/check_block.html:25
+#: templates/admin/edit_inline/check_block.html:30
 msgid "Request hours"
 msgstr "Ore richieste"
 
-#: templates/admin/edit_inline/check_block.html:27
+#: templates/admin/edit_inline/check_block.html:32
 msgid "Missing hours"
 msgstr "Ore mancanti"
 
-#: templates/admin/edit_inline/check_block.html:36
+#: templates/admin/edit_inline/check_block.html:41
 msgid "Provided trainers enough"
 msgstr "Formatori forniti sufficienti"
 
-#: templates/admin/edit_inline/check_block.html:38
+#: templates/admin/edit_inline/check_block.html:43
 msgid "Provided trainers NOT enough"
 msgstr "Formatori forniti NON sufficienti "
 
-#: templates/admin/edit_inline/check_block.html:44
+#: templates/admin/edit_inline/check_block.html:49
 msgid "Practice hours enough"
 msgstr "Ore pratica sufficienti"
 
-#: templates/admin/edit_inline/check_block.html:46
+#: templates/admin/edit_inline/check_block.html:51
 msgid "Practice hours NOT enough"
 msgstr "Ore pratica NON sufficienti"
 
-#: templates/admin/edit_inline/check_block.html:47
+#: templates/admin/edit_inline/check_block.html:52
 msgid "Provided"
 msgstr "Fornito"
 
-#: templates/admin/edit_inline/check_block.html:49
+#: templates/admin/edit_inline/check_block.html:54
 msgid "Missing"
 msgstr "Mancante"
 
-#: templates/admin/edit_inline/check_block.html:55
+#: templates/admin/edit_inline/check_block.html:60
 msgid "Check all"
 msgstr "Controllo generale"
 
-#: templates/admin/edit_inline/check_block.html:58
+#: templates/admin/edit_inline/check_block.html:63
 msgid "Check passed"
 msgstr "Controllo passato"
 
-#: templates/admin/edit_inline/check_block.html:62
+#: templates/admin/edit_inline/check_block.html:67
 msgid "Check NOT passed"
 msgstr "Controllo NON passato"
 
@@ -878,7 +939,7 @@ msgstr "Data nascita"
 
 #: templates/protocol/certificate_user.html:74
 #: templates/protocol/exam_print_signpage.html:22
-#: templates/protocol/register_print_listpage.html:23 users/forms.py:29
+#: templates/protocol/register_print_listpage.html:23 users/forms.py:27
 msgid "Fiscal code"
 msgstr "Codice fiscale"
 
@@ -1209,30 +1270,57 @@ msgstr ""
 msgid "Double ckick on file to insert sign"
 msgstr ""
 
-#: users/admin.py:272
+#: users/admin.py:304
 #, python-format
 msgid "%s is a Trainer now"
 msgstr ""
 
-#: users/admin.py:284
+#: users/admin.py:316
 #, python-format
 msgid "%s is a director now"
 msgstr ""
 
-#: users/admin.py:296
+#: users/admin.py:328
 #, python-format
 msgid "%s is an administrator now"
 msgstr ""
 
-#: users/admin.py:313
+#: users/admin.py:345
 #, python-format
 msgid "%s is an institution now"
 msgstr "%s è un ente ora"
 
-#: users/admin.py:324
+#: users/admin.py:356
 #, python-format
 msgid "%d user is log now"
 msgstr "Utente %d è loggato"
+
+#: users/admin.py:362
+#, python-brace-format
+msgid ""
+"Dear,:\n"
+" {name} {surname}"
+msgstr ""
+
+#: users/admin.py:364
+#, fuzzy
+#| msgid "Username"
+msgid "Username: {}"
+msgstr "Nome utente"
+
+#: users/admin.py:366
+msgid "Password: {}"
+msgstr ""
+
+#: users/admin.py:370
+msgid "Link to login: {}{}"
+msgstr ""
+
+#: users/admin.py:371
+#, fuzzy
+#| msgid "Create new protocol"
+msgid "Create new account"
+msgstr "Crea nuovo protocollo"
 
 #: users/forms.py:16
 msgid "Username"
@@ -1254,34 +1342,38 @@ msgstr ""
 msgid "Password2"
 msgstr ""
 
-#: users/forms.py:27
+#: users/forms.py:35
 msgid "First name"
 msgstr ""
 
-#: users/forms.py:28
+#: users/forms.py:36
 msgid "Last name"
 msgstr ""
 
-#: users/forms.py:61
-msgid "Invalid value: Fiscal code is used from other users."
+#: users/forms.py:37
+msgid "Email"
 msgstr ""
 
-#: users/models.py:89
+#: users/forms.py:61
+msgid "Invalid value: Fiscal code is used from other user."
+msgstr ""
+
+#: users/models.py:99
 #, python-brace-format
 msgid "Max size is {0}x{1}px (w,h). You try load image size of {2}x{3}px"
 msgstr ""
 
-#: users/models.py:91
+#: users/models.py:101
 msgid ""
 "Your sign file needs trasparency in background. We have not check it. Your "
 "file should be in .png and trasparence."
 msgstr ""
 
-#: users/models.py:105
+#: users/models.py:115
 #, python-brace-format
 msgid "Unsupported file extension. Valid extetion is '{0}'"
 msgstr ""
 
-#: users/models.py:231
+#: users/models.py:241
 msgid "Permitted courses"
 msgstr ""

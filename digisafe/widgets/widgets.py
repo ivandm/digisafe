@@ -21,3 +21,4 @@ class AutocompleteSelect(forms.widgets.Select):
                     })
         
         super().__init__(attrs, *args, **kwargs)
+

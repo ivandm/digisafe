@@ -24,18 +24,18 @@ class UserCreationForm(UserCreationForm):
     )
     password1   = forms.CharField(label=_('Password1'), max_length=128, required=False)
     password2   = forms.CharField(label=_('Password2'), max_length=128, required=False)
+    fiscal_code = forms.CharField(label=_('Fiscal code'), max_length=150, required=True)
+    fiscal_code.widget.attrs.update({
+        "autocomplete_check": "autocomplete_check_field",
+        "autocomplete_check_model_name": "anagrafica",
+        "autocomplete_check_app_label": "users",
+        "autocomplete_check_field_name": "fiscal_code",
+        "autocomplete": "off"
+    })
     first_name  = forms.CharField(label=_('First name'), max_length=150, required=True)
     last_name   = forms.CharField(label=_('Last name'), max_length=150, required=True)
-    fiscal_code = forms.CharField(label=_('Fiscal code'), max_length=150, required=True)
-    
-    fiscal_code.widget.attrs.update({
-                                "autocomplete_check":"autocomplete_check_field",
-                                "autocomplete_check_model_name":"anagrafica",
-                                "autocomplete_check_app_label":"users",
-                                "autocomplete_check_field_name":"fiscal_code",
-                                "autocomplete":"off"
-                                })
-    
+    email       = forms.EmailField(label=_('Email'), required=True)
+
     def __init__(self, *args, **kwargs):
         # print("UserCreationForm.__init__")
         super().__init__(*args, **kwargs)        
@@ -53,12 +53,12 @@ class UserCreationForm(UserCreationForm):
         # print("UserCreationForm.clean_fiscal_code")
         cleaned_data = super().clean()
         fiscal_code = cleaned_data["fiscal_code"]
-        print("UserCreationForm.clean_fiscal_code", fiscal_code)
-        # check se non esiste un altro fiscal_code in anagrafica
+        # print("UserCreationForm.clean_fiscal_code", fiscal_code)
+        # controlla se non esiste un altro fiscal_code in anagrafica
         check = Anagrafica.objects.filter(fiscal_code__iexact = fiscal_code)
         if check:
             raise ValidationError(
-                    _('Invalid value: Fiscal code is used from other users.'),
+                    _('Invalid value: Fiscal code is used from other user.'),
                     code='invalid',
                 )
         return fiscal_code.upper()

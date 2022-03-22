@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 import socket
+
 hostname = socket.gethostname()
 IPAddr = socket.gethostbyname(hostname)
 
@@ -20,8 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 if IPAddr == "77.68.51.150":
     DEPLOY = True
+    CURRENT_SITE = "digisafe.ircot.net"
+    HTTP = "https://"
 else:
     DEPLOY = False
+    CURRENT_SITE = "localhost:8000"
+    HTTP = "http://"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -59,14 +64,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.gis",
-    
-    # maps manage
-    'leaflet',
-    'djgeojson',
+    # 'django.contrib.sites',
+
+    # plugin
+    'leaflet',  #  maps manage
+    'djgeojson',  #  maps manage
+    # 'schedule',
 
     # SCSS compiler
     'compressor',
+
+    'bootstrap_datepicker_plus',
 ]
+
+# SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

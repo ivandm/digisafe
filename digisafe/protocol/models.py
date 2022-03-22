@@ -353,6 +353,11 @@ class Protocol(models.Model):
     def status_close(self):
         return self.status == "h"
 
+    def is_authorized(self):
+        if self.status in ['a', 't', 'h']:
+            return True
+        return False
+
 class Session(models.Model):
     protocol    = models.ForeignKey(
                     Protocol,
@@ -456,7 +461,23 @@ class Session(models.Model):
                                 ).exclude(pk=self.protocol.pk):
                 return True
         return False
-        
+
+    def isPreDate(self, date):
+        # print("Session isPreDate")
+        if self.protocol.course.need_institution:
+            pre_days = self.protocol.institution.pre_days
+            today = datetime.date.today()
+            end_date = today + datetime.timedelta(days=pre_days)
+
+            # print(date, type(date))
+            # print(today, type(today))
+            # print(end_date, type(end_date))
+            # print(date >= end_date)
+            return date >= end_date
+        else:
+            return True
+
+
 def file_path_name_learner(instance, file_name):
     file_root, file_ext = os.path.splitext(file_name)
     return "prot_{0}_{1}_{2}".format(instance.protocol.id, "cert_inst", file_ext)

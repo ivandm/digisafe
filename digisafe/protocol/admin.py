@@ -22,17 +22,22 @@ from .forms import DeniedConfirmForm, IntegrationInfoForm
 class StatusManager:
     status_form = ""
     def _set_status_form(self, request, obj, **kwargs):
+        # print("StatusManager _set_status_form")
+        # print(obj)
         if obj:
             status  = obj.status
             default = "_set_status_form_default"
             method = "_set_%s_status_form"%status
             # print("method", method)
             if hasattr(self, method):
+                # print("hasattr ", status)
                 return getattr(self, method)(request, obj, **kwargs)
             elif hasattr(self, default):
+                # print("no hasattr")
                 return getattr(self, default)(request, obj, **kwargs)
         else:
             # niente oggetto = nuovo protocollo
+            # print("else")
             return self._set_status_form_add(request, obj, **kwargs)
             
     def _set_status_form_add(self, request, obj, **kwargs):
@@ -194,6 +199,8 @@ class SessionInline(admin.TabularInline, StatusManager):
     
     def get_max_num(self, request, obj=None, **kwargs):
         # print("LearnersInline.get_max_num", obj)
+        if request.user.is_superuser:
+            return None
         if obj:
             if obj.status != 'm' or obj.owner != request.user: return 0
         
@@ -430,6 +437,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     readonly_fields_default = ("owner", "status")
     readonly_fields_all     = ["owner", "status"]  + ["course","type","learners_request","status","center", "institution"]
 
+
     class Media:
         css = {
             'all': (
@@ -471,6 +479,9 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             
             if obj.status == "m" and request.user.profile.trainer:
                 fields = readonly_fields_default
+                if need_institution and obj.center:
+                    # fields.append("center")
+                    fields.remove("institution")
             if obj.status == "m" and request.user.profile.trainer and obj.session_set.count() > 0:
                 fields = readonly_fields_all
             if obj.status == "m" and request.user.profile.director:
@@ -482,7 +493,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                 fields = readonly_fields_all
             if obj.status == "r"  and request.user.profile.director:
                 fields = readonly_fields_all
-                if need_institution: fields.remove("institution")
+                # if need_institution: fields.remove("institution")
             if obj.status == "r" and request.user.profile.institution:
                 fields = readonly_fields_all
                 
@@ -547,7 +558,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             return HttpResponseRedirect("../%s/change/"%obj.pk)
         return super().response_add(request, obj, post_url_continue)
 
-    # INIZIO extra views
+    # INIZIO extra additional views
     def get_urls(self):
         from django.urls import path
         urls = super().get_urls()
@@ -654,21 +665,17 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     def get_inline_instances(self, request, obj=None):
         # solamente dopo che viene aggiunto protocollo visualizza i forms in line
         # print("get_inline_instances", obj.session_set.count())
-        # inlines_add = ()
-        # inlines_add_session = (SessionInline, )
-        # inlines_add_learner = (SessionInline, LearnersInline)
         status_full = ["m", "r", "c", "a", "t", "h"]
         inlines_full = [SessionInline, LearnersInline, AuthorizationsInline, FilesInline]
         inlines = []
         if obj:
             # Trainer user
             if request.user.profile.trainer:
-                if not obj.center is None:
+                if (obj.course.need_institution == (obj.institution != None)) and not obj.center is None:
                     return [inline(self.model, self.admin_site) for inline in [SessionInline,]]
                 if obj.status in status_full and obj.session_set.count() > 0:
                     return [inline(self.model, self.admin_site) for inline in inlines_full]
 
-            
             # Director user
             if request.user.profile.director:
                 if obj.status in ["r", "c"]:
@@ -774,6 +781,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     def notifyToOwner(self, obj, subject=_("Notify protocol"), msg=""):
        obj.owner.sendSystemEmail(subject, msg)
 
+
     # status 'default'        
     def _set_status_response_change_default(self, request, obj):
         return
@@ -816,7 +824,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
            # self.readonly_fields = self.readonly_fields + ("institution",)
            return kwargs
         # self.readonly_fields = self.readonly_fields_all
-        return
+        return kwargs
     
     def _set_m_status_change_view(self, request, object_id, form_url, extra_context):
         # return super()._set_m_status_change_view(request, object_id, form_url, extra_context)
@@ -969,7 +977,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                 extra_context['custom_institution_files'] = True
                 extra_context['object_custom_institution_files'] = p.institution.institutioncustomfiles_set.all()
                 f = p.institution.institutioncustomfiles_set.all()[0]
-                print(dir(f))
+                # print(dir(f))
             else:
                 extra_context['attendance_register_view'] = True
                 extra_context['exam_reporte_view'] = True

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout,authenticate, login
+from django.utils.decorators import method_decorator
+from django.contrib.auth import logout, authenticate, login
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import EmailMessage, BadHeaderError
@@ -8,8 +9,12 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.template.response import TemplateResponse
 from django.db.models import Q
+from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
 
-from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, AccountResetPasswordForm
+import datetime
+
+from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, \
+    AccountResetPasswordForm, CalendarFormEvent
 from .models import TmpPassword, UsersPosition
 from companies.models import requestAssociatePending, Company
 from users.models import User
@@ -18,6 +23,7 @@ from protocol.models import Protocol
 @login_required(login_url="/account/login/")
 def accountView(request):
     context = {
+        'agendas': UsersPosition.objects.filter(user=request.user),
         'pending': request.user.requestassociatepending_set.filter(user_req=False),
         'companies': request.user.associates_company.filter(active=True).order_by("name").values("id", "name")
     }
@@ -31,6 +37,81 @@ def accountView(request):
     if request.user.learners_set.count():
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/index.html", context=context)
+
+
+@login_required(login_url="/account/login/")
+def calendarView(request, *args, **kwargs):
+    # print("account.views.agenda")
+    # print(args)
+    # print(kwargs)
+    context = {}
+    today = datetime.datetime.today()
+    context.update(today=today)
+    context.update(year=kwargs.get('year', today.year))
+    context.update(month=kwargs.get('month', today.month))
+    return TemplateResponse(request, "calendar/index.html", context)
+
+
+class CalendarFormEventView(UpdateView):
+    model = UsersPosition
+    form_class = CalendarFormEvent
+    context_object_name = 'item'
+    template_name = 'account/calendar_event_form.html'
+    # fields = ['anonymous', 'date_start', 'date_end', 'object', 'description']
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        print("CalendarFormEventView.dispatch")
+        self.item_id = kwargs['pk']
+        self.year = kwargs['year']
+        self.month = kwargs['month']
+        self.day = kwargs['day']
+        print(args, kwargs)
+        return super(CalendarFormEventView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        print("CalendarFormEventView.get_context_data")
+        context = super(CalendarFormEventView, self).get_context_data(*args, **kwargs)
+        context['year'] = self.year
+        context['month'] = self.month
+        context['day'] = self.day
+        return context
+
+    def form_valid(self, form):
+        # print("CalendarFormEventView.form_valid")
+        form.save()
+        item = UsersPosition.objects.get(pk=self.item_id)
+        # print(item)
+        # print(item.date_start.year)
+        return redirect(reverse('account:calendar', args=[item.date_start.year, item.date_start.month]))
+
+
+class CalendarDelEventView(DeleteView):
+    model = UsersPosition
+    template = "account/usersposition_confirm_delete.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        print("CalendarDelEventView.dispatch")
+        print(args, kwargs)
+        return super(CalendarDelEventView, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, user, *args, **kwargs):
+        print("CalendarDelEventView.form_valid")
+        print(args, kwargs)
+        print(user)
+        print(self.object)
+
+        # self.item_id = kwargs['pk']
+        # self.year = 0
+        # self.month = 0
+        # return super(CalendarDelEventView, self).form_valid(user, *args, **kwargs)
+
+    def get_success_url(self):
+        return redirect(reverse('account:index'))
+        # return redirect(reverse('account:calendar', args=[self.year, self.month]))
+
+
 
 @login_required(login_url="/account/login/")
 def searchCourseView(request):

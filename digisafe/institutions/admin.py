@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.db.models import Q
 
+from protocol.models import Protocol
 from .models import Institution, InstitutionCustomFiles, CoursesAdmitedInstitution
 
 
@@ -29,7 +31,8 @@ class InstitutionAdmin(admin.ModelAdmin):
     search_fields = ("name", )
     ordering = ['name'] 
     inlines = (InstitutionCustomFilesInline, CoursesInline,)
-    filter_horizontal = ("centers",)
+    filter_horizontal = ("staff", "centers",)
+    autocomplete_fields = ['admin']
     
     def get_queryset(self, request):
         # print("InstitutionAdmin.get_queryset")
@@ -43,11 +46,17 @@ class InstitutionAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         # Model Protocol
-        if app_label=="protocol" and model_name=="protocol" and field_name=="institution":
+        if app_label == "protocol" and model_name == "protocol" and field_name == "institution":
             # print(" qs", qs.filter(centers_=request.user.center_set.all()))
-            return qs.filter(centers__director=request.user)
+            protocol_id = request.session.get('protocol_id')
+            if protocol_id:
+                p = Protocol.objects.get(pk=protocol_id)
+                # print(p)
+                # course = p.course
+                center = p.center
+                return qs.filter(centers=center)
+            # return qs.filter(centers__director=request.user)
 
-        # return qs.filter(admin=request.user)
-        return qs
+        return qs.filter(Q(admin=request.user) | Q(staff=request.user) | Q(centers__trainers=request.user))
 
 

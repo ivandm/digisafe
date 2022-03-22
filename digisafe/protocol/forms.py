@@ -2,6 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
+import datetime
+
 from users.models import User
 from courses.models import Courses
 from .models import Session, Learners, Protocol, Files
@@ -22,6 +24,8 @@ class ProtocolForm(forms.ModelForm):
         if self.instance:
             cleaned_data = super().clean()
             course = cleaned_data.get("course")
+            center = cleaned_data.get("center")
+            institution = cleaned_data.get("institution")
             if course:
                 learners = cleaned_data.get("learners_request")
                 typecourse = cleaned_data.get("type")
@@ -33,12 +37,22 @@ class ProtocolForm(forms.ModelForm):
                             code='invalid',
                             params={'learners': maxlearnsers},
                         )
+            if course:
+                if course.need_institution and institution:
+                    if not center:
+                        raise ValidationError(
+                            _('Center is mondatory'),
+                            code='invalid',
+                            # params={'learners': maxlearnsers},
+                        )
+                    print(institution, type(institution))
+                    print(center.associate_institutions.filter(pk=institution.id))
 
 
 class SessionForm(ChainedCountryForm):
 
     def __init__(self, *args, **kwargs):
-        print("SessionForm")
+        # print("SessionForm")
         super(SessionForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -46,10 +60,15 @@ class SessionForm(ChainedCountryForm):
         fields = "__all__"
         
     def clean(self):
-        # print("SessionForm.clean", self.instance)
+        # print("SessionForm.clean")
+
         if self.instance:
             cleaned_data = super().clean()
             date = cleaned_data.get("date")
+            init_date = self.get_initial_for_field(self.fields['date'], 'date')
+            # print(self.get_initial_for_field(self.fields['date'], 'date'))
+            # print(self.fields['date'].has_changed(init_date,date))
+            # print()
             trainer = cleaned_data.get("trainer")
             start_time = cleaned_data.get("start_time")
             end_time = cleaned_data.get("end_time")
@@ -59,6 +78,18 @@ class SessionForm(ChainedCountryForm):
                     code='invalid',
                     params={'user': trainer},
                 )
+            if self.instance.protocol.course.need_institution and self.fields['date'].has_changed(init_date,date) and self.instance.protocol.is_authorized():
+                # print("predays: ", self.instance.protocol.course.need_institution)
+                # print("predays: ", self.instance.protocol.institution.pre_days)
+                if not self.instance.isPreDate(date):
+                    pre_days = self.instance.protocol.institution.pre_days
+                    today = datetime.date.today()
+                    end_date = today + datetime.timedelta(days=pre_days)
+                    raise ValidationError(
+                        _('Invalid date: Cannot insert request before %(date)s or change date if the course has been authorized'),
+                        code='invalid',
+                        params={'date': end_date},
+                    )
             if end_time and start_time:
                 "Ora finale deve essere maggiorne di ora iniziale"
                 if end_time < start_time:

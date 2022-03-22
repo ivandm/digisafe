@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Q
 
 from .models import Center, CoursesAdmitedCenter
 from .forms import CenterForm
@@ -44,7 +45,7 @@ class CenterAdmin(admin.ModelAdmin):
             # return request.user.associate_centers.all()
 
         # print(qs)
-        return qs.filter(director=request.user)
+        return qs.filter(Q(director=request.user)|Q(trainers=request.user)|Q(staff=request.user))
         # return super().get_queryset(request)
         
     def get_search_results(self, request, queryset, search_term):

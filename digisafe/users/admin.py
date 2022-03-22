@@ -8,13 +8,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.contrib import messages
 from leaflet.admin import LeafletGeoAdmin
+from django.urls import reverse
+from django.conf import settings
 
 from account.models import UsersPosition
 from protocol.models import Protocol
 from .models import User, Anagrafica, Profile, Subjects, Institutions
 from .forms import AnagraficaForm, UserForm, UserCreationForm
 
-    
+
 # Define an inline admin descriptor for Employee model
 # which acts a bit like a singleton
 class AnagraficaInline(admin.StackedInline):
@@ -115,7 +117,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             # 'fields': ('username', 'password1', 'password2', 'first_name', 'last_name')
-            'fields': ('first_name', 'last_name', 'fiscal_code')
+            'fields': ('fiscal_code', 'first_name', 'last_name', 'email')
             }
         ),
     )
@@ -197,10 +199,11 @@ class UserAdmin(BaseUserAdmin):
         return [inline(self.model, self.admin_site) for inline in self.inlines]
         
     def save_model(self, request, obj, form, change):
-        # print("UserAdmin.save_model change", change) 
+        print("UserAdmin.save_model")
         # print("UserAdmin.save_model form", form.is_valid())
         # return super().save_model(request, obj, form, change)
-        if getattr(obj, 'owner', None) is None and form.is_valid() and not change: #solo alla creazione del record
+        # Quando viene creato un nuovo utente
+        if getattr(obj, 'owner', None) is None and form.is_valid() and not change:
             # print("save_model", request.user)
             obj.owner = request.user
             first_name = form.cleaned_data['first_name']
@@ -218,11 +221,15 @@ class UserAdmin(BaseUserAdmin):
             obj.username = username_temp
             password = get_random_string(length=12)
             obj.set_password(password)
-            # print("UserAdmin.save_model password", password)
             obj.save()
-            # print("fiscal_code: ", form.cleaned_data['fiscal_code'])
-            a=Anagrafica(fiscal_code=form.cleaned_data['fiscal_code'],user=obj)
+            a = Anagrafica(fiscal_code=form.cleaned_data['fiscal_code'], user=obj)
             a.save()
+            # print("user: ", obj)
+            # print("password: ", password)
+            # print("fiscal_code: ", form.cleaned_data['fiscal_code'])
+            self.send_email_new_user(obj, password)
+
+        # quando viene modificato un utente
         else:
             # print("UserAdmin.save_model else")
             super().save_model(request, obj, form, change)
@@ -233,23 +240,28 @@ class UserAdmin(BaseUserAdmin):
         
     def get_queryset(self, request):
         # print("UserAdmin.get_queryset")
-        path = request.path
+        # path = request.path
         app_label   = request.GET.get('app_label', None)
         model_name  = request.GET.get('model_name', None)
         field_name  = request.GET.get('field_name', None)
         
         qs = super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
         
         # if path == "/admin/autocomplete/" and field_name=='owner':
             # return qs.filter(profile__administrator=1)
         # Model User
         if not request.user.is_superuser and app_label=="users" and model_name=="user" and field_name=="owner":
             return qs.filter(owner=request.user)
+
         # Model Learners
-        elif "not request.user.is_superuser" and app_label=="protocol" and model_name=="learners" and field_name=="user":
+        elif app_label=="protocol" and model_name=="learners" and field_name=="user":
             return qs.order_by("last_name")
+
         # Model Session
-        elif "not request.user.is_superuser" and app_label=="protocol" and model_name=="session" and field_name=="trainer":
+        elif app_label=="protocol" and model_name=="session" and field_name=="trainer":
             protocol_id = request.session.get('protocol_id')
             if protocol_id:
                 p = Protocol.objects.get(pk=protocol_id)
@@ -260,11 +272,15 @@ class UserAdmin(BaseUserAdmin):
                 return qs.filter(is_active=True, profile__trainer=1, materie__subjects=course, associate_centers=center).exclude(Q(associate_centers=None) | Q(materie__subjects=None)).order_by("last_name")
             else:
                 return qs.none()  # return empty query
+
+        # Model request: Institution. Restituisce utenti con profilo institution=True
+        elif app_label=="institutions" and model_name=="institution" and field_name=="admin":
+            return qs.filter(profile__institution=True)
+
         # Others not superuser return only owner's users
-        elif not request.user.is_superuser:
-            return qs.filter(owner=request.user)
-            
-        return super().get_queryset(request)
+        # print(request.user.associate_staff.all())
+        # | Q(associate_staff=request.user)
+        return qs.filter(Q(owner=request.user))
 
     def get_actions(self, request):
         #solo il super utente (e forse qualcun altro) ha i permessi per le azioni, pertanto ha senso che le veda
@@ -341,7 +357,20 @@ class UserAdmin(BaseUserAdmin):
             ) % update, messages.SUCCESS)
             # queryset.update(trainer=True)
     
-    
+    # send email
+    def send_email_new_user(self, user, password):
+        msg = _("Dear,:\n {name} {surname}".format(name=user.first_name, surname=user.last_name, ))
+        msg += "\n\n"
+        msg += _("Username: {}".format(user.username))
+        msg += "\n"
+        msg += _("Password: {}".format(password))
+        msg += "\n\n"
+        current_site = settings.CURRENT_SITE
+        http = settings.HTTP
+        msg += _("Link to login: {}{}".format(http+current_site, reverse("account:login")))
+        subject = _("Create new account")
+        user.sendSystemEmail(subject, msg)
+
 # Register Custom UserAdmin
 admin.site.register(User, UserAdmin)
 
