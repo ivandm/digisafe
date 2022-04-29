@@ -41,19 +41,20 @@
 <div id="container-sm">
     <!-- Header -->
     {% block header %}
-    <div id="header">
-        <div id="branding">
+    <div id="header" class="m-0 p-1">
+        <div id="branding" class="">
         {% block branding %}{% endblock %}
         </div>
         {% block usertools %}
         {% if request.user.is_authenticated %}
-        <div id="user-tools">
+        <div id="user-tools" class="m-0 p-1">
             {% block welcome-msg %}
                 {% translate 'Welcome,' %}
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
                 {% get_current_language as LANGUAGE_CODE %}
                 (Lang: {{ LANGUAGE_CODE }})
             {% endblock %}
+            <div>
             {% block userlinks %}
                 {% if site_url %}
                 <a href="{{ site_url }}">{% translate 'View site' %}</a> /
@@ -66,6 +67,7 @@
                 {% endif %}
                 <a href="{% url 'account:logout' %}">{% translate 'Log out' %}</a>
             {% endblock %}
+            </div>
         </div>
         {% endif %}
         {% endblock %}
@@ -75,7 +77,7 @@
     <!-- END Header -->
     
     <!-- Nav-bar -->
-    <nav class="navbar navbar-expand-lg px-4 navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg px-1 navbar-dark bg-dark">
         <div class="container-fluid fs-5">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -86,7 +88,7 @@
         </div>
     </nav>
     {% block nav-bar-sub %}
-    <nav class="navbar navbar-expand-lg px-5 bg-secondary">
+    <nav class="navbar navbar-expand-lg px-2 bg-secondary">
         <div class="container-fluid fs-6">
             {% block nav-bar-sub-brand %}{% endblock %}
             <button class="navbar-toggler  float-end " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSubMenu" aria-controls="navbarSubMenu" aria-expanded="false" aria-label="Toggle navigation">
