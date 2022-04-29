@@ -33,7 +33,7 @@ urlpatterns = [
     path('sessionbook/create/', SessionBookCreateView.as_view(), name="sessionbook-create"),
     path('sessionbook/<int:pk>/update/', SessionBookUpdateView.as_view(), name="sessionbook-update"),
     path('sessionbook/<int:pk>/delete/', SessionBookDeleteView.as_view(), name="sessionbook-delete"),
-    path('sessionbook/<int:pk>/detail/', SessionBookDetailView.as_view(), name="sessionbook-detail"),
+    # path('sessionbook/<int:pk>/detail/', SessionBookDetailView.as_view(), name="sessionbook-detail"),
     path('sessionbook/<int:pk>/bookresponse/', SessionBookDetailView.as_view(), name="sessionbook-bookresponse"),
 
 ]
