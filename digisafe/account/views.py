@@ -226,6 +226,7 @@ def searchCourseView(request):
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/home_courses_object.html", context=context)
 
+
 @login_required(login_url="/account/login/")
 def dissociateCompanyView(request, pk):
     # print(request.user.associates_company.filter(pk=pk))
@@ -233,6 +234,7 @@ def dissociateCompanyView(request, pk):
     if c:
         c[0].associates.remove(request.user)
     return redirect(reverse('account:index'))
+
 
 def loginView(request):
     if request.method == 'POST':
@@ -243,6 +245,8 @@ def loginView(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                if request.GET.get("next", False):
+                    return redirect(request.GET.get("next"))
                 return redirect(reverse('account:index'))
             else:
                 # Return an 'invalid login' error message.
@@ -251,12 +255,14 @@ def loginView(request):
                                         'error_login':_("Invalid username or password."),
                                         'form':form})
     form = AccountAuthenticationForm()
-    return render(request, "account/login.html", context={'form':form})
+    return render(request, "account/login.html", context={'form': form})
+
 
 @login_required(login_url="/account/login/")
 def logoutView(request):
     logout(request)
     return redirect(reverse('home:index'))
+
 
 def loginLostView(request):
     if request.method == 'POST':
@@ -294,6 +300,7 @@ def loginLostView(request):
         form = AccountLoginLostForm()
         return render(request, "account/lost_login.html", context={'form':form})
 
+
 def resetPasswordView(request):
     if request.method == 'POST':
         form = AccountResetPasswordForm(request.POST)
@@ -327,6 +334,7 @@ def resetPasswordView(request):
     form = AccountResetPasswordForm()
     return render(request, "account/reset_password.html", context={'form':form})
 
+
 @login_required(login_url="/account/login/")
 def changePasswordView(request):
     if request.method == 'POST':
@@ -356,6 +364,7 @@ def changePasswordView(request):
         form = AccountChangePasswordForm()
         return render(request, "account/change_password.html", context={'form':form})
 
+
 @login_required(login_url="/account/login/")
 def setPosition(request):
     lat=request.POST.get("lat")
@@ -367,6 +376,7 @@ def setPosition(request):
         pos.save()
         return JsonResponse({'save': True})
     return JsonResponse({'save': False})
+
 
 @login_required(login_url="/account/login/")
 def certificateView(request, pk_protocol=None, user_id=None):
