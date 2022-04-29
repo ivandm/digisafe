@@ -288,9 +288,13 @@ def loginLostView(request):
                 # invia la nuova password per email
                 mex = "Username: {0}\n\n" \
                       "Auth code: {1}\n\n" \
-                      "link: {2}".format(u.username,
-                                         t.cod_auth,
-                                         settings.HTTP+settings.CURRENT_SITE+reverse('account:reset-password'))
+                      "link: {2}?auth_code={3}".format(
+                            u.username,
+                            t.cod_auth,
+                            settings.HTTP+settings.CURRENT_SITE+reverse('account:reset-password'),
+                            t.cod_auth,
+                        )
+
                 EmailMessage(
                     subject=_('Digi.Safe. new credentials'),
                     body=mex,
@@ -304,7 +308,7 @@ def loginLostView(request):
                 return render(request, "error_pages/email_404.html", context={'email': email})
     else:
         form = AccountLoginLostForm()
-        return render(request, "account/lost_login.html", context={'form':form})
+        return render(request, "account/lost_login.html", context={'form': form})
 
 
 def resetPasswordView(request):
@@ -336,9 +340,9 @@ def resetPasswordView(request):
                 return redirect(reverse('account:login'))
             except BadHeaderError:
                 return HttpResponse(_('Invalid header found.'))
-        return render(request, "account/reset_password.html", context={'form':form})
-    form = AccountResetPasswordForm()
-    return render(request, "account/reset_password.html", context={'form':form})
+        return render(request, "account/reset_password.html", context={'form': form})
+    form = AccountResetPasswordForm(initial=request.GET)
+    return render(request, "account/reset_password.html", context={'form': form})
 
 
 @login_required(login_url="/account/login/")

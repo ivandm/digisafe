@@ -35,6 +35,7 @@ class SessionBookForm(forms.ModelForm):
                     params={'ds': start_date, 'de': end_date, },
                 )
 
+
 class SessionBookUpdateForm(SessionBookForm):
     class Meta:
         model = SessionBook
