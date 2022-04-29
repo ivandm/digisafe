@@ -115,7 +115,7 @@ class AgendaFeaturesForm(forms.ModelForm):
         fields = ["default_position"]
 
         widgets = {
-            'default_position': OSMWidget(attrs={'map_width': 400, 'map_height': 400}),
+            'default_position': OSMWidget(attrs={'map_height': 400}),
         }
 
 

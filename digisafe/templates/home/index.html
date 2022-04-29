@@ -4,15 +4,22 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block nav-sidebar %}{% endblock %}
-
+{% block nav-bar-sub %}{% endblock %}
 {% block content %}
 
 <div class="container">
     <h1 class="text-center m-3">HOME</h1>
     <div class="">
-        <span>
-            {% translate "Professional and Technician Organization" %}
-        </span>
+        <h1>
+            {% translate "Professional, Technician and Business Network Organization" %}
+        </h1>
+        <p><img src="{% static 'imgs/home/online-learning.png' %}"> Gestione Centro di Formazione</p>
+        <p><img src="{% static 'imgs/home/macro.png' %}"> Gestione Ente di Formazione</p>
+        <p><img src="{% static 'imgs/home/company.png' %}"> Gestione Aziendale</p>
+        <p><img src="{% static 'imgs/home/civil_engineer.png' %}"> Gestione Professionisti</p>
+        <p><img src="{% static 'imgs/home/operator.png' %}"> Gestione Operatori</p>
+        <p><img src="{% static 'imgs/home/teacher.png' %}"> Gestione Docenti</p>
+        <p><img src="{% static 'imgs/home/network.png' %}"> Mercato Elettronico Privato</p>
     </div>
 </div>
 
