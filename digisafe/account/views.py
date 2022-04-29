@@ -284,7 +284,7 @@ def loginLostView(request):
                 messages.success(request, _('New auth code was sent to {0}.'.format(email)))
                 messages.info(request, _('Check your email. Beware it\'s not in spam.'))
                 # invia la nuova password per email
-                mex = "Username: {0}<br>Auth code: {1}<br>link: {2}".format(u.username, t.cod_auth, reverse('account:reset-password'))
+                mex = "Username: {0}\n\nAuth code: {1}\n\nlink: {2}".format(u.username, t.cod_auth, reverse('account:reset-password'))
                 EmailMessage(
                     subject=_('Digi.Safe. new credentials'),
                     body=mex,
@@ -318,7 +318,7 @@ def resetPasswordView(request):
                 return render(request, "account/reset_password.html", context={'form':form})
             messages.success(request, _('Password has been changed.'))
             email = t.user.email
-            mex = "Your password has been changed<br>"
+            mex = "Your password has been changed\n\n"
             try:
                 EmailMessage(
                     subject=_('Digi.Safe. new password'),
