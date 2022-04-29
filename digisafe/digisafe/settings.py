@@ -231,13 +231,6 @@ LEAFLET_CONFIG = {
 # Settings for deploy
 SECURE_SSL_REDIRECT = False
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
-if not DEBUG:
-    FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
-    SECURE_HSTS_SECONDS = 0
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = 'DENY'
 
 # PARAMETRI EMAIL
 DEFAULT_FROM_EMAIL = "noreply@ircot.net"
@@ -250,6 +243,12 @@ if DEPLOY:
     # EMAIL_USE_SSL = True
     EMAIL_USE_TLS = True
 
+    FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
+    SECURE_HSTS_SECONDS = 0
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
 # SCSS compiler
 STATICFILES_FINDERS = ['compressor.finders.CompressorFinder', 'django.contrib.staticfiles.finders.AppDirectoriesFinder']
 COMPRESS_PRECOMPILERS = (
