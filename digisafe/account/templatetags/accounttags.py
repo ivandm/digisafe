@@ -1,6 +1,7 @@
 from django import template
 
-import datetime, calendar
+import datetime
+import calendar
 from dateutil import relativedelta
 
 from agenda.models import Agenda

@@ -3,8 +3,7 @@
 # sudo apt-get install pkg-config
 # sudo apt-get install libcairo2-dev
 # sudo apt-get install -y libgdk-pixbuf2.0-dev
-# sudo apt install pango1.0-toolsatialite
-# sudo apt-get install -y gettext
+# sudo apt install pango1.0-tools
 # sudo apt-get install -y gettext
 # sudo apt install gdal-bin
 #
@@ -26,5 +25,7 @@ django-filter~=21.1.0
 djangorestframework-gis~=0.18.0
 djangorestframework~=3.13.0
 geopy
+django-bootstrap-datepicker-plus
+dateutil
 # icalendar
 # django-ical

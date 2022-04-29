@@ -255,7 +255,7 @@ class SessionBookCreateView(CreateView):
 
     def get_success_url(self):
         company_id = self.request.session.get("company_id")
-        return reverse_lazy("companies:company-view", args=[company_id])
+        return reverse_lazy("companies:company-list")
 
 
 @method_decorator(login_required, name='dispatch')
