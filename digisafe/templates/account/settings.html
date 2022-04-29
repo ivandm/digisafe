@@ -7,16 +7,19 @@
 {% endblock %}
 
 {% block content %}
+<div class="m-2">
+    <h1 class="bg-primary bg-opacity-25 text-dark fs-3 p-2"><span >{% translate 'Account Settings' %}</span></h1>
+</div>
 <div>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    {{ anagrafica.as_p }}
-    {{ agendafeatures.as_p }}
-    <div class="clearfix" style="clear: both;">
-        <input type="submit" value="Save">
-        <a class="btn btn-secondary" href="{% url 'account:index' %}">Annulla</a>
-    </div>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        {{ anagrafica.as_p }}
+        {{ agendafeatures.as_p }}
+        <div class="clearfix" style="clear: both;">
+            <input type="submit" value="Save">
+            <a class="btn btn-secondary" href="{% url 'account:index' %}">Annulla</a>
+        </div>
 
-</form>
+    </form>
 </div>
 {% endblock %}

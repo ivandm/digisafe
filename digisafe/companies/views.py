@@ -20,6 +20,10 @@ from .models import Company, requestAssociatePending, SessionBook, DateBook
 from .forms import SessionBookForm, SessionBookUpdateForm
 
 
+# todo: Sviluppare form di Ricerca Book sessions
+# todo: Sviluppare Template Company Settings
+
+
 @login_required(login_url="/account/login/")
 def home(request):
     print("companies.views.home")
