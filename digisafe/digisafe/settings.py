@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 import socket
+import os
+import random
+import string
+
 
 hostname = socket.gethostname()
 IPAddr = socket.gethostbyname(hostname)
@@ -23,21 +27,21 @@ if IPAddr == "77.68.51.150":
     DEPLOY = True
     CURRENT_SITE = "digisafe.ircot.net"
     HTTP = "https://"
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = False
 else:
     DEPLOY = False
     CURRENT_SITE = "localhost:8000"
     HTTP = "http://"
+    DEBUG = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-import random, string
 SECRET_KEY = 'django-insecure-(j#=u5-d5y6e(fer*m04_$ib444=v11mg!uo%jocnt+k!_wxk9'
-# SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}".format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECRET_KEY = ''.join([random.SystemRandom().choice("{}{}{}"
+# .format(string.ascii_letters, string.digits, string.punctuation)) for i in range(50)])
 
 ALLOWED_HOSTS = ["digisafe.ircot.net", "127.0.0.1", "localhost", "192.168.10.104", "192.168.8.101", "192.168.43.249"]
 
@@ -56,7 +60,9 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'users.apps.UsersConfig',
     'countries.apps.CountriesConfig',
-    'digisafe.apps.DigiSafeAdminSite', #'django.contrib.admin',
+    'digisafe.apps.DigiSafeAdminSite',  # 'django.contrib.admin',
+    'job.apps.JobConfig',
+    'agenda.apps.AgendaConfig',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,11 +70,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.gis",
+    "rest_framework",
+    "rest_framework_gis",
     # 'django.contrib.sites',
 
     # plugin
-    'leaflet',  #  maps manage
-    'djgeojson',  #  maps manage
+    'leaflet',  # maps manage
+    'djgeojson',  # maps manage
     # 'schedule',
 
     # SCSS compiler
@@ -92,7 +100,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'digisafe.urls'
 
-import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -178,15 +185,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Substituting a custom User model
 AUTH_USER_MODEL = 'users.User'
 
-FILE_UPLOAD_TEMP_DIR = 'tmp'
+# FILE_UPLOAD_TEMP_DIR = 'tmp'
 
 DATE_INPUT_FORMATS = [
-    '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', # '2006-10-25', '10/25/2006', '10/25/06'
-    '%Y/%m/%d', '%m-%d-%Y', '%m-%d-%y', # '2006-10-25', '10/25/2006', '10/25/06'
-    '%b %d %Y', '%b %d, %Y',            # 'Oct 25 2006', 'Oct 25, 2006'
-    '%d %b %Y', '%d %b, %Y',            # '25 Oct 2006', '25 Oct, 2006'
-    '%B %d %Y', '%B %d, %Y',            # 'October 25 2006', 'October 25, 2006'
-    '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
+    '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y',  # '2006-10-25', '10/25/2006', '10/25/06'
+    '%Y/%m/%d', '%m-%d-%Y', '%m-%d-%y',  # '2006-10-25', '10/25/2006', '10/25/06'
+    '%b %d %Y', '%b %d, %Y',             # 'Oct 25 2006', 'Oct 25, 2006'
+    '%d %b %Y', '%d %b, %Y',             # '25 Oct 2006', '25 Oct, 2006'
+    '%B %d %Y', '%B %d, %Y',             # 'October 25 2006', 'October 25, 2006'
+    '%d %B %Y', '%d %B, %Y',             # '25 October 2006', '25 October, 2006'
 ]
 
 TIME_INPUT_FORMATS = [
@@ -204,11 +211,21 @@ if DEBUG:
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (41.8069, 12.6779),
     'DEFAULT_ZOOM': 10,
-    #'MIN_ZOOM': 3,
-    #'MAX_ZOOM': 18,
+    # 'MIN_ZOOM': 3,
+    # 'MAX_ZOOM': 18,
     'DEFAULT_PRECISION': 6,
-    #'TILES': [('Satellite', 'http://server/a/...', {'attribution': '&copy; Big eye', 'maxZoom': 16}),
-    #          ('Streets', 'http://server/b/...', {'attribution': '&copy; Contributors'})],
+    'RESET_VIEW': False,
+    'ATTRIBUTION_PREFIX': 'Powered by IRCoT Digi.Safe.',
+    # 'MINIMAP': False,
+    'TILES': [
+     ('Streets', 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}),
+     ('Satellite', 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {}),
+    ],
+    'PLUGINS': {
+            'forms': {
+                'auto-include': True
+            },
+        }
 }
 
 # Settings for deploy
@@ -234,7 +251,7 @@ if DEPLOY:
     EMAIL_USE_TLS = True
 
 # SCSS compiler
-STATICFILES_FINDERS = ['compressor.finders.CompressorFinder','django.contrib.staticfiles.finders.AppDirectoriesFinder']
+STATICFILES_FINDERS = ['compressor.finders.CompressorFinder', 'django.contrib.staticfiles.finders.AppDirectoriesFinder']
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
@@ -244,9 +261,11 @@ COMPRESS_PRECOMPILERS = (
 # django-admin makemessages -l it
 # Creating message files from JavaScript source code
 # django-admin makemessages -d djangojs -l it
-# To reexamine all source code and templates for new translation strings and update all message files for all locale, run this:
+# To reexamine all source code and templates for new translation strings and update all message files for all locale,
+# run this:
 # django-admin makemessages -a
-# The script should be run from one of two places: The root directory of your Django project or The root directory of your Django project
+# The script should be run from one of two places: The root directory of your Django project or The root directory of
+# your Django project
 # django-admin compilemessages per compilare i messaggi
 LOCALE_PATHS = [
     BASE_DIR / "locale/",
@@ -256,4 +275,3 @@ LANGUAGES = [
     ('it', _('Italian')),
     ('en', _('English')),
 ]
-

@@ -1,0 +1,55 @@
+{% extends "companies/index_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="container">
+    <div>
+        <h1>Book sessions</h1>
+    </div>
+    <div class="my-2">
+        <a class="btn btn-success bi-plus-circle-fill" href="{% url 'companies:sessionbook-create' %}"> Add new session</a>
+    </div>
+    {% for sb in sessionbook_list %}
+    <div class="row">
+        <div class="col">
+            <p>
+                <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info"  data-bs-toggle="tooltip" data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
+                <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success"  data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
+                <a href="{% url 'companies:sessionbook-delete' sb.id %}" class="btn btn-danger"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash-fill"></i></a>
+            </p>
+        </div>
+        <div class="col">
+            <p>{{sb.name}}</p>
+        </div>
+        <div class="col">
+            <p>{{sb.expire_date}}</p>
+        </div>
+        <div class="col">
+            <p>{{sb.start_date}}/{{sb.end_date}}</p>
+        </div>
+        <div class="col">
+            <p>{{sb.note}}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="mt-3 text-center fs-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="bi-skip-backward-fill"></a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="bi-caret-left-fill"></a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="bi-caret-right-fill"></a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="bi-skip-forward-fill"></a>
+            {% endif %}
+        </span>
+    </div>
+
+</div>
+{% endblock %}

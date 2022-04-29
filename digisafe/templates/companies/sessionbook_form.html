@@ -1,0 +1,16 @@
+{% extends "companies/index_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+    {{form.media}}
+    <div>
+        <h1>SESSION BOOK FORM</h1>
+        <div>
+            <form class="" method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Save">
+                <a href="{% url 'companies:sessionbook-list' %}" class="btn btn-secondary">Annulla</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

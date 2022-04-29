@@ -3,6 +3,7 @@
 <html lang="{{ LANGUAGE_CODE|default:'en-us' }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
 <title>{% block title %}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 {% compress css %}
 <link type="text/x-scss" href="{% static 'theme.scss' %}" rel="stylesheet" media="screen">
 {% endcompress %}
@@ -74,7 +75,18 @@
     <!-- END Header -->
     
     <!-- Nav-bar -->
-    <div>{% block nav-bar %}{% endblock %}</div>
+    <nav class="navbar navbar-expand-lg px-4 navbar-dark bg-dark">{% block nav-bar %}{% endblock %}</nav>
+    <nav class="navbar navbar-expand-lg px-4 bg-secondary">
+        <div class="container-fluid">
+            {% block nav-bar-sub-brand %}{% endblock %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                {% block nav-bar-sub-content %}{% endblock %}
+            </div>
+        </div>
+    </nav>
     <!-- END Nav-bar -->
     
     <!-- breadcrumbs -->
@@ -91,7 +103,7 @@
       {% endif %}
     {% endblock messages %}
     
-    <div class="content">
+    <div class="container">
     {% block content %}
     <h1>HOME</h1>
     {% endblock %}

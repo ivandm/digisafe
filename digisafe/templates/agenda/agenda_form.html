@@ -1,0 +1,155 @@
+{% extends "home/home_base.html" %}
+{% load i18n leaflet_tags geojson_tags %}
+
+{% block extrascript %}
+{% leaflet_css  %}
+{% leaflet_js  %}
+{{block.super}}
+{{ form.media }}
+<!-- XDSoft DateTimePicker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/css/autocomplete.min.css"/>
+<script src="https://cdn.jsdelivr.net/gh/tomik23/autocomplete@1.8.3/dist/js/autocomplete.min.js"></script>
+
+<!-- Plugin Leaflet.Autocomplete -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
+
+{% block extrastyle %}
+{{block.super}}
+<style>
+
+    .leaflet-container {  /* all maps */
+        //width:  600px;
+        height: 400px;
+    }
+
+    /* Resize the "display_raw" textbox */
+    .django-leaflet-raw-textarea {
+        width: 100%;
+    }
+
+    /* custom style map */
+    #id_city_div_map{
+        float: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auto-search-wrapper">
+        <input
+        type="text"
+        autocomplete="off"
+        id="search"
+        class="full-width"
+        placeholder="{% translate 'Enter the city name' %}"
+        />
+    </div>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="{% translate 'Save' %}">
+        <a class="btn btn-secondary" href="{% url 'account:calendar-set' year month %}">{% translate 'Cancel' %}</a>
+        {% if item.id %}
+            <a id="delete_button" class="btn btn-danger" href="{% url 'account:calendar-del' item.id %}">{% translate 'Delete' %}</a>
+        {% endif %}
+    </form>
+
+</div>
+<script>
+  // datetimepicker
+  $(function () {
+    $("input#datatimepicker").datetimepicker({
+      //format: 'd/m/Y H:i',
+      format: 'Y-m-d H:i',
+    });
+  });
+</script>
+<script>
+/* Definisce le costanti per il widget map */
+const widget_map = geodjango_city;
+//const map = geodjango_city.map;
+
+</script>
+<script type="text/javascript">
+/* script per la ricerca del luogo e centraggio della mappa */
+// minimal configure
+new Autocomplete("search", {
+  // default selects the first item in
+  // the list of results
+  selectFirst: true,
+
+  // The number of characters entered should start searching
+  howManyCharacters: 2,
+
+  // onSearch
+  onSearch: ({ currentValue }) => {
+    // You can also use static files
+    // const api = '../static/search.json'
+    const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&city=${encodeURI(
+      currentValue
+    )}`;
+
+    return new Promise((resolve) => {
+      fetch(api)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data.features);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  },
+  // nominatim GeoJSON format parse this part turns json into the list of
+  // records that appears when you type.
+  onResults: ({ currentValue, matches, template }) => {
+    const regex = new RegExp(currentValue, "gi");
+
+    // if the result returns 0 we
+    // show the no results element
+    return matches === 0
+      ? template
+      : matches
+          .map((element) => {
+            return `
+          <li class="loupe">
+            <p>
+              ${element.properties.display_name.replace(
+                regex,
+                (str) => `<b>${str}</b>`
+              )}
+            </p>
+          </li> `;
+          })
+          .join("");
+  },
+
+  // we add an action to enter or click
+  onSubmit: ({ object }) => {
+    const { display_name } = object.properties;
+    const [lat, lng] = object.geometry.coordinates;
+
+    var center = [lat, lng];
+    if (widget_map.options.map_srid) {
+        center = ol.proj.transform(center, 'EPSG:4326', geodjango_city.map.getView().getProjection() );
+    }
+    widget_map.map.getView().setCenter(center);
+    widget_map.map.getView().setZoom(geodjango_city.options.default_zoom);
+  },
+
+  // get index and data from li element after
+  // hovering over li with the mouse or using
+  // arrow keys ↓ | ↑
+  onSelectedItem: ({ index, element, object }) => {
+    //console.log("onSelectedItem:", index, element, object);
+  },
+
+  // the method presents no results element
+  noResults: ({ currentValue, template }) =>
+    template(`<li>No results found: "${currentValue}"</li>`),
+});
+</script>
+{% endblock %}

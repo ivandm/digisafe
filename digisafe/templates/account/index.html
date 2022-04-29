@@ -1,75 +1,8 @@
-{% extends "home/home_base.html" %}
+{% extends "account/index_base.html" %}
 {% load i18n static leaflet_tags %}
 
-{% block extrastyle %}{{super}}
-    {% leaflet_js %}
-    {% leaflet_css %}
-{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-
 {% block content %}
-
-<div class="container">
-    <h1 class="bg-primary text-white fs-1 p-2">{% translate 'PROFILES PAGE' %}</h1>
-    
-    <nav>
-      <div class="nav nav-pills" id="nav-account-tab" role="tablist">
-        <button class="nav-link active" id="nav-agenda-tab" data-bs-toggle="tab" data-bs-target="#nav-agenda" type="button" role="tab" aria-controls="nav-agenda" aria-selected="true">
-            {% translate 'Agenda' %}</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
-            {% translate 'Personal profile' %}</button>
-        {% if companies %}
-          <button class="nav-link" id="nav-companies-tab" data-bs-toggle="tab" data-bs-target="#nav-companies" type="button" role="tab" aria-controls="nav-companies" aria-selected="false">
-            {% translate 'Associate companies' %}</button>
-        {% endif %}
-        {% if courses %}
-          <button class="nav-link"        id="nav-courses-tab" data-bs-toggle="tab" data-bs-target="#nav-courses" type="button" role="tab" aria-controls="nav-courses" aria-selected="false">
-            {% translate 'Owner courses' %}</button>
-        {%endif%}
-        {% if user.profile.administrator %}
-        <button class="nav-link"        id="nav-admin-tab" data-bs-toggle="tab" data-bs-target="#nav-admin" type="button" role="tab" aria-controls="nav-admin" aria-selected="false">
-            {% translate 'Admin profile' %}</button>
-        {% endif %}
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-account-tabContent">
-        <div class="tab-pane fade show active" id="nav-agenda" role="tabpanel" aria-labelledby="nav-agenda-tab">
-            {% include 'account/home_agenda.html' %}
-        </div>
-        <div class="tab-pane fade " id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-            {% include 'account/home_profile.html' %}
-        </div>
-        {% if companies %}
-        <div class="tab-pane fade" id="nav-companies" role="tabpanel" aria-labelledby="nav-companies-tab">
-            {% include 'account/home_companies.html' %}
-        </div>
-        {% endif %}
-        {% if courses %}
-        <div class="tab-pane fade" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
-            {% include 'account/home_courses.html' %}
-        </div>
-        {% endif %}
-        {% if user.profile.administrator %}
-        <div class="tab-pane fade" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
-            {% include 'account/home_admin.html' %}
-        </div>
-        {% endif %}
-    </div>
-    
-    <!-- sezione dati personali -->
-        <!-- utente -->
-        <!-- trainer -->
-        <!-- direttore -->
-        <!-- ente -->
-        <!-- azienda -->
-        
-    <!-- sezione formazione -->
-
-    <!-- sezione plugin profili lavorativi -->
-        <!-- trainer -->
-        <!-- geolocalizzazione -->
-
-</div>
-
+<h1>
+    Home page Personal Account
+</h1>
 {% endblock %}

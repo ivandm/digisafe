@@ -1,8 +1,10 @@
+{% extends "account/index_base.html" %}
 {% load i18n static %}
 
-<DIV class="m-2">
+{% block content %}
+<div class="m-2">
     <h1 class="bg-primary bg-opacity-25 text-dark fs-3 p-2"><span >{% translate 'Owner Courses Panel' %}</span></h1>
-</DIV>
+</div>
 
 <div>
     <form class="row g-3" onsubmit="search_course">
@@ -44,12 +46,12 @@ window.onload = function() {
             url: url,
             data: data,
             success: function (response) {
-                // on successfull creating object
+                // on successfully creating object
                 // console.log(response);
                 response_from_ajax(response);
             },
             error: function (response) {
-                // alert the error if any error occured
+                // alert the error if any error occurred
                 console.log("error ajax: ", response);
                 var body = document.getElementById('body_result');
                 body.innerHTML = "Errore nella richiesta";
@@ -58,5 +60,4 @@ window.onload = function() {
     };
 };
 </script>
-
-
+{% endblock %}

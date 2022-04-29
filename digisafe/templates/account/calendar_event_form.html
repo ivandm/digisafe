@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n  %}
 
 {% block content %}
 <div class="modal-dialog modal-lg" xmlns="http://www.w3.org/1999/html">
@@ -41,4 +41,29 @@
         <a id="delete_button" class="btn btn-danger" href="{% url 'account:calendar-del' item.id %}">{% translate 'Delete' %}</a>
     </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
+<script>
+    //alert("test javscript from modal");
+
+function disable_modal_form(){
+    $("#item_update_form input").attr("disabled", "");
+    $("#item_update_form textarea").attr("disabled", "");
+    $("a#delete_button").addClass("disabled");
+}
+
+function toggle_modal_inputs(e){
+    var ischecked = e.checked;
+    if (ischecked){
+        $("#item_update_form input").removeAttr("disabled");
+        $("#item_update_form textarea").removeAttr("disabled");
+        $("a#delete_button").removeClass("disabled");
+    }
+    else{
+        $("#item_update_form input").attr("disabled", "");
+        $("#item_update_form textarea").attr("disabled", "");
+        $("a#delete_button").addClass("disabled");
+    };
+};
+
+disable_modal_form();
+</script>
 {% endblock %}

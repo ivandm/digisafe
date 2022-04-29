@@ -3,13 +3,18 @@ from django.forms import ModelForm
 
 from countries.models import City, Country
 
+
 class ChainedCountryForm(ModelForm):
+    """
+    Ricorda di importare lo script 'js/chained-country.js' in Media
+    quando erediti la classe
+    """
 
     class Meta:
         fields = "__all__"
     
     def __init__(self, *args, **kwargs):
-        # print("ChainedCountryForm")
+        print("countries.forms.ChainedCountryForm")
         prefix = kwargs.get('prefix')
         data = kwargs.get('data')
         country_id = None
@@ -40,13 +45,11 @@ class ChainedCountryForm(ModelForm):
             pass
 
         # Override the form, add onchange attribute to call the ajax function
+        country_attrs = self.fields['city'].widget.attrs
+        country_attrs.update(id="id_country")
+        country_attrs.update(onchange="getCities(this)")
         self.fields['country'].widget = forms.Select(
-            attrs={
-                'id': 'id_country',
-                'onchange': 'getCities(this)',
-                # 'onload': 'onload_func(this)', # onload non implementato su select
-                # 'style': 'width:200px'
-            },
+            attrs=country_attrs,
             choices=country_list,
         )
 
@@ -74,12 +77,10 @@ class ChainedCountryForm(ModelForm):
                         country=kwargs['instance'].country).order_by('name')
                         ]
             city_init_form = city_init_form + city_init_form_append
-            
+
+        city_attrs = self.fields['city'].widget.attrs
+        city_attrs.update(id="id_city")
         self.fields['city'].widget = forms.Select(
-            attrs={
-                'id': 'id_city',
-                # 'onchange': 'getKecamatan(this.value)',
-                # 'style': 'width:200px'
-            },
+            attrs=city_attrs,
             choices=city_init_form
         )

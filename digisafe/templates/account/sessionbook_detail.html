@@ -1,0 +1,57 @@
+{% extends "account/index_base.html" %}
+{% load i18n static accounttags %}
+
+{% block content %}
+<h1>Work session {{object.id}}</h1>
+<div class="row">
+    <div class="col-2"><span class="">Name session:</span></div>
+    <div class="col"><p class="fw-bold">{{ object.name }}</p></div>
+</div>
+
+<div class="row">
+    <div class="col-2"><span class="">Address session:</span></div>
+    <div class="col"><p class="fw-bold">{{ object.address }}</p></div>
+</div>
+
+<div class="row">
+    <div class="col-2"><span class="">Session notes:</span></div>
+    <div class="col"><p class="fw-bold">{{ object.note }}</p></div>
+</div>
+
+<div class="row">
+    <div class="col-2"><span class="">Session expiration date:</span></div>
+    <div class="col"><p class="fw-bold">{{ object.expire_date }}</p></div>
+</div>
+
+<div>
+    <h2>Dates:</h2>
+    <p class="alert-info">Choice dates</p>
+    <form method="post">{% csrf_token %}
+        <input type="hidden" value="{{object.uuid}}" name="uuid">
+        {% for d in object.datebook_set.all %}
+        {% busy_in_date d.date request.user as busy %}
+        <div class="form-check">
+            {% if busy %}
+            <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}" name="date_id" disabled>
+            <label class="form-check-label text-decoration-line-through" for="check_{{d.id}}">
+                {{d.date}}
+            </label> <span> Impegnato: </span>{{busy}}
+            {% else %}
+            <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}"  name="date_id"
+                   {% if request.user in d.users.all %}
+                   checked
+                   {% endif %}
+            >
+            <label class="form-check-label fw-bold " for="check_{{d.id}}">
+                {{d.date}}
+            </label>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button class="btn btn-success" type="submit" value="yes" name="response">Accept</button>
+        <a class="btn btn-danger">Decline</a>
+    </form>
+
+</div>
+
+{% endblock %}

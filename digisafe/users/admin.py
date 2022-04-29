@@ -1,19 +1,19 @@
 from django.contrib import admin
+from django.contrib.gis.forms.widgets import OSMWidget
+from django.contrib.gis.db import models as gismodel
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
-from django.utils.translation import ngettext, gettext as _
+from django.utils.translation import gettext as _
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.contrib import messages
-from leaflet.admin import LeafletGeoAdmin
 from django.urls import reverse
 from django.conf import settings
 
-from account.models import UsersPosition
 from protocol.models import Protocol
-from .models import User, Anagrafica, Profile, Subjects, Institutions
+from agenda.models import AgendaFeatures
+from .models import User, Anagrafica, Profile, JobProfile, Subjects, Institutions
 from .forms import AnagraficaForm, UserForm, UserCreationForm
 
 
@@ -29,9 +29,10 @@ class AnagraficaInline(admin.StackedInline):
     add_fieldsets = (
         (None, {
             # 'classes': ('wide',),
-            'fields': ('fiscal_code',)}
-        ),
+            'fields': ('fiscal_code',)
+        }),
     )
+
     class Media:
         js = (
             'js/chained-country.js',
@@ -39,20 +40,20 @@ class AnagraficaInline(admin.StackedInline):
         )
     
     def formfield_for_dbfield(self, db_field, request, **kwargs):
-        """aggiunge gli attributi ai campi della lista autocomplete_check_fields """
+        """ Aggiunge gli attributi ai campi della lista autocomplete_check_fields """
         # print("formfield_for_dbfield", db_field)
         if not hasattr(self, "autocomplete_check_fields"):
             self.autocomplete_check_fields = []
         if 'widget' not in kwargs:
             if db_field.name in self.autocomplete_check_fields:
                 widget = db_field.formfield().widget
-                attr = widget.attrs.update({
-                    "autocomplete_check":"autocomplete_check_field",
-                    "autocomplete_check_model_name":self.model.__name__.lower(),
-                    "autocomplete_check_app_label":self.model._meta.app_label.lower(),
-                    "autocomplete_check_field_name":db_field.name,
-                    "autocomplete":"off"
-                    })
+                # attr = widget.attrs.update({
+                #     "autocomplete_check": "autocomplete_check_field",
+                #     "autocomplete_check_model_name": self.model.__name__.lower(),
+                #     "autocomplete_check_app_label": self.model._meta.app_label.lower(),
+                #     "autocomplete_check_field_name": db_field.name,
+                #     "autocomplete": "off"
+                #     })
                 # print(attr)
                 kwargs['widget'] = widget
         return super().formfield_for_dbfield(db_field, request, **kwargs)
@@ -66,13 +67,33 @@ class AnagraficaInline(admin.StackedInline):
         #     return super().get_fieldsets(request, obj)
         pass
                     
-# which acts a bit like a singleton
+
 class ProfileInline(admin.TabularInline):
     model = Profile
     can_delete = False
     show_change_link = False
     verbose_name_plural = 'Profile'
-    
+
+
+class AgendaPropertyInline(admin.TabularInline):
+    model = AgendaFeatures
+    can_delete = False
+    show_change_link = False
+    verbose_name_plural = 'Jobs'
+    filter_horizontal = ("job",)
+    formfield_overrides = {
+        gismodel.PointField: {"widget": OSMWidget},
+    }
+
+
+class JobProfileInline(admin.TabularInline):
+    model = JobProfile
+    can_delete = False
+    show_change_link = False
+    verbose_name_plural = 'Jobs'
+    filter_horizontal = ("job",)
+
+
 class SubjectsInline(admin.StackedInline):
     model = Subjects
     can_delete = False
@@ -87,21 +108,24 @@ class InstitutionsInLine(admin.StackedInline):
     show_change_link = False
     verbose_name_plural = 'Institutions Centers'
     filter_horizontal = ("institutions",)
-    
+
+
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserForm
     # model = User
-    inlines_superuser = (AnagraficaInline, ProfileInline, SubjectsInline, InstitutionsInLine)
+    inlines_superuser = (AnagraficaInline, ProfileInline, AgendaPropertyInline,
+                         JobProfileInline, SubjectsInline, InstitutionsInLine)
     inlines = (AnagraficaInline,)
     ordering = ['-pk']
     list_per_page = 20
-    search_fields = ["username", "last_name", "first_name", "anagrafica__fiscal_code", "associate_centers__name", "center__name"]
-    autocomplete_fields = ['owner',]
+    search_fields = ["username", "last_name", "first_name", "anagrafica__fiscal_code",
+                     "associate_centers__name", "center__name"]
+    autocomplete_fields = ['owner']
     # filter_horizontal = BaseUserAdmin.filter_horizontal + ("subjects",)
     fieldsets = (
-        *BaseUserAdmin.fieldsets,  # original form fieldsets, expandeds follows
+        *BaseUserAdmin.fieldsets,  # original form fieldsets, expand follows
         (                      
             'Custom Fields',  # Gruppo campi personalizzati
             {
@@ -118,8 +142,7 @@ class UserAdmin(BaseUserAdmin):
             'classes': ('wide',),
             # 'fields': ('username', 'password1', 'password2', 'first_name', 'last_name')
             'fields': ('fiscal_code', 'first_name', 'last_name', 'email')
-            }
-        ),
+         }),
     )
     list_filter = (
         "is_superuser",
@@ -129,7 +152,7 @@ class UserAdmin(BaseUserAdmin):
         "profile__administrator",
     )
     list_editable = ("is_staff",)
-    actions = ['make_trainer','make_director','make_administrator','make_institution','make_log',]
+    actions = ['make_trainer', 'make_director', 'make_administrator', 'make_institution', 'make_log']
     # prepopulated_fields = {"username": ("first_name", "last_name")}
     
     class Media:
@@ -207,14 +230,14 @@ class UserAdmin(BaseUserAdmin):
             # print("save_model", request.user)
             obj.owner = request.user
             first_name = form.cleaned_data['first_name']
-            last_name  = form.cleaned_data['last_name']
+            last_name = form.cleaned_data['last_name']
             username = "{first_name}.{last_name}".format(
                                                         first_name=first_name, 
-                                                        last_name =last_name
+                                                        last_name=last_name
                                                    ).lower()
             username_temp = username
             i = 1
-            while(User.objects.filter(username__iexact=username_temp)):
+            while User.objects.filter(username__iexact=username_temp):
                 username_temp = username + str(i)
                 # print("while", username)
                 i += 1
@@ -241,9 +264,9 @@ class UserAdmin(BaseUserAdmin):
     def get_queryset(self, request):
         # print("UserAdmin.get_queryset")
         # path = request.path
-        app_label   = request.GET.get('app_label', None)
-        model_name  = request.GET.get('model_name', None)
-        field_name  = request.GET.get('field_name', None)
+        app_label = request.GET.get('app_label', None)
+        model_name = request.GET.get('model_name', None)
+        field_name = request.GET.get('field_name', None)
         
         qs = super().get_queryset(request)
 
@@ -253,15 +276,15 @@ class UserAdmin(BaseUserAdmin):
         # if path == "/admin/autocomplete/" and field_name=='owner':
             # return qs.filter(profile__administrator=1)
         # Model User
-        if not request.user.is_superuser and app_label=="users" and model_name=="user" and field_name=="owner":
+        if not request.user.is_superuser and app_label == "users" and model_name == "user" and field_name == "owner":
             return qs.filter(owner=request.user)
 
         # Model Learners
-        elif app_label=="protocol" and model_name=="learners" and field_name=="user":
+        elif app_label == "protocol" and model_name == "learners" and field_name == "user":
             return qs.order_by("last_name")
 
         # Model Session
-        elif app_label=="protocol" and model_name=="session" and field_name=="trainer":
+        elif app_label == "protocol" and model_name == "session" and field_name == "trainer":
             protocol_id = request.session.get('protocol_id')
             if protocol_id:
                 p = Protocol.objects.get(pk=protocol_id)
@@ -269,12 +292,15 @@ class UserAdmin(BaseUserAdmin):
                 center = p.center
                 # print(course)
                 # print(center)
-                return qs.filter(is_active=True, profile__trainer=1, materie__subjects=course, associate_centers=center).exclude(Q(associate_centers=None) | Q(materie__subjects=None)).order_by("last_name")
+                return qs.filter(
+                    is_active=True, profile__trainer=1,
+                    materie__subjects=course, associate_centers=center).exclude(
+                    Q(associate_centers=None) | Q(materie__subjects=None)).order_by("last_name")
             else:
                 return qs.none()  # return empty query
 
         # Model request: Institution. Restituisce utenti con profilo institution=True
-        elif app_label=="institutions" and model_name=="institution" and field_name=="admin":
+        elif app_label == "institutions" and model_name == "institution" and field_name == "admin":
             return qs.filter(profile__institution=True)
 
         # Others not superuser return only owner's users
@@ -283,7 +309,7 @@ class UserAdmin(BaseUserAdmin):
         return qs.filter(Q(owner=request.user))
 
     def get_actions(self, request):
-        #solo il super utente (e forse qualcun altro) ha i permessi per le azioni, pertanto ha senso che le veda
+        # solo il super utente (e forse qualcun altro) ha i permessi per le azioni, pertanto ha senso che le veda
         actions = super().get_actions(request)
         if not request.user.is_superuser:
             self.actions = []
@@ -303,7 +329,7 @@ class UserAdmin(BaseUserAdmin):
             self.message_user(request, _(
                     '%s is a Trainer now',
                 ) % q, messages.SUCCESS)
-                # queryset.update(trainer=True)
+            # queryset.update(trainer=True)
     
     @admin.action(description='Mark director')
     def make_director(self, request, queryset):
@@ -315,7 +341,7 @@ class UserAdmin(BaseUserAdmin):
             self.message_user(request, _(
                     '%s is a director now',
                 ) % q, messages.SUCCESS)
-                # queryset.update(trainer=True)
+            # queryset.update(trainer=True)
     
     @admin.action(description='Mark administrator')
     def make_administrator(self, request, queryset):
@@ -327,7 +353,7 @@ class UserAdmin(BaseUserAdmin):
             self.message_user(request, _(
                     '%s is an administrator now',
                 ) % q, messages.SUCCESS)
-                # queryset.update(trainer=True)
+            # queryset.update(trainer=True)
     
     @admin.action(description='Mark institution')
     def make_institution(self, request, queryset):
@@ -344,20 +370,20 @@ class UserAdmin(BaseUserAdmin):
             self.message_user(request, _(
                             '%s is an institution now',
                         ) % q, messages.SUCCESS)
-                        # queryset.update(trainer=True)
+            # queryset.update(trainer=True)
     
     @admin.action(description='Mark log')
     def make_log(self, request, queryset):
-        #update = queryset.update(is_log=True)
+        # todo: `update` era commentato ma non saprei perché, utilizzato dopo in self.message_user
+        update = queryset.update(is_log=True)
         for q in queryset:
             group = Group.objects.get(name='Log')
             q.groups.add(group)
         self.message_user(request, _(
             '%d user is log now',
             ) % update, messages.SUCCESS)
-            # queryset.update(trainer=True)
+        # queryset.update(trainer=True)
     
-    # send email
     def send_email_new_user(self, user, password):
         msg = _("Dear,:\n {name} {surname}".format(name=user.first_name, surname=user.last_name, ))
         msg += "\n\n"
@@ -371,11 +397,6 @@ class UserAdmin(BaseUserAdmin):
         subject = _("Create new account")
         user.sendSystemEmail(subject, msg)
 
+
 # Register Custom UserAdmin
 admin.site.register(User, UserAdmin)
-
-#Position
-admin.site.register(UsersPosition, LeafletGeoAdmin)
-
-
-

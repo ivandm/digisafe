@@ -1,0 +1,14 @@
+{% extends "companies/index_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}" and relate dates with booked users saved?</p>
+    {% for d in object.datebook.all %}
+    <p>{{d}}</p>
+    {% endfor %}
+    {{ form }}
+    <input type="submit" value="Confirm">
+    <a href="{% url 'companies:sessionbook-list' %}" class="btn btn-secondary">Annulla</a>
+</form>
+{% endblock %}

@@ -2,41 +2,106 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import logout, authenticate, login
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import EmailMessage, BadHeaderError
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
 from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
+from django.views.decorators.csrf import csrf_protect
 
 import datetime
 
-from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, \
-    AccountResetPasswordForm, CalendarFormEvent
-from .models import TmpPassword, UsersPosition
+from agenda.models import Agenda
 from companies.models import requestAssociatePending, Company
 from users.models import User
 from protocol.models import Protocol
+from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, \
+    AccountResetPasswordForm, CalendarFormEvent
+from .forms import AccountForm, AnagraficaFormSet, AgendaFeaturesFormSet
+from .models import TmpPassword
+
 
 @login_required(login_url="/account/login/")
-def accountView(request):
-    context = {
-        'agendas': UsersPosition.objects.filter(user=request.user),
-        'pending': request.user.requestassociatepending_set.filter(user_req=False),
-        'companies': request.user.associates_company.filter(active=True).order_by("name").values("id", "name")
-    }
-    if request.user.profile.administrator:
-        c = Company.objects.filter(admins=request.user)
-        p = UsersPosition.objects.filter(user = request.user)
-        if p:
-            context.update(position=p[0])
-        # print("accountView", c)
-        context.update(company_list=c)
+def indexView(request):
+    return render(request, "account/index.html", context={})
+
+
+@login_required(login_url="/account/login/")
+def coursesView(request):
+    context = {}
     if request.user.learners_set.count():
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
-    return render(request, "account/index.html", context=context)
+    return render(request, "account/home_courses.html", context=context)
+
+
+class SettingsView(UpdateView):
+    template_name = "account/settings.html"
+    form_class = AccountForm
+    model = User
+
+    def get_context_data(self, **kwargs):
+        data = super(SettingsView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['form'] = AccountForm(self.request.POST, instance=self.object)
+            data['anagrafica'] = AnagraficaFormSet(self.request.POST, instance=self.object)
+            data['agendafeatures'] = AgendaFeaturesFormSet(self.request.POST, instance=self.object)
+        else:
+            data['form'] = AccountForm(instance=self.object)
+            data['anagrafica'] = AnagraficaFormSet(instance=self.object)
+            data['agendafeatures'] = AgendaFeaturesFormSet(instance=self.object)
+        return data
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        anagrafica_form = AnagraficaFormSet(self.request.POST, instance=self.object)
+        agendadefaultposition_form = AgendaFeaturesFormSet(self.request.POST, instance=self.object)
+        if form.is_valid() and anagrafica_form.is_valid():
+            return self.form_valid(form, anagrafica_form, agendadefaultposition_form)
+        else:
+            return self.form_invalid(form, anagrafica_form, agendadefaultposition_form)
+
+    def form_valid(self, form, anagrafica_form, agendadefaultposition_form):
+        """
+        Called if all forms are valid. Creates a Recipe instance along with
+        associated Ingredients and Instructions and then redirects to a
+        success page.
+        """
+        self.object = form.save()
+        anagrafica_form.instance = self.object
+        anagrafica_form.save()
+        agendadefaultposition_form.instance = self.object
+        agendadefaultposition_form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, anagrafica_form, agendadefaultposition_form):
+        """
+        Called if a form is invalid. Re-renders the context data with the
+        data-filled forms and errors.
+        """
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  anagrafica=anagrafica_form,
+                                  agendafeatures=agendadefaultposition_form
+                                  ))
+
+    def get_success_url(self):
+        return reverse_lazy("account:settings", args=[self.object.id])
+
+
+@login_required(login_url="/account/login/")
+def settingsView(request):
+    context = {}
+    return render(request, "account/settings.html", context=context)
 
 
 @login_required(login_url="/account/login/")
@@ -49,28 +114,73 @@ def calendarView(request, *args, **kwargs):
     context.update(today=today)
     context.update(year=kwargs.get('year', today.year))
     context.update(month=kwargs.get('month', today.month))
-    return TemplateResponse(request, "calendar/index.html", context)
+    return TemplateResponse(request, "account/agenda.html", context)
 
 
+class CalendarAddView(CreateView):
+    model = Agenda
+    form_class = CalendarFormEvent
+    # fields = "__all__"
+
+    def get_success_url(self):
+        return reverse('account:calendar-set', args=[self.year, self.month])
+
+    def dispatch(self, *args, **kwargs):
+        # print("CalendarAddView.dispatch")
+        # print(args, kwargs)
+        self.year = kwargs.get('year')
+        self.month = kwargs.get('month')
+        self.day = kwargs.get('day')
+        self.date_start = datetime.datetime.today()
+        self.user = self.request.user
+        return super(CalendarAddView, self).dispatch(*args, **kwargs)
+
+    def get_initial(self):
+        return {
+            'date_start': self.date_start,
+        }
+
+    def form_valid(self, form):
+        # print("CalendarAddView.form_valid ", form.cleaned_data['date_end'])
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        # do something with self.object
+        # remember the import: from django.http import HttpResponseRedirect
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, *args, **kwargs):
+        # print("CalendarFormEventView.get_context_data")
+        context = super(CalendarAddView, self).get_context_data(*args, **kwargs)
+        context['year'] = self.year
+        context['month'] = self.month
+        context['day'] = self.day
+        return context
+
+
+@method_decorator(csrf_protect, name='dispatch')
 class CalendarFormEventView(UpdateView):
-    model = UsersPosition
+    model = Agenda
     form_class = CalendarFormEvent
     context_object_name = 'item'
-    template_name = 'account/calendar_event_form.html'
+    # template_name = 'account/calendar_event_form.html'
     # fields = ['anonymous', 'date_start', 'date_end', 'object', 'description']
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        print("CalendarFormEventView.dispatch")
+        # print("CalendarFormEventView.dispatch")
         self.item_id = kwargs['pk']
         self.year = kwargs['year']
         self.month = kwargs['month']
         self.day = kwargs['day']
-        print(args, kwargs)
+        # print(args, kwargs)
         return super(CalendarFormEventView, self).dispatch(*args, **kwargs)
 
+    def get_success_url(self):
+        return reverse('account:calendar-set', args=[self.year, self.month])
+
     def get_context_data(self, *args, **kwargs):
-        print("CalendarFormEventView.get_context_data")
+        # print("CalendarFormEventView.get_context_data")
         context = super(CalendarFormEventView, self).get_context_data(*args, **kwargs)
         context['year'] = self.year
         context['month'] = self.month
@@ -80,15 +190,15 @@ class CalendarFormEventView(UpdateView):
     def form_valid(self, form):
         # print("CalendarFormEventView.form_valid")
         form.save()
-        item = UsersPosition.objects.get(pk=self.item_id)
+        item = Agenda.objects.get(pk=self.item_id)
         # print(item)
         # print(item.date_start.year)
-        return redirect(reverse('account:calendar', args=[item.date_start.year, item.date_start.month]))
+        return redirect(self.get_success_url())
 
 
 class CalendarDelEventView(DeleteView):
-    model = UsersPosition
-    template = "account/usersposition_confirm_delete.html"
+    model = Agenda
+    template = "account/Agenda_confirm_delete.html"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -96,21 +206,10 @@ class CalendarDelEventView(DeleteView):
         print(args, kwargs)
         return super(CalendarDelEventView, self).dispatch(request, *args, **kwargs)
 
-    def form_valid(self, user, *args, **kwargs):
-        print("CalendarDelEventView.form_valid")
-        print(args, kwargs)
-        print(user)
-        print(self.object)
-
-        # self.item_id = kwargs['pk']
-        # self.year = 0
-        # self.month = 0
-        # return super(CalendarDelEventView, self).form_valid(user, *args, **kwargs)
-
     def get_success_url(self):
-        return redirect(reverse('account:index'))
+        print("CalendarDelEventView.get_success_url")
+        return reverse('account:index')
         # return redirect(reverse('account:calendar', args=[self.year, self.month]))
-
 
 
 @login_required(login_url="/account/login/")
@@ -263,7 +362,7 @@ def setPosition(request):
     lon=request.POST.get("lon")
     user = request.user
     if lat and lon:
-        pos, created = UsersPosition.objects.get_or_create(user=request.user)
+        pos, created = Agenda.objects.get_or_create(user=request.user)
         pos.setGeom(lon, lat)
         pos.save()
         return JsonResponse({'save': True})
@@ -301,3 +400,23 @@ def certificateView(request, pk_protocol=None, user_id=None):
                 qrcode_img=qrcode_str2base64(full_url)
             )
         return TemplateResponse(request, "protocol/certificate_user.html", context)
+
+
+@login_required(login_url="/account/login/")
+def accountView(request):
+    context = {
+        'agendas': Agenda.objects.filter(user=request.user),
+        'pending': request.user.requestassociatepending_set.filter(user_req=False),
+        'companies': request.user.associates_company.filter(active=True).order_by("name").values("id", "name")
+    }
+    if request.user.profile.administrator:
+        c = Company.objects.filter(admins=request.user)
+        p = Agenda.objects.filter(user = request.user)
+        if p:
+            context.update(position=p[0])
+        # print("accountView", c)
+        context.update(company_list=c)
+    if request.user.learners_set.count():
+        context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
+    return render(request, "account/index.html", context=context)
+

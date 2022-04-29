@@ -18,6 +18,7 @@ from courses.models import Courses
 from users.models import User
 from .forms import DeniedConfirmForm, IntegrationInfoForm
 
+
 # class manage status
 class StatusManager:
     status_form = ""
@@ -183,10 +184,10 @@ class SessionInline(admin.TabularInline, StatusManager):
     extra = 0
     autocomplete_fields = ['trainer']
     # search_fields = ['trainer']
-    readonly_fields_not_modify = ("trainer", "subject_type", "execution", "country", "city", "address", "date", "start_time", "end_time")
+    readonly_fields_not_modify = ("trainer", "subject_type", "execution", "country", "city",
+                                  "address", "date", "start_time", "end_time")
     # readonly_fields_not_modify = ()
 
-    
     class Media:
         css = {
             'all': (

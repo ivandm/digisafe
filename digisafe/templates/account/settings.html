@@ -1,0 +1,22 @@
+{% extends "account/index_base.html" %}
+{% load i18n static leaflet_tags %}
+
+{% block extrascript %}
+{{form.media}}
+{{agendafeatures.media}}
+{% endblock %}
+
+{% block content %}
+<div>
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    {{ anagrafica.as_p }}
+    {{ agendafeatures.as_p }}
+    <div class="clearfix" style="clear: both;">
+        <input type="submit" value="Save">
+        <a class="btn btn-secondary" href="{% url 'account:index' %}">Annulla</a>
+    </div>
+
+</form>
+</div>
+{% endblock %}

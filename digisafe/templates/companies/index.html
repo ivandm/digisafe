@@ -1,12 +1,5 @@
-{% extends "home/home_base.html" %}
-{% load i18n static leaflet_tags geojson_tags %}
-
-{% block extrastyle %}{{ block.super }}
-    {% leaflet_js %}
-    {% leaflet_css %}
-{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
+{% extends "companies/index_base.html" %}
+{% load i18n static %}
 
 {% block content %}
 <DIV class="container m-2">
@@ -14,11 +7,17 @@
 <h3 class="bg-primary bg-opacity-25 text-dark fs-3 p-2">{% translate 'Dashboard panel' %}</h3>
 
     <nav>
-      <div class="nav nav-tabs" id="nav-admin-tab" role="tablist">
-        <button class="nav-link "       id="nav-listusers-tab" data-bs-toggle="tab" data-bs-target="#nav-listusers" type="button" role="tab" aria-controls="nav-listusers" aria-selected="true" >{% translate 'Associate users' %}</button>
-        <button class="nav-link "       id="nav-associate-tab" data-bs-toggle="tab" data-bs-target="#nav-associate" type="button" role="tab" aria-controls="nav-associate" aria-selected="false">{% translate 'Seacrh users' %}</button>
-        <button class="nav-link active" id="nav-maps-tab"      data-bs-toggle="tab" data-bs-target="#nav-maps"      type="button" role="tab" aria-controls="nav-maps"      aria-selected="false">{% translate 'Maps' %}</button>
-      </div>
+        <ul class="nav nav-tabs" id="nav-admin-tab" role="tablist">
+            <li>
+                <button class="nav-link "       id="nav-listusers-tab" data-bs-toggle="tab" data-bs-target="#nav-listusers" type="button" role="tab" aria-controls="nav-listusers" aria-selected="true" >{% translate 'Associate users' %}</button>
+            </li>
+            <li>
+                <button class="nav-link "       id="nav-associate-tab" data-bs-toggle="tab" data-bs-target="#nav-associate" type="button" role="tab" aria-controls="nav-associate" aria-selected="false">{% translate 'Seacrh users' %}</button>
+            </li>
+            <li>
+                <a class="nav-link" href="{% url 'companies:sessionbook-list' %}">Session list</a>
+            </li>
+        </ul>
     </nav>
     <div class="tab-content" id="nav-admin-tabContent">
       <div class="tab-pane fade " id="nav-associate" role="tabpanel" aria-labelledby="nav-associate-tab">
@@ -32,15 +31,6 @@
         <div class="m-3">
         <h1  class="fw-bold">{% translate 'Associate users' %}</h1>
         {% include 'companies/associate_user.html' %}
-        </div>
-      </div>
-      <div class="tab-pane fade show active" id="nav-maps" role="tabpanel" aria-labelledby="nav-maps-tab">
-        <div class="m-3">
-        <h1  class="fw-bold">{% translate 'Maps' %}</h1>
-           <script>
-               var collection = {{ qs_results|geojsonfeature:"popupContent"|safe }};
-           </script>
-           {% include 'maps/searchplace.html' %}
         </div>
       </div>
     </div>

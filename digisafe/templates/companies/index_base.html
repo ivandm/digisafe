@@ -1,0 +1,23 @@
+{% extends "home/home_base.html" %}
+
+{% block nav-bar-sub-brand %}
+    <span class="navbar-brand text-black fw-bold">
+        {% if request.session.company_name %}
+        {{request.session.company_name}}
+        {% else %}
+        Company
+        {% endif %}
+
+    </span>
+{% endblock %}
+{% block nav-bar-sub-content %}
+<div class="navbar-nav me-auto mb-2 mb-lg-0">
+    {% if user.profile.administrator %}
+    <a class="nav-link" href="{% url 'companies:home' %}"><i class="bi bi-building"></i> Select</a>
+    {% endif %}
+    {% if request.session.company_id %}
+    <a class="nav-link" href="{% url 'companies:setting' %}"><i class="bi bi-gear"></i> Settings</a>
+    <a class="nav-link" href="{% url 'companies:sessionbook-list' %}"><i class="bi bi-map"></i> Sessions</a>
+    {% endif %}
+</div>
+{% endblock %}

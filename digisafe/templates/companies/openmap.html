@@ -1,0 +1,23 @@
+{% extends "companies/index_base.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/map.css' %}" />
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <!-- Marker cluster -->
+    <!--  https://github.com/Leaflet/Leaflet.markercluster -->
+    <link rel="stylesheet" type="text/css" href="{% static 'leaflet/plugins/markercluster/MarkerCluster.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'leaflet/plugins/markercluster/MarkerCluster.Default.css' %}" />
+    <script src="{% static 'leaflet/plugins/markercluster/leaflet.markercluster.js' %}"></script>
+
+    <!-- Chart -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+{% endblock %}
+
+{% block content %}
+    {% include 'maps/map_markers.html' %}
+{% endblock %}

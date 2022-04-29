@@ -4,7 +4,15 @@
 
 <script>
 
+
 $(window).on('load', function() {
+    $(function () {
+        $("input#datatimepicker").datetimepicker({
+          //format: 'd/m/Y H:i',
+          format: 'Y-m-d H:i',
+        });
+    });
+
     $("a#calendar_edit_event").each(function(index) {
         //console.log(index, $(this));
         $(this).on("click", function (e) {
@@ -13,11 +21,12 @@ $(window).on('load', function() {
             //console.log("calendar_edit_event href", $(this).attr('href'));
             var url = $(this).attr('href');
             var popup = $('#popup');
+
             $.ajax({
                 type: 'GET',
                 url: url,
                 data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    //csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (response) {
                     //console.log(response);
@@ -27,7 +36,8 @@ $(window).on('load', function() {
                     //var my_modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
                     var my_modal = new bootstrap.Modal(popup);
                     my_modal.show();
-                    disable_modal_form();
+                    //disable_modal_form();
+                    evalJSFromHtml(response);
                 },
                 error: function (response) {
                     console.log("Error");
@@ -46,16 +56,26 @@ function disable_modal_form(){
 }
 
 function toggle_modal_inputs(e){
-        var ischecked = e.checked;
-        if (ischecked){
-            $("#item_update_form input").removeAttr("disabled");
-            $("#item_update_form textarea").removeAttr("disabled");
-            $("a#delete_button").removeClass("disabled");
-        }
-        else{
-            $("#item_update_form input").attr("disabled", "");
-            $("#item_update_form textarea").attr("disabled", "");
-            $("a#delete_button").addClass("disabled");
-        };
+    var ischecked = e.checked;
+    if (ischecked){
+        $("#item_update_form input").removeAttr("disabled");
+        $("#item_update_form textarea").removeAttr("disabled");
+        $("a#delete_button").removeClass("disabled");
+    }
+    else{
+        $("#item_update_form input").attr("disabled", "");
+        $("#item_update_form textarea").attr("disabled", "");
+        $("a#delete_button").addClass("disabled");
     };
+};
+
+function evalJSFromHtml(html) {
+    console.log("eval script");
+    var newElement = document.createElement('div');
+    newElement.innerHTML = html;
+    var scripts = newElement.getElementsByTagName("script");
+    for (var i = 0; i < scripts.length; ++i) {
+        var script = scripts[i]; eval(script.innerHTML);
+        };
+};
 </script>

@@ -4,21 +4,16 @@ from django.utils.translation import gettext as _
 
 import datetime
 
-from users.models import User
 from courses.models import Courses
 from .models import Session, Learners, Protocol, Files
-from countries.models import Country
 from countries.forms import ChainedCountryForm
-from .widgets import AdminFileSignWidget
+
 
 class ProtocolForm(forms.ModelForm):
     
     class Meta:
         model = Protocol
         fields = "__all__"
-        # widgets = {
-            # 'course': AutocompleteSelect(),
-        # }
     
     def clean(self):
         if self.instance:
@@ -33,7 +28,7 @@ class ProtocolForm(forms.ModelForm):
                 # print("ProtocolForm.clean", learners, maxlearnsers)
                 if int(learners) > maxlearnsers or int(learners) < 0:
                     raise ValidationError(
-                            _('Learnser number error: Max admited is %(learners)s (Min is 0).'),
+                            _('Learner number error: Max admitted is %(learners)s (Min is 0).'),
                             code='invalid',
                             params={'learners': maxlearnsers},
                         )
@@ -41,7 +36,7 @@ class ProtocolForm(forms.ModelForm):
                 if course.need_institution and institution:
                     if not center:
                         raise ValidationError(
-                            _('Center is mondatory'),
+                            _('Center is mandatory'),
                             code='invalid',
                             # params={'learners': maxlearnsers},
                         )
@@ -78,20 +73,21 @@ class SessionForm(ChainedCountryForm):
                     code='invalid',
                     params={'user': trainer},
                 )
-            if self.instance.protocol.course.need_institution and self.fields['date'].has_changed(init_date,date) and self.instance.protocol.is_authorized():
-                # print("predays: ", self.instance.protocol.course.need_institution)
-                # print("predays: ", self.instance.protocol.institution.pre_days)
+            if self.instance.protocol.course.need_institution \
+                    and self.fields['date'].has_changed(init_date, date) \
+                    and self.instance.protocol.is_authorized():
                 if not self.instance.isPreDate(date):
                     pre_days = self.instance.protocol.institution.pre_days
                     today = datetime.date.today()
                     end_date = today + datetime.timedelta(days=pre_days)
                     raise ValidationError(
-                        _('Invalid date: Cannot insert request before %(date)s or change date if the course has been authorized'),
+                        _('Invalid date: Cannot insert request before %(date)s or change '
+                          'date if the course has been authorized'),
                         code='invalid',
                         params={'date': end_date},
                     )
             if end_time and start_time:
-                "Ora finale deve essere maggiorne di ora iniziale"
+                "Ora finale deve essere maggiore di ora iniziale"
                 if end_time < start_time:
                     raise ValidationError(
                         _('Invalid time: End time %(end_time)s is lower than start time %(start_time)s.'),
@@ -100,16 +96,20 @@ class SessionForm(ChainedCountryForm):
                     )
                 if self.instance.getDateTimeRange(trainer, date, start_time, end_time):
                     raise ValidationError(
-                        _('Invalid date for user: %(user)s. The user is busy on %(date)s from %(start_time)s and %(end_time)s.'),
+                        _('Invalid date for user: %(user)s. The user is busy on '
+                          '%(date)s from %(start_time)s and %(end_time)s.'),
                         code='invalid',
-                        params={'user': trainer, 'date': date, 'start_time':start_time.strftime("%H:%M"), 'end_time':end_time.strftime("%H:%M")},
+                        params={'user': trainer, 'date': date, 'start_time': start_time.strftime("%H:%M"),
+                                'end_time': end_time.strftime("%H:%M")},
                     )
                 if self.instance.getTheoryTimes(date, start_time, end_time):
                     # print("SessionForm.clean", start_time, end_time)
                     raise ValidationError(
-                        _('Invalid time for date: %(date)s. The time from %(start_time)s and %(end_time)s is busy on theory session.'),
+                        _('Invalid time for date: %(date)s. The time from %(start_time)s '
+                          'and %(end_time)s is busy on theory session.'),
                         code='invalid',
-                        params={'date': date, 'start_time':start_time.strftime("%H:%M"), 'end_time':end_time.strftime("%H:%M")},
+                        params={'date': date, 'start_time': start_time.strftime("%H:%M"),
+                                'end_time': end_time.strftime("%H:%M")},
                     )
 
 
@@ -117,11 +117,7 @@ class LearnersForm(forms.ModelForm):
    
     def __init__(self, *args, **kwargs):
         super(LearnersForm, self).__init__(*args, **kwargs)
-        # if self.instance:
-            # self.fields['user'].queryset = \
-                # User.objects.all().order_by('last_name')
-        pass
-        
+
     class Meta:
         model = Learners
         fields = "__all__"
@@ -131,17 +127,17 @@ class LearnersForm(forms.ModelForm):
         if self.instance:
             cleaned_data = super().clean()
 
-            upload    = cleaned_data.get("inst_cert")
+            upload = cleaned_data.get("inst_cert")
             import os
-            if upload == False and self.instance.inst_cert:
+            if upload is False and self.instance.inst_cert:
                 # cancella il file associato quando si spunta il checkbox 'clear'
-                if os.path.os.path.lexists(self.instance.inst_cert.path):
+                if os.path.lexists(self.instance.inst_cert.path):
                     # cancella solo il file se esiste
                     # print("Cancella file")
                     self.instance.inst_cert.delete(False)
                     pass
             
-            learner   = cleaned_data.get("user")
+            learner = cleaned_data.get("user")
             if self.instance.isBusy(learner):
                 raise ValidationError(
                     _('User busy: %(user)s. The user is busies in other course on these date and time session.'),
@@ -160,11 +156,15 @@ class LearnersForm(forms.ModelForm):
     
 
 class IntegrationInfoForm(forms.Form):
-    info = forms.CharField(widget=forms.Textarea, help_text=_("Write in the box to text integration information message"))
+    info = forms.CharField(
+        widget=forms.Textarea,
+        help_text=_("Write in the box to text integration information message"))
 
 
 class DeniedConfirmForm(forms.Form):
-    info_denied = forms.CharField(widget=forms.Textarea, help_text=_("Without fill this form doesn't chage the status in case of denied choise"))
+    info_denied = forms.CharField(
+        widget=forms.Textarea,
+        help_text=_("Without fill this form doesn't change the status in case of denied choice"))
 
 
 class FilesForm(forms.ModelForm):

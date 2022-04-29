@@ -1,0 +1,39 @@
+{% extends "home/home_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="content">
+    <div class="row fw-bold d-flex align-items-center text-center">
+        <div class="col "><p class=" border bg-light">id</p></div>
+        <div class="col "><p class=" border bg-light">Operator</p></div>
+        <div class="col "><p class=" border bg-light">Azioni</p></div>
+    </div>
+    {% for u in objects_list %}
+    <div class="row d-flex align-items-center text-center">
+        <div class="col "><p class="p-1 border bg-light">{{u.id}}</p></div>
+        <div class="col "><p class="p-1 border bg-light">{{u.getFullName}}</p></div>
+        <div class="col ">
+            <button onclick="opzione(this, {{u.id}})" class="btn btn-success">Richiedi opzione</button>
+            <span id="check_{{u.id}}" class="bi bi-check-circle text-success invisible" > inviato</span>
+        </div>
+    </div>
+    {% endfor %}
+<script>
+    async function opzione(e ,id){
+        console.log(id);
+        const url = "{% url 'companies:bookuser' %}";
+        console.log(url);
+        const response = await fetch(url);
+        const jsonresp = await response.json();
+        console.log(jsonresp);
+        if(jsonresp.booked){
+            $(e).html("Revoca opzione" );
+            $(`span#check_${id}`).removeClass("invisible")
+        }else{
+            $(e).html("Richiedi opzione" );
+            $(`span#check_${id}`).addClass("invisible")
+        }
+    }
+</script>
+</div>
+{% endblock %}

@@ -1,20 +1,11 @@
-{% extends "home/home_base.html" %}
 {% load i18n static accounttags %}
-
-{% block extrascript %}{{super}}
-{% endblock %}
-
-{% block extrastyle %}{{super}}
-<script src="{% static 'admin/js/calendar.js' %}"></script>
-<script src="{% static 'admin/js/admin/DateTimeShortcuts.js' %}"></script>
-{% endblock %}
 
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
 <div class="container">
 
-{% include 'calendar/modal.html' %}
+{# include 'calendar/modal.html' #}
 
 <DIV class="m-2">
     <h1 class="bg-primary bg-opacity-25 text-dark fs-3 p-2"><span class="">{% translate 'Agenda Panel' %}</span></h1>
@@ -43,7 +34,14 @@
                     <div class="card col text-center border-start border-end p-0 {% if not events %} bg-success {% endif %}" style="min-height: 100px;">
                         <div class="card-header {% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}  fw-bold p-0">
                             <div class="float-start "><a class="{% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}" href="{% url 'account:calendar-add' year month day|date:'j' %}"><i class="bi bi-calendar-plus"></i></a></div>
-                            <div>{{ day|date:"d, M" }}</div>
+                            <div>
+                            {% calendar_is_today day|date:'Y' day|date:'m' day|date:'d' as is_today %}
+                            {% if is_today %}
+                                <span class="bg-secondary rounded-pill px-1">{{ day|date:"d, M" }}</span>
+                            {% else %}
+                                <span>{{ day|date:"d, M" }}</span>
+                            {% endif %}
+                            </div>
                         </div>
                         <div class="card-body {% if day|date:'w'  == '0' or day|date:'w'  == '6' %}{% else %}{% endif %} p-0">
                             {% for event in events %}
@@ -51,11 +49,11 @@
                                 {% if event.anonymous %}
                                 <p>{% translate 'Busy' %}</p>
                                 {% else %}
-                                <p id="event_id_{{event.id}}" class="text-truncate">
+                                <div id="event_id_{{event.id}}" class="text-truncate badge bg-secondary">
                                     <a id="calendar_edit_event" data-toggle="modal" href="{% url 'account:calendar-edit' event.id day.year day.month day.day %}" data-target="#modal" title="Edit event" data-tooltip>
                                     {{event.object}}
                                     </a>
-                                </p>
+                                </div>
 
                                 {% endif %}
                             </div>

@@ -6,6 +6,7 @@
 # sudo apt install pango1.0-toolsatialite
 # sudo apt-get install -y gettext
 # sudo apt-get install -y gettext
+# sudo apt install gdal-bin
 #
 # pip install -r requirements.txt
 PyPDF2
@@ -20,5 +21,10 @@ django-geojson
 django-tinymce
 django_compressor
 django-libsass
+psycopg2-binary~=2.9.0
+django-filter~=21.1.0
+djangorestframework-gis~=0.18.0
+djangorestframework~=3.13.0
+geopy
 # icalendar
 # django-ical

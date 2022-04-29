@@ -27,6 +27,8 @@ urlpatterns = [
     path('account/', include(('account.urls', 'account'), namespace='account')),
     path('company/', include(('companies.urls', 'companies'), namespace='companies')),
     path('institutions/', include(('institutions.urls', 'institutions'), namespace='institutions')),
+    path('maps/', include(('maps.urls', 'maps'), namespace='maps')),
+    path('jobs/', include(('job.urls', 'job'), namespace='job')),
 
     path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()), #completamento automatico del campo
     path('admin/', admin.site.urls),
@@ -38,8 +40,11 @@ urlpatterns = [
     path('document/<str:path>/', protocol_download_file, name="protocol-download-file"),
     path('signs/<str:path>/', protocol_download_sign_file, name="protocol-sign-file"),
 
-    
 ] + static("/imgs/", document_root=settings.BASE_DIR)
 
+handler404 = 'home.views.custom_page_not_found_view'
+handler500 = 'home.views.custom_error_view'
+handler403 = 'home.views.custom_permission_denied_view'
+handler400 = 'home.views.custom_bad_request_view'
 # print("settings.MEDIA_ROOT", static("/imgs/", document_root=settings.BASE_DIR))
 

@@ -3,18 +3,21 @@ from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.conf import settings
 from django.utils.translation import gettext as _
 from django.core.mail import send_mail
+from django.core.files.storage import Storage, FileSystemStorage
+
 
 from countries.models import Country, City
 from courses.models import Courses
-from centers.models import Center
 from institutions.models import Institution
+from job.models import Job
 
 # Costanti usate qui
-SIGN_MAX_SIZE = (500,250) # in pixels
+SIGN_MAX_SIZE = (500, 250)  # in pixels
+
 
 class User(AbstractUser):
     description = models.TextField(default='', blank=True)
-    owner       = models.ForeignKey(
+    owner = models.ForeignKey(
                             settings.AUTH_USER_MODEL,
                             on_delete=models.CASCADE,
                         )
@@ -37,8 +40,12 @@ class User(AbstractUser):
     
     def fiscal_code(self):
         return self.anagrafica.fiscal_code
-    
+
+    @property
     def getFullName(self):
+        return "{0} {1}".format(self.last_name, self.first_name)
+
+    def getFullNameInverse(self):
         return "{0} {1}".format(self.first_name, self.last_name)
 
     def sendSystemEmail(self, subject, msg):
@@ -86,6 +93,8 @@ import os, io
 from django.core.exceptions import ValidationError
 from PIL import ImageFile as PillowImageFile
 from django.core.files.images import ImageFile
+
+
 def validate_file_trasparence(value):
     p = PillowImageFile.Parser()
     if hasattr(value.file, 'read'):
@@ -100,25 +109,28 @@ def validate_file_trasparence(value):
         if not hasattr(p.image, 'png'):
             raise ValidationError(_("Your sign file needs trasparency in background. We have not check it. Your file should be in .png and trasparence."))
     return value
-    
+
+
 def validate_file_size(value):
     filesize= value.size
     if filesize > 500000: #500KB
         raise ValidationError(_("The maximum file size that can be uploaded is {0}".format("0.5MB/500KB")))
     else:
         return value
-     
+
+
 def validate_file_extension(value):
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
     valid_extensions = ['.png']
     if not ext.lower() in valid_extensions:
         raise ValidationError(_("Unsupported file extension. Valid extetion is '{0}'".format(".png")))
-        
+
+
 def file_path_name(instance, file_name):
     file_root, file_ext = os.path.splitext(file_name)
     return "sign_{0}_{1}_{2}".format(instance.user.id, instance.user.last_name, file_ext)
 
-from django.core.files.storage import Storage, FileSystemStorage
+
 class ProtocolFileSystemStorage(FileSystemStorage):
     def _save(self, name, content):
         # print("ProtocolFileSystemStorage._save name", name)
@@ -205,8 +217,11 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         
         # Rimuove la copia del file 
         os.remove(self.path(signFile_tmp))
-        
+
+
 fs = ProtocolFileSystemStorage(location='signs/', base_url="/signs")
+
+
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -227,7 +242,23 @@ class Profile(models.Model):
                             first_name=self.user.first_name,
                             last_name=self.user.last_name)
         return "Profile of " + "{utente}".format(utente=self.user)
-        
+
+
+class JobProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    job = models.ManyToManyField(
+        Job,
+        blank=True,
+        help_text=_("Jobs")
+    )
+
+    def __str__(self):
+        return "{}".format(self.user)
+
+
 class Subjects(models.Model):
     """Materie di docenza"""
     user = models.OneToOneField(

@@ -1,0 +1,16 @@
+{% extends "companies/index_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div>
+      <h1 class="bg-primary text-white p-2 fs-2">{% translate 'Dashboard Companies' %}</h1>
+      <div class="">
+        <p>{% translate 'List companies you are admin' %}</p>
+            {% for company in company_list %}
+                <div class="m-3">
+                <a href="{% url 'companies:set-company' company.id %}" class="btn btn-primary">{% translate 'Open' %}</a> {{company.name}}
+                </div>
+          {% endfor %}
+      </div>
+</div>
+{% endblock %}

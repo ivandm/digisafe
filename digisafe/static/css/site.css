@@ -7,13 +7,11 @@
 /* VARIABLE DEFINITIONS */
 :root {
   --primary: #00004d;
-  /*--secondary: #417690;*/
-  /*--secondary: linear-gradient(90deg, rgba(0, 82, 204) 0%, rgba(0, 0, 77) 100%);*/
   --secondary: rgba(0, 0, 77);
-  /*--accent: #f5dd5d;*/
   --accent: #fff;
   --success: #009933; /*Verde*/
   --primary-fg: #fff;
+  --new-background: rgba(18, 118, 220, 0.95);
 
   --success-hover-bg: #006622;
   --body-fg: #333;
@@ -23,7 +21,7 @@
 
   --header-color: #ffc;
   --header-branding-color: var(--accent);
-  --header-bg: var(--secondary);
+  --header-bg: var(--new-background);
   --header-link-color: var(--primary-fg);
 
   --breadcrumbs-fg: #c4dce8;
