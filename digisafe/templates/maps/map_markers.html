@@ -7,6 +7,20 @@
 <script src="{% static 'js/plugins/leaflet-search.js' %}"></script>
 
 <div class="w-auto">
+    {# javscript Bootstrap Toast Message #}
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToastMsg" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-chat-left-text"></i>
+                <strong class="me-auto"> System Message</strong>
+                <small><span id="liveToastMsg_head"></span></small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <span id="liveToastMsg_body"></span>
+            </div>
+        </div>
+    </div>
 
     {# Button trigger info session modal #}
     <div class="alert alert-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Clicca su info per maggiori dettagli">
@@ -148,6 +162,32 @@
             <div id="timeline" class="" style="height: 180px; width=100%"></div>
         </div>
         <div class="col-2 m-0 ms-1 p-0 text-center">
+            {# Button trigger User List modal #}
+            <a href="#" class="bi bi-info-circle-fill  float-start" data-bs-toggle="modal" data-bs-target="#userListModal"></a>
+
+            {# Info User List Modal Panel #}
+            <div class="modal fade" id="userListModal" tabindex="-1" aria-labelledby="userListModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="infoModalLabel">Istruzioni sulla ricerca</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-start">
+                            <p>Sezione di visualizzazione della lista utenti scelti</p>
+                            <p>Per aggiungere un utente cliccare sul <i>marker</i> della mappa e poi sul tasto
+                                <i class="btn-info bi bi-list-task"></i> </p>
+                            <p>Per rimuovere un utente cliccare sull'icona <i class="bi bi-eraser-fill"></i> posta a fianco del nome.</p>
+                            <p>Per inviare gli inviti agli utenti in lista cliccare sull'icona <i class="bi bi-envelope"></i></p>
+                            <p class="alert-warning">Per ragioni di sicurezza antispam, gli invii sono consentiti ogni 10 minuti. </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <button class="btn btn-success btn-sm float-end" onclick="send_invite_now(this)" data-bs-toggle="tooltip" data-bs-placement="left" title="Invito rapido"><i class="bi bi-envelope"></i></button>
             <h3 class="bg-info p-1 "><i class="bi bi-list-task"></i>
                 Users selected list

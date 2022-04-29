@@ -186,11 +186,17 @@ async function option_list(e){
 
 /* Send invite now */
 async function send_invite_now(e){
+    var el = e;
     var url = "../invite/";
     const response = await fetch(url);
     const geojson = await response.json();
     if(geojson.send == true){
         console.log("Invio effettuato");
+        toastMsg("Invito rapido", "Email inviate");
+        $(e).prop( "disabled", true );
+        myVar = setTimeout(function(){
+            $(el).prop( "disabled", false );
+        }, 10*60*1000);
     }
 }
 
@@ -463,6 +469,16 @@ function addRowsFromDefaultPosition(markers){
         //console.log(rowsDatas);
 
     })
+}
+
+const toastLiveMsg = document.getElementById('liveToastMsg');
+const liveToastMsg_head = $("#liveToastMsg_head");
+const liveToastMsg_body = $("#liveToastMsg_body");
+function toastMsg(head, body) {
+    liveToastMsg_head.html(head);
+    liveToastMsg_body.html(body);
+    var toast = new bootstrap.Toast(toastLiveMsg)
+    toast.show()
 }
 
 /* Initial Trigger */

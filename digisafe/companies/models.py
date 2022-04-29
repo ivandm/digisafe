@@ -120,22 +120,20 @@ class SessionBook(models.Model):
         dates = "\n".join(date_list)
         for u in self.user_option_list.all():
 
-            subject = "Invite book session from {}".format(self.company)
+            subject = "Invite book session from {}. Open until date {}".format(self.company, self.expire_date.date())
             msg =""" 
 Dear {username},
 
 You have been invited to book on work session id {session_id}
 
-Session name:
-{session_name}
-
-Address:
-{address}
+Session name: {session_name}
+Address: {address}
+Expiration date: {exp_date}
 
 Work session dates:
 {dates}
 
-Link to choice dates
+Link to choose the date
 {url_choice_dates}?uuid={uuid}
 
             """.format(
@@ -148,6 +146,7 @@ Link to choice dates
                 uuid=self.uuid,
                 session_name=self.name,
                 address=self.address,
+                exp_date=self.expire_date.date(),
                 dates=dates,
             )
             u.sendSystemEmail(subject, msg)
