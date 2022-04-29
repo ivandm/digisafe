@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import logout, authenticate, login
@@ -9,8 +9,10 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
-from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.decorators.csrf import csrf_protect
+from django.conf import settings
+
 
 import datetime
 
@@ -284,7 +286,11 @@ def loginLostView(request):
                 messages.success(request, _('New auth code was sent to {0}.'.format(email)))
                 messages.info(request, _('Check your email. Beware it\'s not in spam.'))
                 # invia la nuova password per email
-                mex = "Username: {0}\n\nAuth code: {1}\n\nlink: {2}".format(u.username, t.cod_auth, reverse('account:reset-password'))
+                mex = "Username: {0}\n\n" \
+                      "Auth code: {1}\n\n" \
+                      "link: {2}".format(u.username,
+                                         t.cod_auth,
+                                         settings.HTTP+settings.CURRENT_SITE+reverse('account:reset-password'))
                 EmailMessage(
                     subject=_('Digi.Safe. new credentials'),
                     body=mex,
