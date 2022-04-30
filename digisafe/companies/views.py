@@ -269,6 +269,7 @@ def openMap(request, session_id=None):
             return render(request, "companies/openmap.html", context)
     return redirect("account:index")
 
+
 # BOOKING
 
 
