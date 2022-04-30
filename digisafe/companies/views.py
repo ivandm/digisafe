@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.utils import timezone
 from django.db.models import Q
@@ -17,7 +17,7 @@ import datetime
 from users.models import User
 from agenda.models import Agenda
 from .models import Company, requestAssociatePending, SessionBook, DateBook
-from .forms import SessionBookForm, SessionBookUpdateForm
+from .forms import SessionBookForm, SessionBookUpdateForm, SettingsForm, ProfileFormSet
 
 
 # todo: Sviluppare form di Ricerca Book sessions
@@ -46,20 +46,72 @@ def set_company(request, pk=None):
     return redirect("companies:home")
 
 
-@login_required(login_url="/account/login/")
-def setting_company(request):
-    context = {}
-    pk = request.session.get("company_id")
-    if pk:
-        u = request.user
-        c = Company.objects.filter(pk=pk, admins=u)
-        # print(c.associates.all())
-        if c:
-            c = c[0]
-            context.update(company=c)
-            request.session["company_id"] = pk
-            request.session["company_name"] = c.name
-    return render(request, "companies/settings.html", context)
+@method_decorator(login_required, name='dispatch')
+class SettingsCompanyView(UpdateView):
+    template_name = "companies/settings.html"
+    form_class = SettingsForm
+    model = Company
+
+    def setup(self, request, *args, **kwargs):
+        """
+        Necessario override di Setup per assegnare 'pk'
+        """
+        # print("companies.views.SettingsCompanyView.setup")
+        pk = request.session.get("company_id")
+        kwargs.update(pk=pk)
+        return super(SettingsCompanyView, self).setup(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super(SettingsCompanyView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['form'] = SettingsForm(self.request.POST, instance=self.object)
+            data['profile'] = ProfileFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            data['form'] = SettingsForm(instance=self.object)
+            data['profile'] = ProfileFormSet(instance=self.object)
+        return data
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        profilo_form = ProfileFormSet(self.request.POST,  self.request.FILES, instance=self.object)
+        if form.is_valid() and profilo_form.is_valid():
+            return self.form_valid(form, profilo_form)
+        else:
+            return self.form_invalid(form, profilo_form)
+
+    def form_valid(self, form, profilo_form):
+        """
+        Called if all forms are valid. Creates a Recipe instance along with
+        associated Ingredients and Instructions and then redirects to a
+        success page.
+        """
+        self.object = form.save()
+        profilo_form.instance = self.object
+        profilo_form.save()
+        messages.add_message(self.request, messages.SUCCESS,
+                             _(mark_safe("Settings <b>{}</b> have been just modified.".format(self.object))))
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, profilo_form):
+        """
+        Called if a form is invalid. Re-renders the context data with the
+        data-filled forms and errors.
+        """
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  profile=profilo_form,
+                                  ))
+
+    def get_success_url(self):
+        return reverse_lazy("companies:setting")
 
 
 @login_required(login_url="/account/login/")
@@ -102,6 +154,7 @@ def retrieve_users_to_associate(request):
     raise Http404(_("No users matches the given query."))
 
 
+@method_decorator(login_required, name='dispatch')
 def companyPublicDetailView(request, pk=None):
     context = {}
     if pk:

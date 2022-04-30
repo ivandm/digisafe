@@ -39,6 +39,7 @@ def coursesView(request):
     return render(request, "account/home_courses.html", context=context)
 
 
+@method_decorator(login_required, name='dispatch')
 class SettingsView(UpdateView):
     template_name = "account/settings.html"
     form_class = AccountForm
@@ -101,12 +102,6 @@ class SettingsView(UpdateView):
 
 
 @login_required(login_url="/account/login/")
-def settingsView(request):
-    context = {}
-    return render(request, "account/settings.html", context=context)
-
-
-@login_required(login_url="/account/login/")
 def calendarView(request, *args, **kwargs):
     # print("account.views.agenda")
     # print(args)
@@ -119,6 +114,7 @@ def calendarView(request, *args, **kwargs):
     return TemplateResponse(request, "account/agenda.html", context)
 
 
+@method_decorator(login_required, name='dispatch')
 class CalendarAddView(CreateView):
     model = Agenda
     form_class = CalendarFormEvent
@@ -198,6 +194,7 @@ class CalendarFormEventView(UpdateView):
         return redirect(self.get_success_url())
 
 
+@method_decorator(login_required, name='dispatch')
 class CalendarDelEventView(DeleteView):
     model = Agenda
     template = "account/Agenda_confirm_delete.html"
@@ -238,6 +235,7 @@ def dissociateCompanyView(request, pk):
     return redirect(reverse('account:index'))
 
 
+# Non inserire login_required
 def loginView(request):
     if request.method == 'POST':
         form = AccountAuthenticationForm(request.POST)
@@ -266,6 +264,7 @@ def logoutView(request):
     return redirect(reverse('home:index'))
 
 
+# Non inserire login_required
 def loginLostView(request):
     if request.method == 'POST':
         form = AccountLoginLostForm(request.POST)
@@ -311,6 +310,7 @@ def loginLostView(request):
         return render(request, "account/lost_login.html", context={'form': form})
 
 
+# Non inserire login_required
 def resetPasswordView(request):
     if request.method == 'POST':
         form = AccountResetPasswordForm(request.POST)

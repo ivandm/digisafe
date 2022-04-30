@@ -14,7 +14,7 @@ class ChainedCountryForm(ModelForm):
         fields = "__all__"
     
     def __init__(self, *args, **kwargs):
-        print("countries.forms.ChainedCountryForm")
+        # print("countries.forms.ChainedCountryForm")
         prefix = kwargs.get('prefix')
         data = kwargs.get('data')
         country_id = None

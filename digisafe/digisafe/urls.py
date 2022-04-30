@@ -41,7 +41,7 @@ urlpatterns = [
     path('document/<str:path>/', protocol_download_file, name="protocol-download-file"),
     path('signs/<str:path>/', protocol_download_sign_file, name="protocol-sign-file"),
 
-] + static("/imgs/", document_root=settings.BASE_DIR)
+] + static("/imgs/", document_root=settings.STATIC_ROOT / "imgs")
 
 handler404 = 'home.views.custom_page_not_found_view'
 handler500 = 'home.views.custom_error_view'

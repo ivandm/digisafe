@@ -1,8 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from django.forms.models import inlineformset_factory
 
-from .models import SessionBook, DateBook
+
+from .models import SessionBook, Company, Profile
+from countries.forms import ChainedCountryForm
 
 
 class SearchUserJobLocationForm(forms.Form):
@@ -52,3 +55,35 @@ class SessionBookUpdateForm(SessionBookForm):
             'start_date': 'Attenzione. Modificando la data e salvando, si cancellano le date già registrate.',
             'end_date': 'Attenzione. Modificando la data e salvando, si cancellano le date già registrate.',
         }
+
+
+class SettingsForm(forms.ModelForm):
+
+    class Media:
+        js = (
+            "/static/admin/js/jquery.min.js",
+            "/static/admin/js/jquery.init.js",
+            'js/chained-country.js',
+        )
+
+    class Meta:
+        model = Company
+        fields = ["name"]
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+        }
+
+
+class ProfileForm(ChainedCountryForm):
+
+    class Meta:
+        model = Profile
+        fields = ["country", "city", "desc", "logo"]
+        widgets = {
+            "country": forms.Select(attrs={"class": "form-select"}),
+            "city": forms.Select(attrs={"class": "form-select"}),
+            "desc": forms.Textarea(attrs={"class": "form-control"}),
+        }
+
+
+ProfileFormSet = inlineformset_factory(Company, Profile, form=ProfileForm, can_delete=False)

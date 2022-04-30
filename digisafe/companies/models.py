@@ -9,7 +9,7 @@ from countries.models import Country, City
 
 
 class Company(models.Model):
-    name   = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
     admins = models.ManyToManyField(
                 User,

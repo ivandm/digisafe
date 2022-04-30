@@ -1,16 +1,16 @@
 from django.urls import path, include
 
-from .views import home, set_company, setting_company
+from .views import home, set_company
 from .views import companyDetailView, companyPublicDetailView, requestAssociateToUser, requestAssociateToCompany
 from .views import requestAssociateAction, retrieve_users_to_associate, requestDissociateAction
 from .views import favoriteuser, list_users_from_map, retrive_users_from_map, book_user
 from .views import SessionBookCreateView, SessionBookListView, SessionBookUpdateView, SessionBookDetailView,\
-                    SessionBookDeleteView, openMap, send_invite_now
+                    SessionBookDeleteView, openMap, send_invite_now, SettingsCompanyView
 
 urlpatterns = [
     path('home/', home, name="home"),
     path('<int:pk>/set/', set_company, name="set-company"),
-    path('settings/', setting_company, name="setting"),
+    path('settings/', SettingsCompanyView.as_view(), name="setting"),
 
     path('<int:pk>/view/', companyDetailView, name="company-view"),
     path('<int:pk>/public/view/', companyPublicDetailView, name="company-public-view"),

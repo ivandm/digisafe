@@ -3,7 +3,7 @@ from django.urls import path, include
 from .views import accountView, logoutView, loginView, loginLostView, \
     changePasswordView, resetPasswordView, setPosition, certificateView, \
     dissociateCompanyView, searchCourseView, calendarView, CalendarDelEventView, \
-    CalendarFormEventView, CalendarAddView, coursesView, settingsView, indexView, SettingsView
+    CalendarFormEventView, CalendarAddView, coursesView, indexView, SettingsView
 
 
 urlpatterns = [

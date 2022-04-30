@@ -92,10 +92,6 @@ class AccountForm(forms.ModelForm):
 
 class AnagraficaForm(ChainedCountryForm):
 
-    def __init__(self, *args, **kwargs):
-        # print("AnagraficaForm")
-        super(AnagraficaForm, self).__init__(*args, **kwargs)
-
     class Meta:
         model = Anagrafica
         fields = ["birthday", "country", "city"]
