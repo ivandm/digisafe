@@ -372,7 +372,7 @@ class SessionBookDetailView(View):
             uuid = request.POST.get("uuid")
         now = timezone.now()
         print(self.pk)
-        print(self.uuid)
+        print(uuid)
         print(now)
         print(request.user)
         if self.pk:
