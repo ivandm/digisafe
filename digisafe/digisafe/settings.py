@@ -249,6 +249,7 @@ if DEPLOY:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+
 # SCSS compiler
 STATICFILES_FINDERS = ['compressor.finders.CompressorFinder', 'django.contrib.staticfiles.finders.AppDirectoriesFinder']
 COMPRESS_PRECOMPILERS = (
@@ -274,3 +275,14 @@ LANGUAGES = [
     ('it', _('Italian')),
     ('en', _('English')),
 ]
+
+# CSS default
+BOOTSTRAP_CSS = "/static/bootstrap-5.1.3-dist/css/bootstrap.css"
+BOOTSTRAP_UTILITIES_CSS = "/static/bootstrap-5.1.3-dist/css/bootstrap-utilities.min.css"
+BOOTSTRAP_GRID_CSS = "/static/bootstrap-5.1.3-dist/css/bootstrap-grid.css"
+
+# corregge conflitti CSS di bootstrap in django admi
+BOOTSTRAP_CSS_ADMIN_CORRECT = "/static/css/admin_bootstrap_correct.css"
+
+#  JS default
+BOOTSTRAP_JS = "/static/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"

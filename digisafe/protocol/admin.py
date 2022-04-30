@@ -6,15 +6,10 @@ from django.db.models import Q
 from django.template.response import TemplateResponse
 from django.conf import settings
 
-from utils import time
 from utils.helper import *
-from datetime import timedelta
-import numpy
-from itertools import chain
 
 from .models import Protocol, Session, Learners, Files, Authorizations, Action
 from .forms import ProtocolForm, SessionForm, LearnersForm, FilesForm
-from courses.models import Courses
 from users.models import User
 from .forms import DeniedConfirmForm, IntegrationInfoForm
 
@@ -233,11 +228,11 @@ class LearnersInline(admin.TabularInline, StatusManager):
     def get_fields(self, request, obj=None):
         if obj:
             if obj.course.need_institution:
-                if obj.status in ["t"] and request.user.profile.institution  and obj.checkAllSignedFiles():
+                if obj.status in ["t"] and request.user.profile.institution and obj.checkAllSignedFiles():
                     return ('user', 'passed', 'inst_cert')
                 if obj.status in ["h"]:
-                    return  ('user', 'passed', 'inst_cert')
-        return  ('user', 'passed')
+                    return ('user', 'passed', 'inst_cert')
+        return ('user', 'passed')
         
     def get_max_num(self, request, obj=None, **kwargs):
         # print("LearnersInline.get_max_num", obj)
@@ -246,9 +241,7 @@ class LearnersInline(admin.TabularInline, StatusManager):
             max_learner = obj.learners_request
             if request.user.is_superuser:
                 return int(max_learner)
-            if (obj.status == 'm' or obj.status == 'a') and obj.owner == request.user :
-                type = obj.type
-                # max_learner_theory = getattr(obj.course, type).max_learners_theory
+            if (obj.status == 'm' or obj.status == 'a') and obj.owner == request.user:
                 return int(max_learner)
             else:
                 return 0
@@ -279,7 +272,7 @@ class LearnersInline(admin.TabularInline, StatusManager):
         if obj:
             if request.user.is_superuser:
                 self.can_delete = True
-            elif (obj.status == 'm' or obj.status == 'a') and obj.owner == request.user :
+            elif (obj.status == 'm' or obj.status == 'a') and obj.owner == request.user:
                 # print("LearnersInline.get_formset m and a")
                 self.can_delete = True
             else:
@@ -288,7 +281,9 @@ class LearnersInline(admin.TabularInline, StatusManager):
             if obj.status in ["t"] and not obj.checkAllSignedFiles():
                 for c in obj.files_set.all():
                     if not c.check_signed():
-                        messages.add_message(request, messages.WARNING, _('{0} File documentation have not been signed yet.'.format(c.get_doc_type_display())))
+                        messages.add_message(request, messages.WARNING,
+                                             _('{0} File documentation have not been signed yet.'
+                                               .format(c.get_doc_type_display())))
                 
         return super().get_formset(request, obj, **kwargs)
 
@@ -369,7 +364,8 @@ class AuthorizationsInline(admin.TabularInline, StatusManager):
     readonly_fields_not_modify = ["auth_prot", "datetime", "doc_type", "file"]
     
     def get_max_num(self, request, obj=None, **kwargs):
-        # print("AuthorizationsInline.get_max_num", len(self.model.doc_type.field.choices), self.model.doc_type.field.choices, dir(self.model.doc_type.field.choices))
+        # print("AuthorizationsInline.get_max_num", len(self.model.doc_type.field.choices),
+        # self.model.doc_type.field.choices, dir(self.model.doc_type.field.choices))
         if request.user.is_superuser:
             return super(AuthorizationsInline, self).get_max_num(request, obj, **kwargs)
         if obj:
@@ -423,12 +419,12 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     ordering = ['-pk']
     autocomplete_fields = ['course', 'owner', 'center', 'institution']
     list_display = ('__str__', 'type', 'title', 'code', 'status', "owner", "center")
-    search_fields = ["id", "course__feature__title", "course__code", 
-                        "session__trainer__last_name",
-                        "session__trainer__first_name",
-                        "learners__user__last_name",
-                        "learners__user__first_name",
-                    ]
+    search_fields = ["id", "course__feature__title", "course__code",
+                     "session__trainer__last_name",
+                     "session__trainer__first_name",
+                     "learners__user__last_name",
+                     "learners__user__first_name",
+                     ]
     list_filter = (
         "type",
         "status",
@@ -436,15 +432,15 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     )
     readonly_fields_add = ("owner", "status", "center", "institution")
     readonly_fields_default = ("owner", "status")
-    readonly_fields_all     = ["owner", "status"]  + ["course","type","learners_request","status","center", "institution"]
-
+    readonly_fields_all = ["owner", "status"] + ["course", "type", "learners_request",
+                                                 "status", "center", "institution"]
 
     class Media:
         css = {
             'all': (
-            'css/digisafe.css',
-            # "/static/admin/css/forms.css",
-            "/static/css/site.css",
+                'css/digisafe.css',
+                # "/static/admin/css/forms.css",
+                "/static/css/site.css",
             )
             }
         js = (
@@ -453,7 +449,6 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         )
 
     def get_exclude(self, request, obj=None):
-        fields = []
         if obj:
             if obj.course.need_institution == True:
                 fields = []
@@ -473,10 +468,11 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             need_institution = obj.course.need_institution
             if obj.course.need_institution == True:
                 readonly_fields_default = ["owner", "status", "institution"]
-                readonly_fields_all     = ["owner", "status"]  + ["course","type","learners_request","center", "institution"]
+                readonly_fields_all = ["owner", "status"] + ["course", "type",
+                                                             "learners_request", "center", "institution"]
             else:
                 readonly_fields_default = ["owner", "status"]
-                readonly_fields_all     = ["owner", "status"]  + ["course","type","learners_request","center"]
+                readonly_fields_all = ["owner", "status"] + ["course", "type", "learners_request", "center"]
             
             if obj.status == "m" and request.user.profile.trainer:
                 fields = readonly_fields_default
@@ -490,31 +486,31 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             if obj.status == "m" and request.user.profile.institution:
                 fields = readonly_fields_all
             
-            if obj.status == "r"  and request.user.profile.trainer:
+            if obj.status == "r" and request.user.profile.trainer:
                 fields = readonly_fields_all
-            if obj.status == "r"  and request.user.profile.director:
+            if obj.status == "r" and request.user.profile.director:
                 fields = readonly_fields_all
                 # if need_institution: fields.remove("institution")
             if obj.status == "r" and request.user.profile.institution:
                 fields = readonly_fields_all
                 
-            if obj.status == "c"  and request.user.profile.trainer:
+            if obj.status == "c" and request.user.profile.trainer:
                 fields = readonly_fields_all
-            if obj.status == "c"  and request.user.profile.director:
+            if obj.status == "c" and request.user.profile.director:
                 fields = readonly_fields_all
             if obj.status == "c" and request.user.profile.institution:
                 fields = readonly_fields_all
                 
-            if obj.status == "a"  and request.user.profile.trainer:
+            if obj.status == "a" and request.user.profile.trainer:
                 fields = readonly_fields_all
-            if obj.status == "a"  and request.user.profile.director:
+            if obj.status == "a" and request.user.profile.director:
                 fields = readonly_fields_all
             if obj.status == "a" and request.user.profile.institution:
                 fields = readonly_fields_all
                 
-            if obj.status == "t"  and request.user.profile.trainer:
+            if obj.status == "t" and request.user.profile.trainer:
                 fields = readonly_fields_all
-            if obj.status == "t"  and request.user.profile.director:
+            if obj.status == "t" and request.user.profile.director:
                 fields = readonly_fields_all
             if obj.status == "t" and request.user.profile.institution:
                 fields = readonly_fields_all
@@ -536,12 +532,12 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if object_id:
             obj = Protocol.objects.get(pk=object_id)
             if not extra_context:
-                    extra_context = {}          
+                extra_context = {}
             # extra_context["checknumtrainer"] =  obj.checkNumTrainer()
-            extra_context["protocol"] =  obj
-            extra_context["status_form"] =  self.status_form
-            extra_context["app_name"] =  obj._meta.app_label
-            extra_context["model_name"] =  self.model.__name__.lower()
+            extra_context["protocol"] = obj
+            extra_context["status_form"] = self.status_form
+            extra_context["app_name"] = obj._meta.app_label
+            extra_context["model_name"] = self.model.__name__.lower()
         extra_context = self._set_status_change_view(request, object_id, form_url, extra_context)
         # print("ProtocolAdmin.change_view extra_context", extra_context)
         return super().change_view(
@@ -549,14 +545,12 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     
     def response_change(self, request, obj):
         # print("ProtocolAdmin.response_change")
-        resp = self._set_status_response_change(request, obj)
-        
         return super().response_change(request, obj)
         
     def response_add(self, request, obj, post_url_continue=None):
         # dopo che viene aggiunto un nuovo protocollo ritorna al chenge per inserire i forms in line
         if obj.pk:
-            return HttpResponseRedirect("../%s/change/"%obj.pk)
+            return HttpResponseRedirect("../%s/change/" % obj.pk)
         return super().response_add(request, obj, post_url_continue)
 
     # INIZIO extra additional views
@@ -564,10 +558,14 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         from django.urls import path
         urls = super().get_urls()
         extra_urls = [
-            path('<int:pk>/actions/', self.admin_site.admin_view(self.actions_view), name='actions-list'),
-            path('<int:pk>/certificate/list/', self.admin_site.admin_view(self.certificate_list), name='certificate-list'),
-            path('<int:pk>/user/<int:user_id>/view/', self.admin_site.admin_view(self.certificate_user), name='certificate-user'),
-            path('<int:pk>/file/<int:file_id>/sign/', self.admin_site.admin_view(self.sign_file), name='sign-file'),
+            path('<int:pk>/actions/',
+                 self.admin_site.admin_view(self.actions_view), name='actions-list'),
+            path('<int:pk>/certificate/list/',
+                 self.admin_site.admin_view(self.certificate_list), name='certificate-list'),
+            path('<int:pk>/user/<int:user_id>/view/',
+                 self.admin_site.admin_view(self.certificate_user), name='certificate-user'),
+            path('<int:pk>/file/<int:file_id>/sign/',
+                 self.admin_site.admin_view(self.sign_file), name='sign-file'),
         ]
         return extra_urls + urls
     
@@ -584,9 +582,9 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                    media=self.media,
                    object=protocol,
                    
-                   file = f, 
-                   filename = f.get_doc_type_display,
-                   protocol = protocol,
+                   file=f,
+                   filename=f.get_doc_type_display,
+                   protocol=protocol,
                 )
             return TemplateResponse(request, 'protocol/sign_file.html', context)
         
@@ -601,7 +599,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                # Include common variables for rendering the admin template.
                self.admin_site.each_context(request),
                # Anything else you want in the context...
-               objects_list = objects_list,
+               objects_list=objects_list,
                opts=self.opts,
                object=protocol,
                module_name=self.model._meta.model.__name__,
@@ -635,11 +633,13 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if not pk == None:            
             protocol = Protocol.objects.get(pk=pk)
             trainer = User.objects.get(pk=user_id)
-            full_url = ''.join(['http://', get_current_site(request).domain, "protocol/", str(protocol.id), "/user/", str(trainer.id),"/check/"])
+            full_url = ''.join(['http://', get_current_site(request).domain, "protocol/", str(protocol.id),
+                                "/user/", str(trainer.id),"/check/"])
             
-            #todo: implementazione del codice qr del certificato
+            # todo: implementazione del codice qr del certificato
             if settings.DEBUG:
-                full_url = ''.join(['http://', "192.168.10.104:8000/", "protocol/", str(protocol.id), "/user/", str(trainer.id),"/check/"])
+                full_url = ''.join(['http://', "192.168.10.104:8000/", "protocol/", str(protocol.id),
+                                    "/user/", str(trainer.id),"/check/"])
             # print("ProtocolAdmin.certificate_user full_url", full_url)
             
             context = dict(
@@ -673,7 +673,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             # Trainer user
             if request.user.profile.trainer:
                 if (obj.course.need_institution == (obj.institution != None)) and not obj.center is None:
-                    return [inline(self.model, self.admin_site) for inline in [SessionInline,]]
+                    return [inline(self.model, self.admin_site) for inline in [SessionInline, ]]
                 if obj.status in status_full and obj.session_set.count() > 0:
                     return [inline(self.model, self.admin_site) for inline in inlines_full]
 
@@ -684,7 +684,8 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                 if obj.status in ["a"]:
                     return [inline(self.model, self.admin_site) for inline in [SessionInline, AuthorizationsInline]]
                 if obj.status in ["t", "h"]:
-                    return [inline(self.model, self.admin_site) for inline in [SessionInline, LearnersInline, FilesInline]]
+                    return [inline(self.model, self.admin_site) for inline in [SessionInline, LearnersInline,
+                                                                               FilesInline]]
             
             # Institution user
             if request.user.profile.institution:
@@ -699,16 +700,15 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         # Filtra la lista dei protocolli in base al tipo di utente loggato
         # print("ProtocolAdmin.get_queryset")
         u_superuser = request.user.is_superuser
-        tab = userprofile2bit(request.user)
         query = super().get_queryset(request)
         query_list = []
         if not u_superuser: 
             if protocol_perm(request.user, TRA): 
-                #visualizza i protocolli creati dall'utente loggato
+                # visualizza i protocolli creati dall'utente loggato
                 query_list.append(query.filter(Q(owner=request.user)))
                 pass
             if protocol_perm(request.user, DIR):
-                #visualizza i protocolli creati + centri da direttore
+                # visualizza i protocolli creati + centri da direttore
                 try:
                     own_centers = request.user.associate_centers.all()
                     # print(own_centers)
@@ -780,40 +780,13 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         c.sendEmailStaff(subject, msg)
 
     def notifyToOwner(self, obj, subject=_("Notify protocol"), msg=""):
-       obj.owner.sendSystemEmail(subject, msg)
+        obj.owner.sendSystemEmail(subject, msg)
 
-
-    # status 'default'        
     def _set_status_response_change_default(self, request, obj):
-        return
-        # if not obj: return
-        # text = ""
-        # if request.POST.get("_richiestaprotocol", False):
-            # obj.status = "r"
-            # text = _("Set request")
-        # elif request.POST.get("_autorizzaprotocol", False):
-            # obj.status = "a"
-            # text = _("Set authorized")
-        # elif request.POST.get("_negaprotocol", False):
-            # obj.status = "n"
-            # text = _("Set denied")
-        # elif request.POST.get("_terminarotocol", False):
-            # obj.status = "t"
-            # text = _("Set finish")
-        # elif request.POST.get("_chiudiprotocol", False):
-            # obj.status = "h"
-            # text = _("Set close")
-        # obj.save()
-        # if text:
-            # self.setAction(obj, request.user, text)
         return
         
     def _set_status_form_default(self, request, obj, **kwargs):
         # print("ProtocolAdmin._set_status_form_default", self.readonly_fields)
-        # self.readonly_fields = self.readonly_fields_default
-        # if obj:
-            # if obj.course.need_institution == False:
-                # self.exclude = ["institution",]
         return kwargs
     
     # status 'm'
@@ -821,9 +794,9 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         # print("set_m_status_form", self.readonly_fields)
         # self.readonly_fields = self.readonly_fields + ("course",)
         if obj.owner == request.user:
-           kwargs = self._set_status_form_default(request, obj, **kwargs)
-           # self.readonly_fields = self.readonly_fields + ("institution",)
-           return kwargs
+            kwargs = self._set_status_form_default(request, obj, **kwargs)
+            # self.readonly_fields = self.readonly_fields + ("institution",)
+            return kwargs
         # self.readonly_fields = self.readonly_fields_all
         return kwargs
     
@@ -848,13 +821,14 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if text:
             obj.save()
             self.setAction(obj, request.user, text)
-            self.notifyToCenter(obj, _("New protocol request: {}".format(obj.id)),  _("New protocol request: {}".format(obj.id)) )
+            self.notifyToCenter(obj, _("New protocol request: {}".format(obj.id)),
+                                _("New protocol request: {}".format(obj.id))
+                                )
             
     # status 'r'
     def _set_r_status_form(self, request, obj, **kwargs):
         # print("ProtocolAdmin.set_r_status_form status", obj.status)
         kwargs = self._set_status_form_default(request, obj, **kwargs)
-        u_superuser = request.user.is_superuser
         return kwargs
     
     def _set_r_status_change_view(self, request, object_id, form_url, extra_context):
@@ -862,7 +836,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         if object_id:
             obj = Protocol.objects.get(pk=object_id)
             if request.user.profile.director and obj.course.need_institution == False:
-                    extra_context.update(status_form=DeniedConfirmForm())
+                extra_context.update(status_form=DeniedConfirmForm())
         return extra_context
         
     def _set_r_status_response_change(self, request, obj):
@@ -880,19 +854,30 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             # Procede con lo status successivo 'c'
             if obj.course.need_institution:
                 if not obj.institution:
-                    messages.add_message(request, messages.ERROR, _('{0} Need an institution. Choice one. Status wasn\'t change.'.format(obj)))
+                    messages.add_message(request, messages.ERROR,
+                                         _("{0} Need an institution. Choice one. Status wasn't change."
+                                           .format(obj)))
                     return
             obj.status = "c"
             text = _("Set load by director")
-            self.notifyToInstitution(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
-            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
+            self.notifyToInstitution(obj, _("Notify protocol {}. {}".format(obj.id, text)),
+                                     _("Notify protocol {}. {}".format(obj.id, text))
+                                     )
+            self.notifyToOwner(obj,
+                               _("Notify protocol {}. {}"
+                                 .format(obj.id, text)
+                                 ),
+                               _("Notify protocol {}. {}".format(obj.id, text))
+                               )
             pass
         elif request.POST.get("_autorizzaprotocol", False) and obj.course.need_institution == False:
             # print("ProtocolAdmin._set_r_status_response_change _caricaprotocol")
             # Procede con lo status successivo 'c'
             obj.status = "a"
             text = _("Set authorized by director")
-            self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
+            self.notifyToOwner(obj, _("Notify protocol {}. {}"
+                                      .format(obj.id, text)),  _("Notify protocol {}. {}"
+                                                                 .format(obj.id, text)))
             pass
         elif request.POST.get("_declinaprotocol", False):
             # print("ProtocolAdmin._set_r_status_response_change _declinaprotocol")
@@ -902,7 +887,10 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
                 info = form.cleaned_data['info_denied']
                 text = _("Set denied by director")
                 obj.status = "m"
-                self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),  _("Notify protocol {}. {}".format(obj.id, text)) )
+                self.notifyToOwner(obj, _("Notify protocol {}. {}"
+                                          .format(obj.id, text)),  _("Notify protocol {}. {}"
+                                                                     .format(obj.id, text))
+                                   )
         if text:
             obj.save()
             self.setAction(obj, request.user, text, info)
@@ -911,7 +899,6 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     def _set_c_status_form(self, request, obj, **kwargs):
         # print("ProtocolAdmin.set_c_status_form status", obj.status)
         kwargs = self._set_status_form_default(request, obj, **kwargs)
-        u_superuser = request.user.is_superuser
         return kwargs
         
     def _set_c_status_change_view(self, request, object_id, form_url, extra_context):
@@ -942,7 +929,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),
                                _("Notify protocol {}. {}".format(obj.id, text)))
             self.notifyToCenter(obj, _("Notify protocol {}. {}".format(obj.id, text)),
-                               _("Notify protocol {}. {}".format(obj.id, text)))
+                                _("Notify protocol {}. {}".format(obj.id, text)))
 
             pass
         elif request.POST.get("_negaprotocol", False):
@@ -966,7 +953,6 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     def _set_a_status_form(self, request, obj, **kwargs):
         # print("ProtocolAdmin.set_a_status_form status", obj.status)
         kwargs = self._set_status_form_default(request, obj, **kwargs)
-        u_superuser = request.user.is_superuser
         return kwargs
         
     def _set_a_status_change_view(self, request, object_id, form_url, extra_context):
@@ -977,8 +963,6 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             if p.course.need_institution and p.institution.use_custom_files:
                 extra_context['custom_institution_files'] = True
                 extra_context['object_custom_institution_files'] = p.institution.institutioncustomfiles_set.all()
-                f = p.institution.institutioncustomfiles_set.all()[0]
-                # print(dir(f))
             else:
                 extra_context['attendance_register_view'] = True
                 extra_context['exam_reporte_view'] = True
@@ -1010,7 +994,6 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
     def _set_t_status_form(self, request, obj, **kwargs):
         # print("ProtocolAdmin.set_t_status_form status", obj.status)
         kwargs = self._set_status_form_default(request, obj, **kwargs)
-        u_superuser = request.user.is_superuser
         # print("ProtocolAdmin.set_t_status_form self.readonly_fields", self.readonly_fields)
         return kwargs
         
@@ -1020,7 +1003,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             obj = Protocol.objects.get(pk=object_id)
             
             # Direttore
-            if request.user.profile.director: #and obj.course.need_institution == False:
+            if request.user.profile.director:  # and obj.course.need_institution == False:
                 extra_context.update(status_form=DeniedConfirmForm())
                 f_exam = obj.files_set.filter(doc_type="v")
                 f_register = obj.files_set.filter(doc_type="r")
@@ -1045,15 +1028,15 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         text = info = ""
         form = DeniedConfirmForm(request.POST)
         
-        if request.POST.get("_chiudiprotocol", False): #in caso di solo direttore
+        if request.POST.get("_chiudiprotocol", False):  # in caso di solo direttore
             # print("ProtocolAdmin._set_a_status_response_change _chiudiprotocol")
             # Procede con lo status successivo di chiusura 'h'
             obj.status = "h"
             text = _("Set close")
             self.notifyToOwner(obj, _("Notify protocol {}. {}".format(obj.id, text)),
-                                _("Notify protocol {}. {}".format(obj.id, text)))
-        if request.POST.get("_negaprotocol", False): #in caso di richiesta integrazione
-            # print("ProtocolAdmin._set_a_status_response_change _negaprotocol")
+                               _("Notify protocol {}. {}".format(obj.id, text)))
+        if request.POST.get("_negaprotocol", False):  # in caso di richiesta integrazione
+            # print("ProtocolAdmin._set_a_status_response_change_negaprotocol")
             # Procede con lo status successivo di chiusura 'h'
             if request.user.profile.director:
                 obj.status = "a"
@@ -1062,7 +1045,7 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             if request.user.profile.institution:
                 obj.status = "t"
                 self.notifyToCenter(obj, _("Notify protocol {}. {}".format(obj.id, text)),
-                                   _("Notify protocol {}. {}".format(obj.id, text)))
+                                    _("Notify protocol {}. {}".format(obj.id, text)))
             
             text = _("Request integration.")
             info = form['info_denied'].value()
@@ -1072,14 +1055,17 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
             self.setAction(obj, request.user, text, info)
         
         if obj.course.need_institution and obj.checkAllSignedFiles() and not obj.checkAllCertificateLoads():
-                for u in obj.learners_set.filter(passed=True, inst_cert=""):
-                    messages.add_message(request, messages.WARNING, _('{0}\'s Certificate has not been loaded yet.'.format(u.user.getFullName())))
+            for u in obj.learners_set.filter(passed=True, inst_cert=""):
+                messages.add_message(request, messages.WARNING,
+                                     _('{0}\'s Certificate has not been loaded yet.'
+                                       .format(u.user.getFullName())
+                                       )
+                                     )
             
     #    status 'h'
     def _set_h_status_form(self, request, obj, **kwargs):
         # print("ProtocolAdmin.set_h_status_form status", obj.status)
         kwargs = self._set_status_form_default(request, obj, **kwargs)
-        u_superuser = request.user.is_superuser
         # print("ProtocolAdmin.set_t_status_form self.readonly_fields", self.readonly_fields)
         return kwargs
         

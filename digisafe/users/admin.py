@@ -110,10 +110,10 @@ class InstitutionsInLine(admin.StackedInline):
     filter_horizontal = ("institutions",)
 
 
-# Define a new User admin
+# Define a new User in admin site
 class UserAdmin(BaseUserAdmin):
-    add_form = UserCreationForm
-    form = UserForm
+    add_form = UserCreationForm  # Form per l'aggiunta del nuovo utente
+    form = UserForm  # Form per la modifica di utente esistente
     # model = User
     inlines_superuser = (AnagraficaInline, ProfileInline, AgendaPropertyInline,
                          JobProfileInline, SubjectsInline, InstitutionsInLine)
@@ -158,10 +158,13 @@ class UserAdmin(BaseUserAdmin):
     class Media:
         js = (
             'js/autocomplete_check_fields.js',
+            # settings.BOOTSTRAP_JS,
         )
         css = {
             'all': (
                 "/static/css/site.css",
+                settings.BOOTSTRAP_UTILITIES_CSS,
+                settings.BOOTSTRAP_CSS_ADMIN_CORRECT,
             )
         }
     
@@ -222,15 +225,13 @@ class UserAdmin(BaseUserAdmin):
         return [inline(self.model, self.admin_site) for inline in self.inlines]
         
     def save_model(self, request, obj, form, change):
-        print("UserAdmin.save_model")
-        # print("UserAdmin.save_model form", form.is_valid())
-        # return super().save_model(request, obj, form, change)
+        # print("UserAdmin.save_model")
         # Quando viene creato un nuovo utente
         if getattr(obj, 'owner', None) is None and form.is_valid() and not change:
             # print("save_model", request.user)
             obj.owner = request.user
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
+            first_name = form.cleaned_data['first_name'].capitalize()  # trasforma in capitalize
+            last_name = form.cleaned_data['last_name'].capitalize()  # trasforma in capitalize
             username = "{first_name}.{last_name}".format(
                                                         first_name=first_name, 
                                                         last_name=last_name
@@ -244,12 +245,12 @@ class UserAdmin(BaseUserAdmin):
             obj.username = username_temp
             password = get_random_string(length=12)
             obj.set_password(password)
+            obj.fiscal_code = form.cleaned_data['fiscal_code'].upper()
+            obj.first_name = first_name  # salva in formato capitalize
+            obj.last_name = last_name  # salva in formato capitalize
             obj.save()
-            a = Anagrafica(fiscal_code=form.cleaned_data['fiscal_code'], user=obj)
+            a = Anagrafica(fiscal_code__iexact=form.cleaned_data['fiscal_code'], user=obj)
             a.save()
-            # print("user: ", obj)
-            # print("password: ", password)
-            # print("fiscal_code: ", form.cleaned_data['fiscal_code'])
             self.send_email_new_user(obj, password)
 
         # quando viene modificato un utente

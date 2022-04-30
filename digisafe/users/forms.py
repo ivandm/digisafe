@@ -30,10 +30,17 @@ class UserCreationForm(UserCreationFormMaster):
         "autocomplete_check_model_name": "anagrafica",
         "autocomplete_check_app_label": "users",
         "autocomplete_check_field_name": "fiscal_code",
-        "autocomplete": "off"
+        "autocomplete": "off",
+        "class": "text-uppercase"
     })
     first_name = forms.CharField(label=_('First name'), max_length=150, required=True)
+    first_name.widget.attrs.update({
+        "class": "text-capitalize"
+    })
     last_name = forms.CharField(label=_('Last name'), max_length=150, required=True)
+    last_name.widget.attrs.update({
+        "class": "text-capitalize"
+    })
     email = forms.EmailField(label=_('Email'), required=True)
 
     def __init__(self, *args, **kwargs):

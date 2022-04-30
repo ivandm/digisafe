@@ -1,10 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.utils.translation import gettext as _
 from django.core.mail import send_mail
-from django.core.files.storage import Storage, FileSystemStorage
+from django.core.files.storage import FileSystemStorage
+from django.core.exceptions import ValidationError
 
+import os
+import io
+from PIL import ImageFile as PillowImageFile
 
 from countries.models import Country, City
 from courses.models import Courses
@@ -36,7 +40,7 @@ class User(AbstractUser):
                             last_name=self.last_name,
                             fiscal_code=fiscal_code)
         return "{utente} - {fiscal_code}".format(utente=self.username,
-                                        fiscal_code=fiscal_code)
+                                                 fiscal_code=fiscal_code)
     
     def fiscal_code(self):
         return self.anagrafica.fiscal_code
@@ -52,23 +56,24 @@ class User(AbstractUser):
         send_mail(
             subject,
             msg,
-            None, #'from@example.com',
+            None,  # 'from@example.com',
             [self.email],
             fail_silently=False,
         )
 
+
 class Anagrafica(models.Model):
-    user        = models.OneToOneField(
+    user = models.OneToOneField(
                         settings.AUTH_USER_MODEL,
                         on_delete=models.CASCADE,
                     )
-    birthday    = models.DateField(null=True, blank=True)
-    country     = models.ForeignKey(
+    birthday = models.DateField(null=True, blank=True)
+    country = models.ForeignKey(
                         Country,
                         on_delete=models.CASCADE,
                         null=True, blank=True
                     )
-    city        = models.ForeignKey(
+    city = models.ForeignKey(
                         City,
                         on_delete=models.CASCADE,
                         null=True, blank=True
@@ -88,11 +93,8 @@ class Anagrafica(models.Model):
     def getPlaceTemplate(self):
         return "{0} {1}".format(self.city, self.birthday)
 
-### Manage files ### 
-import os, io
-from django.core.exceptions import ValidationError
-from PIL import ImageFile as PillowImageFile
-from django.core.files.images import ImageFile
+
+# ## Manage files ## #
 
 
 def validate_file_trasparence(value):
@@ -105,15 +107,17 @@ def validate_file_trasparence(value):
         p.feed(data)
         x, y = p.image.size
         if x > SIGN_MAX_SIZE[0] or y > SIGN_MAX_SIZE[1]:
-            raise ValidationError(_("Max size is {0}x{1}px (w,h). You try load image size of {2}x{3}px".format(SIGN_MAX_SIZE[0],SIGN_MAX_SIZE[1],x,y)))
+            raise ValidationError(_("Max size is {0}x{1}px (w,h). You try load image size of {2}x{3}px"
+                                    .format(SIGN_MAX_SIZE[0], SIGN_MAX_SIZE[1], x, y)))
         if not hasattr(p.image, 'png'):
-            raise ValidationError(_("Your sign file needs trasparency in background. We have not check it. Your file should be in .png and trasparence."))
+            raise ValidationError(_("Your sign file needs trasparency in background. "
+                                    "We have not check it. Your file should be in .png with transparent."))
     return value
 
 
 def validate_file_size(value):
-    filesize= value.size
-    if filesize > 500000: #500KB
+    filesize = value.size
+    if filesize > 500000:  # 500KB
         raise ValidationError(_("The maximum file size that can be uploaded is {0}".format("0.5MB/500KB")))
     else:
         return value
@@ -154,7 +158,7 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         self.drawSigns(master, signedFilePath, data)
         
     def getSignedFileName(self, name):
-     # name:  deve essere sempre il file originale
+        # name: deve essere sempre il file originale
         if not name or type(name) != type(""):
             return False
         print("ProtocolFileSystemStorage.getSigned", name)
@@ -165,10 +169,14 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         return name
         
     def drawSigns(self, signFile, destFile, data):
-        # signFile: il file che deve essere firmato
-        #           se esiste una versione firmata prende quest'ultima
-        #           altrimenti usa la versione originale da firmare
-        # destFile: il file con le firme messe
+        """
+
+        :type signFile: il file che deve essere firmato
+                  se esiste una versione firmata prende quest'ultima
+                  altrimenti usa la versione originale da firmare
+        :type destFile: il file con le firme messe
+        :type data: data
+        """
         signFile_tmp = self.path(signFile+".tmp")
         destFile = self.path(destFile)
         # print ("ProtocolFileSystemStorage.drawSigns")
@@ -200,7 +208,7 @@ class ProtocolFileSystemStorage(FileSystemStorage):
                 can.drawString(0, 0, "")
             can.save()
 
-            #move to the beginning of the StringIO buffer
+            # move to the beginning of the StringIO buffer
             packet.seek(0)
 
             # create a new PDF with Reportlab
@@ -227,15 +235,17 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    institution     = models.BooleanField(default=False)
-    administrator   = models.BooleanField(default=False)
-    director        = models.BooleanField(default=False)
-    trainer         = models.BooleanField(default=False)
-    sign            = models.ImageField(upload_to=file_path_name, 
-                                   storage=fs, blank=True,
-                                   validators=[validate_file_size, validate_file_extension, validate_file_trasparence],
-                                   # help_text="file help text"
-                                  )
+    institution = models.BooleanField(default=False)
+    administrator = models.BooleanField(default=False)
+    director = models.BooleanField(default=False)
+    trainer = models.BooleanField(default=False)
+    sign = models.ImageField(
+        upload_to=file_path_name,
+        storage=fs, blank=True,
+        validators=[validate_file_size, validate_file_extension, validate_file_trasparence],
+        # help_text="file help text",
+    )
+
     def __str__(self):
         if self.user.first_name or self.user.last_name:
             return "Profile of " + "{last_name} {first_name}".format(
@@ -264,7 +274,7 @@ class Subjects(models.Model):
     user = models.OneToOneField(
             settings.AUTH_USER_MODEL,
             on_delete=models.CASCADE,
-            related_name = "materie"
+            related_name="materie"
         )
     subjects = models.ManyToManyField(
                 Courses,
