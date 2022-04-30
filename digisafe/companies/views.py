@@ -371,6 +371,10 @@ class SessionBookDetailView(View):
         if request.method == "POST":
             uuid = request.POST.get("uuid")
         now = timezone.now()
+        print(self.pk)
+        print(self.uuid)
+        print(now)
+        print(request.user)
         if self.pk:
             return self.model.objects.get(pk=self.pk, uuid=uuid, expire_date__gte=now, user_option_list=request.user)
         return self.model.objects.none()
