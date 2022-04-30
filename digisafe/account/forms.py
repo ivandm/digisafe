@@ -20,13 +20,14 @@ class OSMWidget(gisforms.OSMWidget):
 class CalendarFormEvent(forms.ModelForm):
     class Meta:
         model = Agenda
-        fields = ['city', 'date_start', 'date_end', 'object', 'description']
+        fields = ['city', 'busy', 'date_start', 'date_end', 'object', 'description']
         widgets = {
             'city': OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
-            # 'anonymous': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'date_start': forms.DateTimeInput(attrs={'class': 'form-control', 'id': 'datatimepicker'}),
-            # 'date_start': AdminSplitDateTime(attrs={'class': 'form-control'}),
-            'date_end': forms.DateTimeInput(attrs={'class': 'form-control', 'id': 'datatimepicker'}),
+            'busy': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            # 'date_start': forms.DateTimeInput(attrs={'class': 'form-control', 'id': 'datatimepicker'}),
+            'date_start': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            # 'date_end': forms.DateTimeInput(attrs={'class': 'form-control', 'id': 'datatimepicker'}),
+            'date_end': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'object': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
         }

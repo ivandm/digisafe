@@ -12,7 +12,7 @@ from django.db.models import Q
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
-
+from django.utils import timezone
 
 import datetime
 
@@ -129,7 +129,9 @@ class CalendarAddView(CreateView):
         self.year = kwargs.get('year')
         self.month = kwargs.get('month')
         self.day = kwargs.get('day')
-        self.date_start = datetime.datetime.today()
+        hour = timezone.now().hour
+        min = timezone.now().minute
+        self.date_start = datetime.datetime(self.year, self.month, self.day, hour, min)
         self.user = self.request.user
         return super(CalendarAddView, self).dispatch(*args, **kwargs)
 
@@ -139,7 +141,26 @@ class CalendarAddView(CreateView):
         }
 
     def form_valid(self, form):
-        # print("CalendarAddView.form_valid ", form.cleaned_data['date_end'])
+        # print("CalendarAddView.form_valid ")
+
+        # Validation Busy in the Date Range Form
+        s_date = form.cleaned_data['date_start']
+        e_date = form.cleaned_data['date_end']
+        events = self.request.user.agenda_set.filter(
+            (Q(date_start__lte=e_date) & Q(date_end__gte=e_date)) |
+            (Q(date_start__lte=s_date) & Q(date_end__gte=s_date))
+        )
+        # se ci sono date impegnate nel range indicato, non salva.
+        if events:
+            messages.add_message(self.request, messages.ERROR, _('You are busy in that date range.'))
+            form.add_error(None, _('You are busy in that date range.'))
+            form.add_error("date_start", _('You are busy in that date range.'))
+            form.add_error("date_end", _('You are busy in that date range.'))
+            return self.render_to_response(
+                self.get_context_data(form=form,
+                                      ))
+
+        # Every dates are ok. User are not busy
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
@@ -187,10 +208,26 @@ class CalendarFormEventView(UpdateView):
 
     def form_valid(self, form):
         # print("CalendarFormEventView.form_valid")
+
+        # Validation Busy in the Date Range Form
+        s_date = form.cleaned_data['date_start']
+        e_date = form.cleaned_data['date_end']
+        events = self.request.user.agenda_set.filter(
+            (Q(date_start__lte=e_date) & Q(date_end__gte=e_date)) |
+            (Q(date_start__lte=s_date) & Q(date_end__gte=s_date))
+        ).exclude(pk=self.object.pk)
+        # se ci sono date impegnate nel range indicato, non salva.
+        if events:
+            messages.add_message(self.request, messages.ERROR, _('You are busy in that date range.'))
+            form.add_error(None, _('You are busy in that date range.'))
+            form.add_error("date_start", _('You are busy in that date range.'))
+            form.add_error("date_end", _('You are busy in that date range.'))
+            return self.render_to_response(
+                self.get_context_data(form=form,
+                                      ))
+
+        # Every dates are ok. User are not busy
         form.save()
-        item = Agenda.objects.get(pk=self.item_id)
-        # print(item)
-        # print(item.date_start.year)
         return redirect(self.get_success_url())
 
 

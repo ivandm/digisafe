@@ -10,8 +10,8 @@ class TmpPassword(models.Model):
                         on_delete=models.CASCADE,
                     )
     timestamp = models.DateTimeField(auto_now_add=True)
-    cod_auth  = models.UUIDField(default=uuid.uuid4)
-    ip        = models.GenericIPAddressField()
+    cod_auth = models.UUIDField(default=uuid.uuid4)
+    ip = models.GenericIPAddressField()
     
     def set_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

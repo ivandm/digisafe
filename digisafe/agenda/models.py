@@ -50,7 +50,7 @@ class Agenda(gismodel.Model):
     description = gismodel.TextField(max_length=500, default="", blank=True)
 
     def __str__(self):
-        return "Agenda {} {}".format(self.user, self.busy)
+        return "Agenda Events: {} {}/{}".format(self.object, self.date_start.date(), self.date_end.date())
 
     def jobs(self):
         return [x.title for x in self.user.jobprofile.job.all()]

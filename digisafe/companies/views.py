@@ -322,10 +322,11 @@ class SessionBookUpdateView(UpdateView):
     form_class = SessionBookUpdateForm
 
     def form_valid(self, form):
+        # print("companies.SessionBookUpdateView.form_valid")
         sb = self.object
-        print(sb.datebook_set.all())
-        print(sb.start_date)
-        print(form.cleaned_data['start_date'])
+        # print(sb.datebook_set.all())
+        # print(sb.start_date)
+        # print(form.cleaned_data['start_date'])
         # se hanno cambiato start_date e end_date ...
         if form.has_changed():
             if 'start_date' in form.changed_data or 'end_date' in form.changed_data:
@@ -371,10 +372,7 @@ class SessionBookDetailView(View):
         if request.method == "POST":
             uuid = request.POST.get("uuid")
         now = timezone.now()
-        print(self.pk)
-        print(uuid)
-        print(now)
-        print(request.user)
+        # todo: se non trova una query, solleva un errore. Bisogna gestire correttamente con messaggi idonei
         if self.pk:
             return self.model.objects.get(pk=self.pk, uuid=uuid, expire_date__gte=now, user_option_list=request.user)
         return self.model.objects.none()
