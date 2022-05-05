@@ -1,5 +1,6 @@
 {% load i18n static %}
 
+// todo: implementazione nella mappa della ricerca markers per jobs come dal companies.model sessionbook.jobs
 /* MANAGE MAP AND CHARTBAR */
 
 /* Global declarations */

@@ -20,10 +20,6 @@ from .models import Company, requestAssociatePending, SessionBook, DateBook
 from .forms import SessionBookForm, SessionBookUpdateForm, DateBookFormSet, SettingsForm, ProfileFormSet
 
 
-# todo: Sviluppare form di Ricerca Book sessions
-# todo: Sviluppare Template Company Settings
-
-
 # Home del menu Company, Seleziona la Company
 @login_required(login_url="/account/login/")
 def home(request):
@@ -231,7 +227,8 @@ def requestAssociateToCompany(request):
         return JsonResponse({'save': 'ok'})
     return JsonResponse({})
 
-# MAP
+
+# * MAP START * #
 
 
 @login_required(login_url="/account/login/")
@@ -254,6 +251,8 @@ def openMap(request, session_id=None):
             context.update(initial_date_end="{}-{:02d}-{:02d}".format(sb.end_date.year,
                                                                       sb.end_date.month, sb.end_date.day))
             context.update(qs_results=qs_results)
+
+            # urls
             context.update(favoriteuser_url=reverse('companies:favoriteuser'))  # add/remove favorite user
             context.update(optionlist_url=reverse('companies:optionusers',
                                                   args=[session_id]))  # add/remove option list user
@@ -269,6 +268,9 @@ def openMap(request, session_id=None):
             context.update(api_search_job_url="/maps/api/search_job/")  # url per la ricerca dei markers sulla mappa
             return render(request, "companies/openmap.html", context)
     return redirect("account:index")
+
+
+# * MAP END * #
 
 
 # * BOOKING VIEWS * #
@@ -320,7 +322,6 @@ class SessionBookCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        company_id = self.request.session.get("company_id")
         return reverse_lazy("companies:sessionbook-list")
 
 
@@ -385,7 +386,8 @@ class SessionBookUpdateView(UpdateView):
                 delta = ed - sd
                 new_range_dates = [sd + datetime.timedelta(days=i) for i in range(delta.days + 1)]  # Nuovo intervallo
                 sb.datebook_set.exclude(date__range=(sd, ed)).delete()  # Cancella le date fuori dal nuovo intervallo
-                exclude_dates_to_add = [x for x in sb.datebook_set.values_list("date", flat=True).filter(date__range=(sd, ed))]
+                exclude_dates_to_add = [x for x in sb.datebook_set.values_list("date",
+                                                                               flat=True).filter(date__range=(sd, ed))]
                 # Lista date da aggiungere
                 new_add_dates = [x for x in new_range_dates if x not in exclude_dates_to_add]
                 # Aggiunge le date, se ci sono
@@ -427,7 +429,6 @@ class SessionBookUpdateView(UpdateView):
                 db.save()
 
     def get_success_url(self):
-        company_id = self.request.session.get("company_id")
         return reverse_lazy("companies:sessionbook-list")
 
 
@@ -462,8 +463,6 @@ class SessionBookDetailView(View):
 
     def get(self, request, pk):
         self.pk = pk
-        uuid = self.request.GET.get("uuid")
-        now = timezone.now()
         obj = self.get_session_object(request=request)
         return render(request, self.template_name, {'object': obj})
 
@@ -569,11 +568,11 @@ def send_invite_now(request, session_id):
 @login_required(login_url="/account/login/")
 def response_user_invite(request, session_id):
     # todo: da implementare, forse!
-    print("companies.views.response_user_invite")
+    # print("companies.views.response_user_invite")
     res = request.GET.get("book_response")
     uuid = request.GET.get("uuid")
-    print(res)
-    print(uuid)
+    # print(res)
+    # print(uuid)
     return JsonResponse({'send': True})
 
 
