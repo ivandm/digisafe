@@ -42,6 +42,8 @@ def set_company(request, pk=None):
             c = c[0]
             request.session["company_id"] = pk
             request.session["company_name"] = c.name
+            messages.add_message(request, messages.SUCCESS,
+                                 _(mark_safe("Company <b>{}</b> have been just selected.".format(c))))
     return redirect("companies:home")
 
 
