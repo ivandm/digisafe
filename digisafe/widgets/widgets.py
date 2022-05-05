@@ -1,4 +1,6 @@
 from django import forms
+from django.forms.utils import flatatt
+
 
 class AutocompleteSelect(forms.widgets.Select):
     class Media:

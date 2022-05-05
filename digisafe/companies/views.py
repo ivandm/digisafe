@@ -17,19 +17,18 @@ import datetime
 from users.models import User
 from agenda.models import Agenda
 from .models import Company, requestAssociatePending, SessionBook, DateBook
-from .forms import SessionBookForm, SessionBookUpdateForm, SettingsForm, ProfileFormSet
+from .forms import SessionBookForm, SessionBookUpdateForm, DateBookFormSet, SettingsForm, ProfileFormSet
 
 
 # todo: Sviluppare form di Ricerca Book sessions
 # todo: Sviluppare Template Company Settings
 
 
+# Home del menu Company, Seleziona la Company
 @login_required(login_url="/account/login/")
 def home(request):
-    print("companies.views.home")
+    # print("companies.views.home")
     companies = Company.objects.filter(admins=request.user)
-    print(request.user.associates_company.filter(active=True))
-    print(companies)
     return render(request, template_name='companies/select.html', context={'company_list': companies})
 
 
@@ -270,23 +269,24 @@ def openMap(request, session_id=None):
     return redirect("account:index")
 
 
-# BOOKING
+# * BOOKING VIEWS * #
 
 
 @method_decorator(login_required, name='dispatch')
 class SessionBookListView(ListView):
     model = SessionBook
     context_object_name = "sessionbook_list"
-    ordering = ["-expire_date"]
+    # ordering = ["id"]
     paginate_by = 20
 
     def get_queryset(self):
+        # print("companies.views.SessionBookListView.get_queryset")
         querystring = self.request.GET.get("qs")
         company_id = self.request.session.get("company_id")
         qs = SessionBook.objects.filter(company__id=company_id)
         if querystring:
-            qs = qs.filter(Q(name__icontains=qs) | Q(note__icontains=qs))
-        return qs
+            qs = qs.filter(Q(name__icontains=querystring) | Q(note__icontains=querystring)).order_by("expire_date")
+        return qs.order_by("expire_date")
 
 
 @method_decorator(login_required, name='dispatch')
@@ -295,20 +295,26 @@ class SessionBookCreateView(CreateView):
     form_class = SessionBookForm
 
     def form_valid(self, form):
+        # print("companies.views.SessionBookCreateView.form_valid")
         company_id = self.request.session.get("company_id")
         c = Company.objects.get(pk=company_id)
         form.instance.company = c
         sb = form.save()
 
-        # crea DateBook per ogni giorno del range date_start/date_end
+        # crea DateBook per ogni Job scelto
+        jobs = form.cleaned_data['jobs']
         sd = form.cleaned_data['start_date']
         ed = form.cleaned_data['end_date']
-        delta = ed - sd
-        for i in range(delta.days + 1):
-            day = sd + datetime.timedelta(days=i)
-            db = DateBook(session=sb, date=day)
-            db.save()
+        for job in jobs:
+            # crea DateBook per ogni giorno del range date_start/date_end
+            delta = ed - sd
+            for i in range(delta.days + 1):
+                day = sd + datetime.timedelta(days=i)
+                db = DateBook(session=sb, job=job, date=day)
+                db.save()
 
+        if self.request.POST.get("save_modify", False):
+            return HttpResponseRedirect(reverse_lazy("companies:sessionbook-update", args=[sb.id]))
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -321,27 +327,102 @@ class SessionBookUpdateView(UpdateView):
     model = SessionBook
     form_class = SessionBookUpdateForm
 
-    def form_valid(self, form):
+    def get_context_data(self, **kwargs):
+        data = super(SessionBookUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['form'] = SessionBookUpdateForm(self.request.POST, instance=self.object)
+            data['dates_form'] = DateBookFormSet(
+                self.request.POST, instance=self.object,
+                queryset=self.object.datebook_set.order_by("job", "date"),)
+        else:
+            data['form'] = SessionBookUpdateForm(instance=self.object)
+            data['dates_form'] = DateBookFormSet(
+                instance=self.object,
+                queryset=self.object.datebook_set.order_by("job", "date"),)
+        return data
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        dates_form = DateBookFormSet(self.request.POST, instance=self.object,
+                                     queryset=self.object.datebook_set.order_by("job", "date"),
+                                     )
+
+        if form.is_valid() and dates_form.is_valid():
+            return self.form_valid(form, dates_form)
+        else:
+            return self.form_invalid(form, dates_form)
+
+    def form_valid(self, form, dates_form):
         # print("companies.SessionBookUpdateView.form_valid")
         sb = self.object
-        # print(sb.datebook_set.all())
-        # print(sb.start_date)
-        # print(form.cleaned_data['start_date'])
-        # se hanno cambiato start_date e end_date ...
+        # se hanno cambiato start_date o end_date o jobs ...
         if form.has_changed():
-            if 'start_date' in form.changed_data or 'end_date' in form.changed_data:
-                # 1) cancella tutti i dati DateBook collegati alla sessione di SessionBook
-                sb.datebook_set.all().delete()
-                # 2) crea nuovi valori DateBook per ogni giorno del nuovo range date_start/date_end
-                sd = form.cleaned_data['start_date']
-                ed = form.cleaned_data['end_date']
-                delta = ed - sd
-                for i in range(delta.days + 1):
-                    day = sd + datetime.timedelta(days=i)
-                    db = DateBook(session=sb, date=day)
-                    db.save()
 
-        return super().form_valid(form)
+            # Aggiorna i Jobs
+            jobs_choosen = form.cleaned_data['jobs']  # Ritorna tipo QuerySet Job
+            sd = form.cleaned_data['start_date']
+            ed = form.cleaned_data['end_date']
+
+            # Aggiorna le date
+            if 'start_date' in form.changed_data or 'end_date' in form.changed_data or 'jobs' in form.changed_data:
+                # Aggiorna jobs
+                to_delete = sb.datebook_set.all().exclude(job__in=jobs_choosen)  # QuerySet DateBook
+                to_delete.delete()
+                jobs_to_add = jobs_choosen.exclude(job_datebook__in=sb.datebook_set.all())
+                self._addJobs(form, jobs_to_add)
+
+                # Aggiorna date
+                delta = ed - sd
+                new_range_dates = [sd + datetime.timedelta(days=i) for i in range(delta.days + 1)]  # Nuovo intervallo
+                sb.datebook_set.exclude(date__range=(sd, ed)).delete()  # Cancella le date fuori dal nuovo intervallo
+                exclude_dates_to_add = [x for x in sb.datebook_set.values_list("date", flat=True).filter(date__range=(sd, ed))]
+                # Lista date da aggiungere
+                new_add_dates = [x for x in new_range_dates if x not in exclude_dates_to_add]
+                # Aggiunge le date, se ci sono
+                for job in sb.jobs.all():
+                    for day in new_add_dates:
+                        db = DateBook(session=sb, date=day, job=job)
+                        db.save()
+
+        # inline_formset
+        self.object = form.save()
+        dates_form.instance = self.object
+        dates_form.save()
+        messages.add_message(self.request, messages.SUCCESS,
+                             _(mark_safe("Settings <b>{}</b> have been just modified.".format(self.object))))
+        if self.request.POST.get("save_modify", False):
+            return HttpResponseRedirect("")
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, dates_form):
+        """
+        Called if a form is invalid. Re-renders the context data with the
+        data-filled forms and errors.
+        """
+        # print("companies.SessionBookUpdateView.form_invalid")
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  dates_form=dates_form,
+                                  ))
+
+    def _addJobs(self, form, jobs):
+        sb = self.object
+        sd = form.cleaned_data['start_date']
+        ed = form.cleaned_data['end_date']
+        delta = ed - sd
+        for job in jobs:
+            for i in range(delta.days + 1):
+                day = sd + datetime.timedelta(days=i)
+                db = DateBook(session=sb, job=job, date=day)
+                db.save()
 
     def get_success_url(self):
         company_id = self.request.session.get("company_id")
@@ -494,4 +575,4 @@ def response_user_invite(request, session_id):
     return JsonResponse({'send': True})
 
 
-# end BOOKING
+# * END BOOKING VIEWS * #

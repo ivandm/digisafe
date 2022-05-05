@@ -6,38 +6,50 @@
     <div>
         <h1>Book sessions list</h1>
     </div>
+
     <div>
-        <for method="get">
-            <form class="form-floating">
-                <input type="text" class="form-control" id="floatingInputValue" placeholder="Ricerca"" value="">
-                <label for="floatingInputValue">Filtro per nome e note</label>
-                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Cerca</button>
-            </form>
-        </for>
+        <form method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="floatingInputValue" placeholder="Ricerca per nome e note"
+                       aria-label="Ricerca per nome e note" aria-describedby="search"
+                       value="" name="qs">
+                <button id="search" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Cerca</button>
+            </div>
+        </form>
     </div>
     <div class="my-2">
         <a class="btn btn-success bi-plus-circle-fill" href="{% url 'companies:sessionbook-create' %}"> Add new session</a>
     </div>
-    {% for sb in sessionbook_list %}
     <div class="row">
-        <div class="col">
-            <p>
-                <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info"  data-bs-toggle="tooltip" data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
-                <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success"  data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                <a href="{% url 'companies:sessionbook-delete' sb.id %}" class="btn btn-danger"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash-fill"></i></a>
-            </p>
+        {% with "Azioni Name Start End Notes" as list %}
+        {% for field in list.split %}
+        <div class="col ">
+            <p class=" fw-bold text-white bg-secondary text-center">{{field}}</p>
+        </div>
+        {% endfor %}
+        {% endwith %}
+    </div>
+    {% for sb in sessionbook_list %}
+    <div class="row mb-2">
+        <div class="col text-center">
+                <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
+                   data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
+                <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success  "
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Update Sessione"><i class="bi bi-pencil-fill"></i></a>
+                <a href="{% url 'companies:sessionbook-delete' sb.id %}" class="btn btn-danger  "
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash-fill"></i></a>
         </div>
         <div class="col">
-            <p>{{sb.name}}</p>
+            <div>{{sb.name}}</div>
         </div>
         <div class="col">
-            <p>{{sb.expire_date}}</p>
+            <div>{{sb.expire_date}}</div>
         </div>
         <div class="col">
-            <p>{{sb.start_date}}/{{sb.end_date}}</p>
+            <div>{{sb.start_date}}/{{sb.end_date}}</div>
         </div>
         <div class="col">
-            <p>{{sb.note}}</p>
+            <div>{{sb.note}}</div>
         </div>
     </div>
     {% endfor %}

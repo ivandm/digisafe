@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'digisafe.apps.DigiSafeAdminSite',  # 'django.contrib.admin',
     'job.apps.JobConfig',
     'agenda.apps.AgendaConfig',
+    'home.apps.HomeConfig',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',

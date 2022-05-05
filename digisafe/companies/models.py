@@ -1,11 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-import os, uuid
+from django.core.validators import MinValueValidator
+import os
+import uuid
 
 from digisafe import storage
 from users.models import User
 from countries.models import Country, City
+from job.models import Job
 
 
 class Company(models.Model):
@@ -94,7 +97,7 @@ class requestAssociatePending(models.Model):
     company_req = models.BooleanField(default=False)
 
 
-# * Booking Models *
+# * Booking Models START * #
 
 
 class SessionBook(models.Model):
@@ -105,6 +108,7 @@ class SessionBook(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     expire_date = models.DateTimeField()
+    jobs = models.ManyToManyField(Job)
     user_option_list = models.ManyToManyField(User)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
@@ -154,11 +158,16 @@ Link to choose the date
 
 class DateBook(models.Model):
     session = models.ForeignKey(SessionBook, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="job_datebook")
+    number_user = models.IntegerField(default=1, validators=[MinValueValidator(1)])
     date = models.DateField()
     users = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
-        return "{} {}".format(self.session.name, self.date)
+        return "{} {} {}".format(self.session.name, self.date, self.job)
 
     def users_display(self):
         return [x.last_name for x in self.users.all()]
+
+
+# * END Booking Models * #

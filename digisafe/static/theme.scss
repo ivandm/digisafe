@@ -2,4 +2,9 @@
 $primary: #00004d;
 // $danger: #ff4136;
 
+/* Fix conflict between Admin and Bootstrap in frontend */
+.closelink{
+    height: auto !important;
+}
+
 @import '../static/bootstrap/bootstrap';

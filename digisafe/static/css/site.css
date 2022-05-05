@@ -7,6 +7,7 @@
 /* VARIABLE DEFINITIONS */
 :root {
   --primary: #00004d;
+  --admin-primary: #79aec8;
   --secondary: rgba(0, 0, 77);
   --accent: #fff;
   --success: #009933; /*Verde*/
@@ -48,7 +49,7 @@
   --selected-row: #ffc;
 
   --button-fg: #fff;
-  --button-bg: var(--primary);
+  --button-bg: var(--admin-primary);
   --button-hover-bg: #609ab6;
   --default-button-bg: var(--secondary);
   --default-button-hover-bg: #205067;

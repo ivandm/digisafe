@@ -2,9 +2,9 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.forms.models import inlineformset_factory
+from django.core.validators import MinValueValidator
 
-
-from .models import SessionBook, Company, Profile
+from .models import SessionBook, DateBook, Company, Profile
 from countries.forms import ChainedCountryForm
 
 
@@ -16,14 +16,27 @@ class SearchUserJobLocationForm(forms.Form):
 class SessionBookForm(forms.ModelForm):
     class Meta:
         model = SessionBook
-        fields = ("name", "address", "expire_date",  "start_date",  "end_date", "note")
+        fields = ("name", "address", "expire_date",  "start_date",  "end_date", "jobs", "note")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "address": forms.TextInput(attrs={"class": "form-control"}),
             "expire_date": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local"}),
             "start_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
             "end_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
-            "note": forms.Textarea(attrs={"class": "form-control"}),
+            "note": forms.Textarea(attrs={"class": "form-control clearfix"}),
+        }
+
+    class Media:
+        js = (
+            '/admin/jsi18n/',
+            '/static/admin/js/core.js',
+            '/static/admin/js/SelectFilter2.js',
+            '/static/admin/js/SelectBox.js',
+        )
+        css = {
+            'all': (
+                '/static/admin/css/forms.css',
+            ),
         }
 
     def clean(self):
@@ -42,7 +55,7 @@ class SessionBookForm(forms.ModelForm):
 class SessionBookUpdateForm(SessionBookForm):
     class Meta:
         model = SessionBook
-        fields = ("name", "address", "note", "expire_date", "start_date", "end_date",)
+        fields = ("name", "address", "expire_date", "start_date", "end_date", "jobs", "note")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "address": forms.TextInput(attrs={"class": "form-control"}),
@@ -54,7 +67,34 @@ class SessionBookUpdateForm(SessionBookForm):
         help_texts = {
             'start_date': 'Attenzione. Modificando la data e salvando, si cancellano le date già registrate.',
             'end_date': 'Attenzione. Modificando la data e salvando, si cancellano le date già registrate.',
+            'jobs': 'Attenzione. Eliminando una scelta si cancellano i dati già inseriti.',
         }
+
+
+class DateBookForm(forms.ModelForm):
+    number_user = forms.IntegerField(validators=[MinValueValidator(1)])
+
+    class Meta:
+        model = DateBook
+        fields = ("job", "date", "number_user")
+        # fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["job"].disabled = True
+        self.fields["date"].disabled = True
+        # Or to set READONLY
+        # self.fields["job"].widget.attrs["readonly"] = True
+        self.fields["job"].widget.attrs["class"] = "bg-secondary text-white"
+        # self.fields["date"].widget.attrs["readonly"] = True
+        self.fields["date"].widget.attrs["class"] = "bg-secondary text-white"
+
+
+DateBookFormSet = inlineformset_factory(SessionBook, DateBook, form=DateBookForm,
+                                        fk_name='session',
+                                        can_delete=False,
+                                        extra=0,
+                                        )
 
 
 class SettingsForm(forms.ModelForm):

@@ -1,16 +1,63 @@
 {% extends "companies/index_base.html" %}
 {% load i18n static %}
 
+{% block extrascript %}
+{% endblock %}
+
+{% block admin_django_css_ %}
+{% endblock %}
+
 {% block content %}
     {{form.media}}
-    <div>
+    <div class="container">
         <h1>SESSION BOOK FORM</h1>
         <div>
             <form class="" method="post">{% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Save">
-                <a href="{% url 'companies:sessionbook-list' %}" class="btn btn-secondary">Annulla</a>
+                <div>
+                    {{ form.as_p }}
+                </div>
+                {{ dates_form.management_form }}
+                {% for df in dates_form %}
+                <div class="row align-items-center">
+                    {{ df.id }}
+                    <div class="col mb-1">
+                        <div class="p-1 border bg-light">
+                            <label class="text-uppercase float-start">{{df.job.label}}</label>
+                            <p class="text-center">{{ df.instance.job }}</p>
+                        </div>
+                    </div>
+                    <div class="col mb-1 ">
+                        <div class="p-1 border bg-light">
+                            <label class="text-uppercase float-start">{{df.date.label}}</label>
+                            <p class="text-center">{{ df.instance.date }}</p>
+                        </div>
+                    </div>
+                    <div class="col  mb-1">
+                        <div class="p-1 border bg-light">
+                            <label  class="text-uppercase float-start">{{ df.number_user.label }}</label>
+                            <p class="text-center m-0 p-0">{{ df.number_user }}</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                {% endfor %}
+                <div class="submit-row">
+                    <input type="submit" value="Save" name="save_close" class="default">
+                    <input type="submit" value="Save and modify" name="save_modify" class="">
+                    <a href="{% url 'companies:sessionbook-list' %}" class="closelink">Annulla</a>
+                </div>
             </form>
         </div>
     </div>
+
+<script type="text/javascript">
+    var jQuery = $;
+    window.addEventListener('load', function(e) {
+        SelectFilter.init("id_jobs", "jobs", 0, "/static/admin/");
+        jQuery(".selector").css("float", "none");
+        jQuery("form p").addClass("clearfix");
+    });
+</script>
+
 {% endblock %}
