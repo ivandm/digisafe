@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.forms.models import inlineformset_factory
 from django.core.validators import MinValueValidator
+from django.utils.safestring import mark_safe
 
 from .models import SessionBook, DateBook, Company, Profile
 from countries.forms import ChainedCountryForm
@@ -42,13 +43,24 @@ class SessionBookForm(forms.ModelForm):
     def clean(self):
         if self.instance:
             cleaned_data = super().clean()
+            exp_date = cleaned_data.get("expire_date")
             start_date = cleaned_data.get("start_date")
             end_date = cleaned_data.get("end_date")
             if end_date < start_date:
-                raise ValidationError(
+                raise forms.ValidationError(
                     _('Data iniziale %(ds)s inferiore a quella finale %(de)s'),
                     code='invalid',
                     params={'ds': start_date, 'de': end_date, },
+                )
+            if exp_date.date() > start_date:
+                raise forms.ValidationError(
+                    _('Data di scadenza %(lab_ed)s %(ed)s '
+                      'dovrebbe essere antecedente o uguale a quella di inizio %(ds)s'
+                      ),
+                    code='invalid',
+                    params={'ds': start_date,
+                            'ed': exp_date.date(),
+                            'lab_ed': self.fields['expire_date'].label},
                 )
 
 

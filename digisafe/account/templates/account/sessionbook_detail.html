@@ -2,7 +2,7 @@
 {% load i18n static accounttags %}
 
 {% block content %}
-<h1>Work session {{object.id}}</h1>
+<h1>Invite to book on Work session {{object.id}}</h1>
 <div class="row">
     <div class="col-2"><span class="">Name session:</span></div>
     <div class="col"><p class="fw-bold">{{ object.name }}</p></div>
@@ -43,13 +43,13 @@
                    {% endif %}
             >
             <label class="form-check-label fw-bold " for="check_{{d.id}}">
-                {{d.date}}
+                {{d.date}}  <span class="fw-normal">{{d.job}}</span>
             </label>
             {% endif %}
         </div>
         {% endfor %}
-        <button class="btn btn-success" type="submit" value="yes" name="response">Accept</button>
-        <a class="btn btn-danger">Decline</a>
+        <button class="btn btn-success" type="submit" value="yes" name="response">Accept/Modify</button>
+        <button class="btn btn-danger" type="submit" value="decline" name="decline">Decline invitation</button>
     </form>
 
 </div>

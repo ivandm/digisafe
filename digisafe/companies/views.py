@@ -244,8 +244,13 @@ def openMap(request, session_id=None):
             c = c[0]
             qs_results = Agenda.objects.filter(user__associates_company=c)
             sb = SessionBook.objects.get(company=c, id=session_id)
+            if timezone.now() > sb.expire_date:
+                messages.add_message(request, messages.ERROR,
+                                     _(mark_safe("Your Work Session is expired on <b>{}</b>".format(sb.expire_date))))
+                return HttpResponseRedirect(reverse_lazy("companies:sessionbook-list"))
             context.update(company=c)
             context.update(sessionbook=sb)
+            context.update(jobs=[x.title for x in sb.jobs.all()])
             context.update(initial_date_start="{}-{:02d}-{:02d}".format(sb.start_date.year,
                                                                         sb.start_date.month, sb.start_date.day))
             context.update(initial_date_end="{}-{:02d}-{:02d}".format(sb.end_date.year,
@@ -259,12 +264,15 @@ def openMap(request, session_id=None):
             context.update(retrive_optionlist_url=reverse('companies:retriveoptionlist',
                                                           args=[session_id]))  # add/remove option list user
             context.update(user_job_info_url=reverse('job:user-job-info'))
-            # url per la ricerca dei markers jobprofile home position sulla mappa
+            # url per la ricerca dei markers jobprofile AGENDA sulla mappa
             context.update(api_markers_agenda_url="/maps/api/agendafree/")
-            # url per la ricerca dei markers jobprofile home position sulla mappa
+            context.update(api_markers_agenda_url2="/maps/api/agendafree2/")
+            # url per la ricerca dei markers jobprofile AGENDA BUSY sulla mappa
             context.update(api_markers_agendabusy_url="/maps/api/agendabusy/")
-            # url per la ricerca dei markers agenda sulla mappa
+            context.update(api_markers_agendabusy_url2="/maps/api/agendabusy2/")
+            # url per la ricerca dei markers DEFAULT POSITION sulla mappa
             context.update(api_markers_defaultposition_url="/maps/api/defaultposition/")
+            context.update(api_markers_defaultposition_url2="/maps/api/defaultposition2/")
             context.update(api_search_job_url="/maps/api/search_job/")  # url per la ricerca dei markers sulla mappa
             return render(request, "companies/openmap.html", context)
     return redirect("account:index")
@@ -400,8 +408,13 @@ class SessionBookUpdateView(UpdateView):
         self.object = form.save()
         dates_form.instance = self.object
         dates_form.save()
-        messages.add_message(self.request, messages.SUCCESS,
-                             _(mark_safe("Settings <b>{}</b> have been just modified.".format(self.object))))
+        if form.has_changed():
+            messages.add_message(self.request, messages.SUCCESS,
+                                 _(mark_safe("Session ID:{} <b>{}</b> have just been modified.".format(self.object.id, self.object))))
+        if dates_form.has_changed():
+            messages.add_message(self.request, messages.SUCCESS,
+                                 _(mark_safe("Dates have just been modified.".format())))
+
         if self.request.POST.get("save_modify", False):
             return HttpResponseRedirect("")
         return HttpResponseRedirect(self.get_success_url())
@@ -458,31 +471,57 @@ class SessionBookDetailView(View):
         now = timezone.now()
         # todo: se non trova una query, solleva un errore. Bisogna gestire correttamente con messaggi idonei
         if self.pk:
-            return self.model.objects.get(pk=self.pk, uuid=uuid, expire_date__gte=now, user_option_list=request.user)
+            ws = self.model.objects.filter(
+                                            pk=self.pk,
+                                            uuid=uuid,
+                                            expire_date__gte=now,
+                                            user_option_list=request.user,
+                                            ).exclude(user_decline_list=request.user).distinct()
+            if ws:
+                return ws[0]
+            messages.add_message(request, messages.ERROR,
+                                 mark_safe(_('Work session request. You are not in list or you have been declined invitation.')))
+        else:
+            messages.add_message(request, messages.WARNING,
+                             mark_safe(_('Request without result')))
         return self.model.objects.none()
+
 
     def get(self, request, pk):
         self.pk = pk
         obj = self.get_session_object(request=request)
-        return render(request, self.template_name, {'object': obj})
+        if obj:
+            # user ha visto l'invito
+            return render(request, self.template_name, {'object': obj})
+        return HttpResponseRedirect(reverse_lazy("account:index"))
 
     def post(self, request, pk):
-        # print("companies.views.SessionBookDetailView.post")
+        print("companies.views.SessionBookDetailView.post")
         self.pk = pk
         obj = self.get_session_object(request=request)
         if obj:
             # print(request.POST)
-            date_ids = self.request.POST.getlist("date_id", [])
-            for date in obj.datebook_set.filter(id__in=date_ids).exclude(users=request.user):
-                date.users.add(request.user)
-                date.save()
-                messages.add_message(request, messages.SUCCESS,
-                                     mark_safe(_('You have booked the date <b>{}</b>'.format(date.date))))
-            for date in obj.datebook_set.filter(users=request.user).exclude(id__in=date_ids):
-                date.users.remove(request.user)
-                date.save()
-                messages.add_message(request, messages.WARNING,
+            if self.request.POST.get("response", "").lower() == "yes":
+                date_ids = self.request.POST.getlist("date_id", [])
+                for date in obj.datebook_set.filter(id__in=date_ids).exclude(users=request.user):
+                    date.users.add(request.user)
+                    date.save()
+                    messages.add_message(request, messages.SUCCESS,
+                                         mark_safe(_('You have booked the date <b>{}</b>'.format(date.date))))
+                for date in obj.datebook_set.filter(users=request.user).exclude(id__in=date_ids):
+                    date.users.remove(request.user)
+                    date.save()
+                    messages.add_message(request, messages.WARNING,
                                      mark_safe(_('You have removed the booked date <b>{}</b>'.format(date.date))))
+                return render(request, self.template_name, {'object': obj})
+            else:
+                # todo: implementare declina invito work session
+                print("Declina")
+                print(obj)
+                obj.user_decline_list.add(request.user)
+                obj.save()
+                return HttpResponseRedirect(reverse_lazy(""))
+
         return render(request, self.template_name, {'object': obj})
 
 

@@ -16,6 +16,9 @@
                 <div>
                     {{ form.as_p }}
                 </div>
+                {% if dates_form %}
+                <h2>Modifica numero operatori richiesti per ogni data</h2>
+                {% endif %}
                 {{ dates_form.management_form }}
                 {% for df in dates_form %}
                 <div class="row align-items-center">

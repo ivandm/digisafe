@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from django.core.validators import MinValueValidator
+from django.core import serializers
 import os
 import uuid
 
@@ -109,7 +110,8 @@ class SessionBook(models.Model):
     end_date = models.DateField()
     expire_date = models.DateTimeField()
     jobs = models.ManyToManyField(Job)
-    user_option_list = models.ManyToManyField(User)
+    user_option_list = models.ManyToManyField(User, blank=True)
+    user_decline_list = models.ManyToManyField(User, related_name="sessionbook_user_decline", blank=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def __str__(self):

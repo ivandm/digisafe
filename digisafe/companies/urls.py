@@ -20,6 +20,7 @@ urlpatterns = [
     path('associatecompany/', requestAssociateToCompany, name="user-request-company"),
     path('users/search/', retrieve_users_to_associate, name="company-user-search"),
 
+    # map
     path('openmap/book/<int:session_id>/view/', openMap, name="openmap"),
     path('openmap/book/<int:session_id>/optionlist/', list_users_from_map, name="optionusers"),
     path('openmap/book/<int:session_id>/retriveoptionlist/', retrive_users_from_map, name="retriveoptionlist"),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('favoriteuser/', favoriteuser, name="favoriteuser"),
     path('bookuser/', book_user, name="bookuser"),
 
-
+    # work session
     path('sessionbook/list/', SessionBookListView.as_view(), name="sessionbook-list"),
     path('sessionbook/create/', SessionBookCreateView.as_view(), name="sessionbook-create"),
     path('sessionbook/<int:pk>/update/', SessionBookUpdateView.as_view(), name="sessionbook-update"),
