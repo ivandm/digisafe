@@ -58,7 +58,7 @@ class User(AbstractUser):
             msg,
             None,  # 'from@example.com',
             [self.email],
-            fail_silently=False,
+            fail_silently=True,
         )
 
 
