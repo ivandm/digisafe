@@ -11,6 +11,7 @@ from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib import messages
 from django.utils.safestring import mark_safe
+from django.forms import modelformset_factory
 
 import datetime
 
@@ -469,8 +470,9 @@ class SessionBookDetailView(View):
         if request.method == "POST":
             uuid = request.POST.get("uuid")
         now = timezone.now()
-        # todo: se non trova una query, solleva un errore. Bisogna gestire correttamente con messaggi idonei
-        if self.pk:
+
+        if self.pk:  # pk passato nella URL <int:pk> in automatico alla classe
+            # Utente invitato, ma senza aver declinato l'invito
             ws = self.model.objects.filter(
                                             pk=self.pk,
                                             uuid=uuid,
@@ -482,10 +484,10 @@ class SessionBookDetailView(View):
             messages.add_message(request, messages.ERROR,
                                  mark_safe(_('Work session request. You are not in list or you have been declined invitation.')))
         else:
+            # Utente non presente in lista invito, oppure ha declinato
             messages.add_message(request, messages.WARNING,
                              mark_safe(_('Request without result')))
         return self.model.objects.none()
-
 
     def get(self, request, pk):
         self.pk = pk
@@ -496,11 +498,11 @@ class SessionBookDetailView(View):
         return HttpResponseRedirect(reverse_lazy("account:index"))
 
     def post(self, request, pk):
-        print("companies.views.SessionBookDetailView.post")
+        # print("companies.views.SessionBookDetailView.post")
         self.pk = pk
         obj = self.get_session_object(request=request)
         if obj:
-            # print(request.POST)
+            # Utente prenota alcune date
             if self.request.POST.get("response", "").lower() == "yes":
                 date_ids = self.request.POST.getlist("date_id", [])
                 for date in obj.datebook_set.filter(id__in=date_ids).exclude(users=request.user):
@@ -513,16 +515,47 @@ class SessionBookDetailView(View):
                     date.save()
                     messages.add_message(request, messages.WARNING,
                                      mark_safe(_('You have removed the booked date <b>{}</b>'.format(date.date))))
+                # todo: notifica alla company la modifica di prenotazione
                 return render(request, self.template_name, {'object': obj})
+
+            # Utente declina l'invito. Non ha successiva possibilità di prenotare
             else:
-                # todo: implementare declina invito work session
-                print("Declina")
-                print(obj)
+                # Viene aggiunto alla lista dei declinati
                 obj.user_decline_list.add(request.user)
                 obj.save()
-                return HttpResponseRedirect(reverse_lazy(""))
+                # Viene cancellato dalle ventuali prenotazioni
+                for db in obj.datebook_set.all():
+                    db.users.remove(request.user)
+                    db.users_confirm.remove(request.user)
+                    db.save()
+                # todo: notifica alla company l'azione di declino
+                return HttpResponseRedirect(reverse_lazy("account:index"))
 
         return render(request, self.template_name, {'object': obj})
+
+
+@login_required(login_url="/account/login/")
+def sessionBookUsers(request, pk):
+    # print("companies.views.sessionBookUsers")
+    company_id = request.session.get("company_id")
+    sb = SessionBook.objects.get(pk=pk, company__id=company_id)
+    if request.POST:
+        datebook_id = request.POST.get("datebook_id")
+        users = request.POST.getlist("users")
+        users_confirm = request.POST.getlist("users_confirm")
+
+        db = DateBook.objects.get(pk=datebook_id)
+        if users:
+            for user_id in users:
+                u = User.objects.get(pk=user_id)
+                db.users_confirm.add(u)
+        if users_confirm:
+            for user_id in users_confirm:
+                u = User.objects.get(pk=user_id)
+                db.users_confirm.remove(u)
+        db.save()
+    return render(request, "companies/sessionbook_users.html", context={'sb': sb})
+
 
 
 @login_required(login_url="/account/login/")

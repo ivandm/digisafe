@@ -9,8 +9,17 @@
 
 {% block content %}
     {{form.media}}
-    <div class="container">
-        <h1>SESSION BOOK FORM</h1>
+    <div class="container my-2">
+        {# BOTTONI MAPPA E MODIFICA #}
+        {% if form.instance.id %}
+        <div class="submit-row float-end  p-1 border rounded">
+            <a href="{% url 'companies:sessionbook-users' form.instance.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
+                   data-bs-placement="top" title="Users booked"><i class="bi bi-person-lines-fill"></i></a>
+            <a href="{% url 'companies:openmap' form.instance.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
+                   data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
+        </div>
+        {% endif %}
+        <h1>SESSION BOOK FORM {{form.instance.id}}</h1>
         <div>
             <form class="" method="post">{% csrf_token %}
                 <div>

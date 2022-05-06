@@ -33,6 +33,6 @@ class DateBookAdmin(admin.ModelAdmin):
     list_display = ("id", "session", "date", "job", "users_display")
     ordering = ["date"]
     search_fields = ["session__name", "date", "users__last_name", "users__first_name", ]
-    filter_horizontal = ("users",)
+    filter_horizontal = ("users", "users_confirm")
 
 

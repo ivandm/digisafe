@@ -7,50 +7,96 @@
         <h1>Book sessions list</h1>
     </div>
 
+    {# RICERCA #}
     <div>
         <form method="get">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" id="floatingInputValue" placeholder="Ricerca per nome e note"
                        aria-label="Ricerca per nome e note" aria-describedby="search"
-                       value="" name="qs">
+                       value="{{request.GET.qs}}" name="qs">
                 <button id="search" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Cerca</button>
             </div>
         </form>
     </div>
+
+    {# ADD SESSION #}
     <div class="my-2">
         <a class="btn btn-success bi-plus-circle-fill" href="{% url 'companies:sessionbook-create' %}"> Add new session</a>
     </div>
+
+    {# HEAD GRIGLIA #}
     <div class="row">
-        {% with "Azioni Name Start End Notes" as list %}
-        {% for field in list.split %}
         <div class="col ">
-            <p class=" fw-bold text-white bg-secondary text-center">{{field}}</p>
+            <p class=" fw-bold text-white bg-secondary text-center">Actions</p>
         </div>
-        {% endfor %}
-        {% endwith %}
+
+        <div class="col ">
+            <p class=" fw-bold text-white bg-secondary text-center">
+                <i class="bi bi-bookmark"></i> Bookmark name</p>
+        </div>
+        <div class="col ">
+            <p class=" fw-bold text-white bg-secondary text-center">
+                <i class="bi bi-calendar-x"></i> Expire date</p>
+        </div>
+        <div class="col ">
+            <p class=" fw-bold text-white bg-secondary text-center">
+                <i class="bi bi-calendar-range"></i> Start/End dates</p>
+        </div>
+        <div class="col ">
+            <p class=" fw-bold text-white bg-secondary text-center">
+                <i class="bi bi-card-text"></i> Notes</p>
+        </div>
+
+        <div class="col ">
+            <p class=" fw-bold text-white bg-secondary text-center">Overview</p>
+        </div>
     </div>
+
+    {# COLONNE GRIGLIA #}
     {% for sb in sessionbook_list %}
     <div class="row mb-2">
         <div class="col text-center">
                 <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
                    data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
                 <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success  "
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="Update Sessione"><i class="bi bi-pencil-fill"></i></a>
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Update Session"><i class="bi bi-pencil-fill"></i></a>
                 <a href="{% url 'companies:sessionbook-delete' sb.id %}" class="btn btn-danger  "
                    data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash-fill"></i></a>
         </div>
         <div class="col">
-            <div>{{sb.name}}</div>
+            <div class="overflow-scroll" style="max-height: 8rem;">
+                <span class="text-break">{{sb.name}}</span></div>
         </div>
         <div class="col">
-            <div>{{sb.expire_date}}</div>
+            <div class="overflow-scroll" style="max-height: 8rem;">
+                {{sb.expire_date}}</div>
         </div>
         <div class="col">
-            <div>{{sb.start_date}}/{{sb.end_date}}</div>
+            <div><i class="bi bi-align-start"></i> {{sb.start_date}} <br>
+                 <i class="bi bi-align-end"></i> {{sb.end_date}}</div>
         </div>
-        <div class="col">
-            <div>{{sb.note}}</div>
+        <div class="col  ">
+            <div class="overflow-scroll" style="max-height: 8rem;" ><span class="text-break">{{sb.note}}</span></div>
         </div>
+        <div class="col m-0 p-0 border rounded p-0 m-0 align-self-start">
+            <a class="float-start btn m-0 p-0" href="{% url 'companies:sessionbook-users' sb.id %}"><i class="bi bi-person-lines-fill"></i></a>
+            <div class=" text-center">Richiesti n. {{sb.total_users_request}} in {{sb.datebook_set.all|length}} date </div>
+            <div class="row row-cols-2  p-0 m-0 mt-1">
+                <div class="col  m-0 p-0 pe-1 text-truncate">
+                    <span class="badge bg-secondary">{{sb.user_option_list.all|length}}</span>
+                    <span class="text-truncate">Invitati</span> </div>
+                <div class="col m-0 p-0 ps-1 text-danger text-truncate">
+                    <span class="badge bg-danger ">{{sb.user_decline_list.all|length}}</span>
+                    <span class="text-truncate">Rifiutati</span> </div>
+                <div class="col m-0 p-0 pe-1 text-danger text-truncate">
+                    <span class="badge bg-primary">{{sb.total_users_booked}}</span>
+                    <span class="">Prenotati</span> </div>
+                <div class="col m-0 p-0 ps-1 text-danger text-truncate">
+                    <span class="badge bg-success">{{sb.total_users_confirmed}}</span>
+                    <span class="">Confermati</span> </div>
+            </div>
+        </div>
+
     </div>
     {% endfor %}
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from django.core.validators import MinValueValidator
-from django.core import serializers
+from django.db.models import Sum, Count
 import os
 import uuid
 
@@ -157,19 +157,37 @@ Link to choose the date
             )
             u.sendSystemEmail(subject, msg)
 
+    def total_users_request(self):
+        return self.datebook_set.aggregate(Sum("number_user"))["number_user__sum"]
+
+    def total_users_booked(self):
+        return self.datebook_set.aggregate(Count("users"))["users__count"]
+
+    def total_users_confirmed(self):
+        return self.datebook_set.aggregate(Count("users_confirm"))["users_confirm__count"]
+
+
+
 
 class DateBook(models.Model):
     session = models.ForeignKey(SessionBook, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="job_datebook")
     number_user = models.IntegerField(default=1, validators=[MinValueValidator(1)])
     date = models.DateField()
-    users = models.ManyToManyField(User, blank=True)
+    users = models.ManyToManyField(User, blank=True)  # Utenti prenotati
+    users_confirm = models.ManyToManyField(User,
+                                           blank=True,
+                                           related_name="datebook_confirm")  # Utenti accettati dalla company
 
     def __str__(self):
         return "{} {} {}".format(self.session.name, self.date, self.job)
 
     def users_display(self):
         return [x.last_name for x in self.users.all()]
+
+    def user_booked(self):
+        res = self.users.all().exclude(id__in=self.users_confirm.all())
+        return res
 
 
 # * END Booking Models * #

@@ -24,9 +24,15 @@
 
     {# Button trigger info session modal #}
     <div class="alert alert-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Clicca su info per maggiori dettagli">
+        {# BOTTONI MAPPA E MODIFICA #}
+        <div class="submit-row float-end p-1 border rounded">
+            <a href="{% url 'companies:sessionbook-users' sessionbook.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
+                   data-bs-placement="top" title="Users booked"><i class="bi bi-person-lines-fill"></i></a>
+            <a href="{% url 'companies:sessionbook-update' sessionbook.id %}" class="btn btn-success  "
+               data-bs-toggle="tooltip" data-bs-placement="top" title="Update Session"><i class="bi bi-pencil-fill"></i></a>
+        </div>
         <span>
             <a href="#" class="bi bi-info-circle-fill  fs-5" data-bs-toggle="modal" data-bs-target="#infoModal"><i class="bi bi-map"></i></a>
-
         </span>
         <span class="ps-1">Sessione: ID <b>{{sessionbook.id}}</b> / NAME <b>{{sessionbook.name}}</b> / EXP DATE <b>{{sessionbook.expire_date}}</b></span>
     </div>

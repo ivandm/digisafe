@@ -5,7 +5,7 @@ from .views import companyDetailView, companyPublicDetailView, requestAssociateT
 from .views import requestAssociateAction, retrieve_users_to_associate, requestDissociateAction
 from .views import favoriteuser, list_users_from_map, retrive_users_from_map, book_user
 from .views import SessionBookCreateView, SessionBookListView, SessionBookUpdateView, SessionBookDetailView,\
-                    SessionBookDeleteView, openMap, send_invite_now, SettingsCompanyView
+                    SessionBookDeleteView, openMap, send_invite_now, SettingsCompanyView, sessionBookUsers
 
 urlpatterns = [
     path('home/', home, name="home"),
@@ -36,5 +36,6 @@ urlpatterns = [
     path('sessionbook/<int:pk>/delete/', SessionBookDeleteView.as_view(), name="sessionbook-delete"),
     # path('sessionbook/<int:pk>/detail/', SessionBookDetailView.as_view(), name="sessionbook-detail"),
     path('sessionbook/<int:pk>/bookresponse/', SessionBookDetailView.as_view(), name="sessionbook-bookresponse"),
+    path('sessionbook/<int:pk>/users/', sessionBookUsers, name="sessionbook-users"),
 
 ]
