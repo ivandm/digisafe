@@ -5,7 +5,9 @@
 <h1>
     Home page Personal Account
 </h1>
+<div class="vstack gap-3">
+<div><a href="{% url 'account:calendar' %}" class="btn btn-primary">Impegni in agenda</a></div>
+<div><a href="{% url 'account:worksessions' %}" class="btn btn-primary">Elenco work session opzionate</a></div>
+</div>
 
-<div>Elenco impegni in agenda</div>
-<div>Elenco work session opzionate</div>
 {% endblock %}
