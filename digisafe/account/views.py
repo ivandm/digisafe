@@ -481,7 +481,6 @@ def accountView(request):
 
 # BOOKING #
 
-# todo: implementare la pagina dei works session
 class WorkSessionView(ListView):
     model = SessionBook
     template_name = 'account/sessionbook_list.html'

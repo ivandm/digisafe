@@ -620,8 +620,7 @@ def list_users_from_map(request, session_id):
     u = User.objects.get(id=user_id)
     option = True
     if c.user_option_list.filter(pk=user_id):
-        # todo: prima di rimuovere dalla lista, controllare se non è nelle liste opzione/conferma
-        # c.user_option_list.remove(u)
+        # prima di rimuovere dalla lista, controllare se non è nelle liste opzione/conferma
         if c.user_option_list_secure_remove(u) == True:
             option = False
     else:
@@ -669,15 +668,4 @@ def send_invite_now(request, session_id):
     """
     s = SessionBook.objects.get(pk=session_id)
     s.send_book_invite()
-    return JsonResponse({'send': True})
-
-
-@login_required(login_url="/account/login/")
-def response_user_invite(request, session_id):
-    # todo: da implementare, forse!
-    # print("companies.views.response_user_invite")
-    res = request.GET.get("book_response")
-    uuid = request.GET.get("uuid")
-    # print(res)
-    # print(uuid)
     return JsonResponse({'send': True})
