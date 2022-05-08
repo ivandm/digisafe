@@ -41,7 +41,7 @@
 
     {# Profili lavorativi  #}
     <div class="col-5 alert-secondary border-bottom border-secondary rounded-top p-2">
-        <a href="" class="float-end btn btn-primary">...</a>
+        <a style="display:none;" href="" class="float-end btn btn-primary">...</a>
         <h2 class="border-bottom border-secondary d-inline-flex">Profili lavorativi</h2>
         <div>
             {% for j in user.jobprofile.job.all %}
@@ -55,24 +55,24 @@
     {# Qualifiche  #}
     <div class="col-5 alert-secondary border-bottom border-secondary rounded-top p-2">
         <div>
-            <a href="" class="float-end btn btn-primary">...</a>
+            <a style="display:none;" href="" class="float-end btn btn-primary">...</a>
             <h2 class="border-bottom border-secondary d-inline-flex">Qualifiche valide</h2>
             <div>
                 {% for s in user.qualifications_valid %}
-                <div class="row">
-                    <div class="col text-truncate ">{{s.course}}</div>
+                <div class="row mb-1">
+                    <div class="col text-truncate ">{{s.course.feature.title}}</div>
                     <div class="float-end col-3 text-end border-start border-secondary">{{s.getExpiration}}</div>
                 </div>
                 {% endfor %}
             </div>
         </div>
         <div>
-            <a href="" class="float-end btn btn-primary">...</a>
+            <a style="display:none;" href="" class="float-end btn btn-primary">...</a>
             <h2 class="border-bottom border-secondary d-inline-flex">Qualifiche in scadenza</h2>
             <div>
                 {% for p in user.qualification_exp_in_one_year %}
-                <div class="row">
-                    <div class="col text-truncate ">{{p.course}}</div>
+                <div class="row  mb-1">
+                    <div class="col text-truncate ">{{p.course.feature.title}}</div>
                     <div class="float-end col-3 text-end border-start border-secondary">{{p.getExpiration}}</div>
                 </div>
                 {% endfor %}
