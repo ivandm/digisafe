@@ -55,7 +55,7 @@
     {# Qualifiche  #}
     <div class="col-5 alert-secondary border-bottom border-secondary rounded-top p-2">
         <div>
-            <a style="display:none;" href="" class="float-end btn btn-primary">...</a>
+            <a href="{% url 'account:courses' %}" class="float-end btn btn-primary">...</a>
             <h2 class="border-bottom border-secondary d-inline-flex">Qualifiche valide</h2>
             <div>
                 {% for s in user.qualifications_valid %}
