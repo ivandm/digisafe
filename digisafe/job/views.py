@@ -5,6 +5,13 @@ from django.http import JsonResponse, Http404, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 
 from users.models import User
+from .models import Job
+
+@login_required(login_url="/account/login/")
+def index(request, pk):
+    job = Job.objects.get(pk=pk)
+    return render(request, 'job/index.html', context={'job': job})
+
 
 @login_required(login_url="/account/login/")
 def job_user_info(request):

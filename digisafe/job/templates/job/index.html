@@ -1,0 +1,29 @@
+{% extends "job/index_base.html" %}
+{% load i18n static leaflet_tags %}
+
+{% block content %}
+<h1 class="fw-bold border-bottom">Job info</h1>
+<div class="vstack gap-3">
+
+    <div >
+        <div class="fs-6 ">Titolo</div>
+        <h1 class="fw-bold fs-3 badge bg-secondary">{{job.title}}</h1>
+    </div>
+    <div class="">
+        <span class="col-1">Code: </span>
+        <span class="text-uppercase fw-bolder p-2 border rounded">{{job.code}}</span>
+    </div>
+    <div class="p-1">
+        <span class="fw-bold ">Description:</span>
+        <p class="alert-secondary p-2 border-bottom border-secondary">{{job.description}}</p>
+    </div>
+    <div>
+        <h2>Corsi che abilitano il titolo</h2>
+        <div>
+            Nessuno
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

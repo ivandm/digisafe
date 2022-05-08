@@ -665,11 +665,17 @@ class ProtocolAdmin(admin.ModelAdmin, StatusManager):
         
     def get_inline_instances(self, request, obj=None):
         # solamente dopo che viene aggiunto protocollo visualizza i forms in line
-        # print("get_inline_instances", obj.session_set.count())
+        # print("protocol.admin.protocol.get_inline_instances")
         status_full = ["m", "r", "c", "a", "t", "h"]
         inlines_full = [SessionInline, LearnersInline, AuthorizationsInline, FilesInline]
         inlines = []
+        # se esiste l'istanza protocollo (obj)
         if obj:
+
+            # super user accede a tutto
+            if request.user.is_superuser:
+                return [inline(self.model, self.admin_site) for inline in inlines_full]
+
             # Trainer user
             if request.user.profile.trainer:
                 if (obj.course.need_institution == (obj.institution != None)) and not obj.center is None:

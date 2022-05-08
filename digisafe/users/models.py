@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 import os
 import io
@@ -62,6 +63,17 @@ class User(AbstractUser):
             fail_silently=True,
         )
 
+    def agenda_future(self):
+        now = timezone.now()
+        return self.agenda_set.filter(date_start__gte=now)
+
+    def qualification_exp_in_one_year(self):
+        one_year = timezone.now() + timezone.timedelta(days=365)
+        return [p.protocol for p in self.learners_set.all() if p.protocol.getExpiration() < one_year.date()]
+
+    def qualifications_valid(self):
+        now = timezone.now()
+        return [p.protocol for p in self.learners_set.all() if p.protocol.getExpiration() > now.date()]
 
 class Anagrafica(models.Model):
     user = models.OneToOneField(
@@ -267,7 +279,7 @@ class JobProfile(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.user)
+        return "{} job profile".format(self.user.getFullName)
 
 
 class Subjects(models.Model):

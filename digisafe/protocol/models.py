@@ -286,9 +286,11 @@ class Protocol(models.Model):
         return  _("Qualification update within {0} years.".format(self.course.feature.years))
     
     def getQualification(self):
+        """ Data conseguimento qualifica """
         return self.session_set.latest('date').date
         
     def getExpiration(self):
+        """ Data scadenza qualifica """
         years = self.course.feature.years
         qual  = self.getQualification() #session_set.latest('date').date
         return qual.replace(year = qual.year + years)
@@ -533,9 +535,8 @@ class Learners(models.Model):
                                 ).exclude(pk=self.protocol.pk):
                 return True
         return False
-    
-    #todo: cancella il file se cancello il record
-    # def delete(.....)
+
+    # todo: cancella il file se cancello il record ( ma non lo avevo fatto ??)
 
 
 class Files(models.Model):
