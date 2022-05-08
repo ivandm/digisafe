@@ -25,7 +25,7 @@
     </div>
 
     {# HEAD GRIGLIA #}
-    <div class="row">
+    <div class="row g-1">
         <div class="col ">
             <p class=" fw-bold text-white bg-secondary text-center">Actions</p>
         </div>
@@ -52,9 +52,9 @@
         </div>
     </div>
 
-    {# COLONNE GRIGLIA #}
+    {# BODY COLONNE GRIGLIA #}
     {% for sb in sessionbook_list %}
-    <div class="row mb-2">
+    <div class="row mb-2 pb-1 g-1 border-bottom">
         <div class="col text-center">
                 <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
                    data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
@@ -79,8 +79,18 @@
             <div class="overflow-scroll" style="max-height: 8rem;" ><span class="text-break">{{sb.note}}</span></div>
         </div>
         <div class="col m-0 p-0 border rounded p-0 m-0 align-self-start">
-            <a class="float-start btn m-0 p-0" href="{% url 'companies:sessionbook-users' sb.id %}"><i class="bi bi-person-lines-fill"></i></a>
-            <div class=" text-center">Richiesti n. {{sb.total_users_request}} in {{sb.datebook_set.all|length}} date </div>
+
+            <div class="text-center d-grid gap-0">
+                <a class="btn btn-outline-primary btn-sm m-0 p-0 width-100" href="{% url 'companies:sessionbook-users' sb.id %}">
+                    <i class="float-start bi bi-person-lines-fill"></i>
+                    <span class=""> Manage </span>
+                </a>
+            </div>
+            <div class="row text-center p-0 m-0 mt-1 alert-info">
+                <div class="col "data-bs-toggle="tooltip" title="Resources"><i class="bi bi-person"></i> {{sb.total_users_request}}</div>
+                <div class="col "data-bs-toggle="tooltip" title="Dates"><i class="bi bi-calendar3-week"></i> {{sb.datebook_set.all|length}}</div>
+                <div class="col "data-bs-toggle="tooltip" title="Jobs"><i class="bi bi-mortarboard"></i> {{sb.jobs.all|length}}</div>
+            </div>
             <div class="row row-cols-2  p-0 m-0 mt-1">
                 <div class="col  m-0 p-0 pe-1 text-truncate">
                     <span class="badge bg-secondary">{{sb.user_option_list.all|length}}</span>
@@ -95,11 +105,12 @@
                     <span class="badge bg-success">{{sb.total_users_confirmed}}</span>
                     <span class="">Confermati</span> </div>
             </div>
+            {% if sb.is_full %}<div class="text-center my-1 alert-success border border-success"><i class="bi bi-clipboard-check"></i> Full</div>{% endif %}
         </div>
-
     </div>
     {% endfor %}
 
+    {# IMPAGINAZIONE #}
     <div class="mt-3 text-center fs-4">
         <span class="step-links">
             {% if page_obj.has_previous %}

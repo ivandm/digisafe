@@ -68,3 +68,16 @@ def busy_in_date(date, user):
         return "{}".format(q[0].object)
     return False
 
+@register.simple_tag(takes_context=True)
+def session_confirm(context):
+    """
+    Controlla se un utente è stato confermato in un session book
+    :param request: deve avere un contex 'object'
+    :return: bool
+    """
+    user = context['user']
+    sessionbook = context['object']
+    for db in sessionbook.datebook_set.all():
+        if user in db.users_confirm.all():
+            return True
+    return False

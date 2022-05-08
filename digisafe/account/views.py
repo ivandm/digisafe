@@ -10,6 +10,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 from django.utils import timezone
@@ -17,7 +18,7 @@ from django.utils import timezone
 import datetime
 
 from agenda.models import Agenda
-from companies.models import requestAssociatePending, Company
+from companies.models import requestAssociatePending, Company, SessionBook
 from users.models import User
 from protocol.models import Protocol
 from .forms import AccountAuthenticationForm, AccountLoginLostForm, AccountChangePasswordForm, \
@@ -477,3 +478,16 @@ def accountView(request):
         context.update(courses=request.user.learners_set.all().order_by('-protocol__course__id'))
     return render(request, "account/index.html", context=context)
 
+
+# BOOKING #
+
+# todo: implementare la pagina dei works session
+class WorkSessionView(ListView):
+    model = SessionBook
+    template_name = 'account/sessionbook_list.html'
+
+    def get_queryset(self):
+        # print("account.views.WorkSessionView.get_queryset")
+        qs = SessionBook.objects.filter(user_option_list=self.request.user)
+        # print(qs)
+        return qs

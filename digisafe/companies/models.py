@@ -117,6 +117,21 @@ class SessionBook(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
+    def user_option_list_secure_remove(self, user):
+        """
+        Rimuove user dalla lista in modo sicuro.
+        Rimuove solo se non presente nella lista 'user' e 'users_confirm' di DateBook.
+        """
+        # print("companies.models.SessionBook.user_option_list_secure_remove")
+        if not self.datebook_set.filter(users_confirm=user) \
+                and not self.datebook_set.filter(users=user) \
+                and not self.user_decline_list.filter(pk=user.id):
+            # print("No booked and confirm and declined", "Rimuovi")
+            self.user_option_list.remove(user)
+            return True
+        # print("booked/confirmed/declined. non rimosso")
+        return "User have been booked or confirmed"
+
     def range_date(self):
         return "{}/{}".format(self.start_date, self.end_date)
 
@@ -166,13 +181,32 @@ Link to choose the date
     def total_users_confirmed(self):
         return self.datebook_set.aggregate(Count("users_confirm"))["users_confirm__count"]
 
+    def is_full(self):
+        for db in self.datebook_set.all():
+            if db.number_user != db.users_confirm.count():
+                return False
+        return True
 
+    def booked_users(self):
+        # print("companies.models.SessionBook.booked_users")
+        datas = self.datebook_set.all().values_list('users', flat=True).order_by('users').distinct()
+        return datas
+
+    def booked_dates(self):
+        # print("companies.models.SessionBook.booked_dates")
+        datas = self.datebook_set.all().values_list('users', 'date').order_by('users')
+        return datas
+
+    def confirmed_users(self):
+        # print("companies.models.SessionBook.booked_confirmed")
+        datas = self.datebook_set.all().values_list('users_confirm', flat=True).order_by('users_confirm').distinct()
+        return datas
 
 
 class DateBook(models.Model):
     session = models.ForeignKey(SessionBook, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="job_datebook")
-    number_user = models.IntegerField(default=1, validators=[MinValueValidator(1)])
+    number_user = models.IntegerField(default=1, validators=[MinValueValidator(0)])
     date = models.DateField()
     users = models.ManyToManyField(User, blank=True)  # Utenti prenotati
     users_confirm = models.ManyToManyField(User,
@@ -183,11 +217,16 @@ class DateBook(models.Model):
         return "{} {} {}".format(self.session.name, self.date, self.job)
 
     def users_display(self):
-        return [x.last_name for x in self.users.all()]
+        return [x.getFullName for x in self.users.all()]
+
+    def confirm_display(self):
+        return [x.getFullName for x in self.users_confirm.all()]
 
     def user_booked(self):
         res = self.users.all().exclude(id__in=self.users_confirm.all())
         return res
 
+    def is_full(self):
+        return self.number_user == self.users_confirm.count()
 
 # * END Booking Models * #

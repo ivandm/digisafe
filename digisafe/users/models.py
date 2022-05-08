@@ -53,6 +53,7 @@ class User(AbstractUser):
         return "{0} {1}".format(self.first_name, self.last_name)
 
     def sendSystemEmail(self, subject, msg):
+        # todo: implementare la gestione degli errori di invio mail
         send_mail(
             subject,
             msg,

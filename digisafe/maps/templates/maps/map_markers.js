@@ -211,7 +211,7 @@ async function retrive_option_list(){
     geojson.forEach( function(item, index){
         var tooltip = item.jobs;
         var link_del  = `<a onclick="option_list(this)" user_id="${item.id}">
-                        <i class="bi bi-eraser-fill"></i></a>`;
+                            <i class="bi bi-eraser-fill_"></i></a>`;
         html_list_li += `<li data-bs-toggle="tooltip" data-bs-placement="left" title="${tooltip}">
                         ${link_del} ${item.user}</li>`;
     });

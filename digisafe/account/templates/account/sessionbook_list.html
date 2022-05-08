@@ -1,0 +1,77 @@
+{% extends "account/index_base.html" %}
+{% load i18n static accounttags %}
+
+{% block content %}
+<style>
+    .worksession_list_img{
+    max-width: 50px;
+    }
+</style>
+<h1>Work Sessions</h1>
+{% for ws in object_list %}
+<div class="row align-items-center">
+    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch">
+        {% if user.id in ws.confirmed_users %}
+        <div class="clearfix"></div>
+        Confermato
+        <div class="dropdown float-end">
+            <div class="btn btn-outline-primary btn-sm p-1 m-0 dropdown-toggle" id="dropdownMenuButton_{{ws.id}}" data-bs-toggle="dropdown" aria-expanded="false">
+                Date
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_{{ws.id}}">
+                {% for d in ws.booked_dates %}
+                    {% if d.0 == user.id %}<li><span class="dropdown-item">{{d.1}}</span></li>{% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if user.id in ws.booked_users %}
+        <div class="clearfix"></div>
+        Prenotato
+        <div class="dropdown float-end">
+            <div class="btn btn-outline-primary btn-sm p-1 m-0 dropdown-toggle" id="dropdownMenuButton_{{ws.id}}" data-bs-toggle="dropdown" aria-expanded="false">
+                Date
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_{{ws.id}}">
+                {% for d in ws.booked_dates %}
+                    {% if d.0 == user.id %}<li><span class="dropdown-item">{{d.1}}</span></li>{% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if user.id not in ws.confirmed_users and user.id not in ws.booked_users %}
+        Invitato
+        {% endif %}
+    </div>
+    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch  order-first">
+        <a href="{% url 'companies:sessionbook-bookresponse' ws.id %}?uuid={{ws.uuid}}" >
+            {{ws.name}}
+            <span class="badge bg-secondary">id: {{ws.id}}</span>
+        </a>
+    </div>
+    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch text-center ">
+        <div class="align-middle align-content-center">
+            <div>{{ws.expire_date}}</div>
+        </div>
+    </div>
+    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch text-center">
+        <div>{{ws.start_date}} / {{ws.end_date}}</div>
+    </div>
+    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch text-center">
+        <div>
+            <div class="d-flex">
+
+                <div class="flex-grow-1 ms-3">
+                    <span>{{ws.company}}</span>
+                </div>
+                <div class="flex-shrink-0">
+                    <img class="worksession_list_img" src="{{ws.company.profile.logo.url}}" alt="...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endfor %}
+{% endblock %}

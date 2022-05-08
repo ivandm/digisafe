@@ -211,10 +211,17 @@ async function retrive_option_list(){
     var html_list_li = "";
     geojson.forEach( function(item, index){
         var tooltip = item.jobs;
-        var link_del  = `<a onclick="option_list(this)" user_id="${item.id}">
-                        <i class="bi bi-eraser-fill"></i></a>`;
-        html_list_li += `<li data-bs-toggle="tooltip" data-bs-placement="left" title="${tooltip}">
-                        ${link_del} ${item.user}</li>`;
+        if(item.booked){
+            var link  = `<i class="bi bi-bookmark-check-fill"></i>`;
+            var booked = `User Booked.`
+        }else{
+            var link  = `<a onclick="option_list(this)" user_id="${item.id}">
+                            <i class="bi bi-eraser-fill"></i></a>`;
+            var booked = `User NOT Booked.`
+        }
+
+        html_list_li += `<li data-bs-toggle="tooltip" data-bs-placement="left" title="${booked} ${tooltip}">
+                        ${link} ${item.user}</li>`;
     });
     el.html(html_list_li);
 }

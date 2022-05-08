@@ -3,7 +3,8 @@ from django.urls import path, include
 from .views import accountView, logoutView, loginView, loginLostView, \
     changePasswordView, resetPasswordView, setPosition, certificateView, \
     dissociateCompanyView, searchCourseView, calendarView, CalendarDelEventView, \
-    CalendarFormEventView, CalendarAddView, coursesView, indexView, SettingsView
+    CalendarFormEventView, CalendarAddView, coursesView, indexView, SettingsView, \
+    WorkSessionView
 
 
 urlpatterns = [
@@ -27,5 +28,6 @@ urlpatterns = [
     path('protocol/<int:pk_protocol>/view/', certificateView, name="view-certificate"),
     path('searchcourse/', searchCourseView, name="searchcourse"),
 
-
+    # work session book
+    path('worksessions/', WorkSessionView.as_view(), name="worksessions"),
 ]

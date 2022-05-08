@@ -84,7 +84,8 @@ class SessionBookUpdateForm(SessionBookForm):
 
 
 class DateBookForm(forms.ModelForm):
-    number_user = forms.IntegerField(validators=[MinValueValidator(1)])
+    min_number_user = 0  # numero minimo nel campo type="number"
+    number_user = forms.IntegerField(validators=[MinValueValidator(min_number_user)])
 
     class Meta:
         model = DateBook
@@ -100,6 +101,7 @@ class DateBookForm(forms.ModelForm):
         self.fields["job"].widget.attrs["class"] = "bg-secondary text-white"
         # self.fields["date"].widget.attrs["readonly"] = True
         self.fields["date"].widget.attrs["class"] = "bg-secondary text-white"
+        self.fields["number_user"].widget.attrs["min"] = "{}".format(self.min_number_user)
 
 
 DateBookFormSet = inlineformset_factory(SessionBook, DateBook, form=DateBookForm,

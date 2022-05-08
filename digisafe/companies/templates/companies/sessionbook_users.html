@@ -7,7 +7,7 @@
     <div class="my-2">
 
         {# BOTTONI MAPPA E MODIFICA #}
-        <div class="submit-row float-end p-1 border rounded">
+        <div class="submit-row float-end p-1 border rounded alert-secondary">
             <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
                    data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
             <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success  "
@@ -15,23 +15,20 @@
         </div>
 
         {# DATI DELLA WORK SESSION #}
-        <div class="bg-light p-2 border">
+        <div class="bg-light p-3 border">
             <h1 class="fw-bold border-bottom">Work sessions id {{sb.id}}</h1>
             <div class="row">
-                <div class="col-2"><span class="">Name session:</span></div>
+                <div class="col-2"><span class="">Bookmark name:</span></div>
                 <div class="col"><p class="fw-bold">{{ sb.name }}</p></div>
             </div>
-
             <div class="row">
                 <div class="col-2"><span class="">Address session:</span></div>
                 <div class="col"><p class="fw-bold">{{ sb.address }}</p></div>
             </div>
-
             <div class="row">
                 <div class="col-2"><span class="">Session notes:</span></div>
-                <div class="col"><p class="fw-bold">{{ sb.note }}</p></div>
+                <div class="col"><p class="fw-bold text-break">{{ sb.note }}</p></div>
             </div>
-
             <div class="row">
                 <div class="col-2"><span class="">Session expiration date:</span></div>
                 <div class="col"><p class="fw-bold">{{ sb.expire_date }}</p></div>
@@ -40,56 +37,71 @@
     </div>
 
     {# USERS LIST INVITED & DECLINED #}
-    <div class="border p-2">
+    <div class="border p-3">
         <h2 class="fw-bold border-bottom">Users in session </h2>
         <div class="row">
-            <div class="col fw-bold">Invited list</div>
-            <div class="col fw-bold">Declined list</div>
+            <div class="col fw-bold bm-1">Invited users <span class="badge bg-primary">{{sb.user_option_list.count}}</span></div>
+            <div class="col fw-bold bm-1 text-danger ">Declined users <span class="badge bg-danger">{{sb.user_decline_list.count}}</span></div>
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="row gx-0">
+            <div class="col p-1 alert-primary rounded">
                 {# Invited list #}
-                <ul class="list-unstyled">
+                <div class="list-unstyled">
                     {% for user in sb.user_option_list.all %}
-                    <li>{{user}}</li>
+                    <div>{{user}}</div>
                     {% endfor %}
-                </ul>
+                </div>
 
             </div>
-            <div class="col">
+            <div class="vr mx-1"></div>
+            <div class="col p-1 alert-danger rounded">
                 {# Declined list #}
-                <ul class="list-unstyled">
+                <div class="list-unstyled">
                     {% for user in sb.user_decline_list.all %}
-                    <li>{{user}}</li>
+                    <div>{{user}}</div>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
     </div>
 
-
     <h2>Users booked</h2>
 
-    {# HEAD GRID #}
+    {# BOOKED HEAD GRID #}
     <div class="row fw-bold mb-3">
-        <div class="col bg-secondary mx-1">Dates</div>
+        <div class="col-1 bg-secondary mx-1">Dates</div>
         <div class="col bg-secondary mx-1">Jobs</div>
+        <div class="col-1 bg-secondary mx-1">Number</div>
         <div class="col bg-secondary mx-1 text-center">Users self booked</div>
         <div class="col bg-secondary mx-1 text-center">Users company confirmed</div>
     </div>
 
-    {# BODY GRID #}
+    {# BOOKED BODY GRID #}
     {% for date in sb.datebook_set.all %}
+    {% with fulldate=date.is_full total_confirmed=date.users_confirm.count %}
     <div class="row  mb-1 ">
 
-        <div class="col mx-1 border border-2 align-self-stretch ">{{date.date}}</div>
-        <div class="col mx-1 border border-2 align-self-stretch ">{{date.job.title}}</div>
-
-        <div class="col mx-1 border border-2 align-self-stretch align-self-center ">
+        <div class="col-1 mx-1 border border-2 align-self-stretch {% if date.is_full %} alert-success {% endif %}">
+            {% if date.is_full %} <i class="bi bi-clipboard-check"></i><br> {% endif %} {{date.date}}</div>
+        <div class="col mx-1 border border-2 align-self-stretch {% if date.is_full %} alert-success {% endif %}">
+            {{date.job.title}}
+            {% if date.number_user <= 0 %}<span class="fw-bold fst-italic"> Not request in this date</span>{% endif %}
+        </div>
+        <div class="col-1 mx-1 border border-2 align-self-stretch {% if date.is_full %} alert-success {% endif %}">{{date.number_user}}</div>
+        <div class="col mx-1 border align-self-stretch align-self-center {% if date.is_full %} alert-success {% endif %}">
             <form method="post">{% csrf_token %}
                 <input type="hidden" name="datebook_id" value="{{date.id}}">
                 <div class="row align-items-center">
                     <div class="col align-self-stretch ">
+                        {% if fulldate %}
+                        {% for user in date.user_booked %}
+                        <div class="form-check">
+                            <label class="form-check-label" for="flexCheckDefault_{{user.id}}">
+                            {{user}}
+                            </label>
+                        </div>
+                        {% endfor %}
+                        {% else %}
                         {% for user in date.user_booked %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="{{user.id}}" name="users" id="flexCheckDefault_{{user.id}}">
@@ -98,23 +110,27 @@
                             </label>
                         </div>
                         {% endfor %}
+                        {% endif %}
                     </div>
                     <div class="col-1 m-0 p-0 align-self-stretch text-center">
                         <button class="btn m-0 p-0" type="submit" id="confirm" name="confirm"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Add confirm list">
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Add confirm list"
+                        {% if fulldate %} disabled {% endif %}>
                             <i class="bi bi-arrow-right-square"></i></button>
                     </div>
                 </div>
             </form>
         </div>
-
-        <div class="col mx-1 border border-2 align-self-stretch align-self-center ">
+        <div class="col mx-1 border border-2 {% if date.is_full %} border-success alert-success
+                                    {% else %} border-danger {% endif %}
+                                    align-self-stretch align-self-center ">
             <form method="post">{% csrf_token %}
                 <input type="hidden" name="datebook_id" value="{{date.id}}">
                 <div class="row align-items-center">
                     <div class="col-1 m-0 p-0 align-self-stretch  text-center">
                         <button class="btn m-0 p-0" type="submit" id="confirm" name="confirm"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Remove confirm list">
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Remove confirm list"
+                        {%if total_confirmed <= 0 %}disabled{% endif %} >
                             <i class="bi bi-arrow-left-square"></i></button>
                     </div>
                     <div class="col align-self-stretch ">
@@ -133,6 +149,7 @@
         </div>
 
     </div>
+    {% endwith %}
     {% endfor %}
 
 </div>

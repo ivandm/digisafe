@@ -5,7 +5,7 @@
 <h1>Invite to book on Work session {{object.id}}</h1>
 <div class="row">
     <div class="col-2"><span class="">Name session:</span></div>
-    <div class="col"><p class="fw-bold">{{ object.name }}</p></div>
+    <div class="col"><p class="fw-bold  text-break">{{ object.name }}</p></div>
 </div>
 
 <div class="row">
@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col-2"><span class="">Session notes:</span></div>
-    <div class="col"><p class="fw-bold">{{ object.note }}</p></div>
+    <div class="col"><p class="fw-bold text-break">{{ object.note }}</p></div>
 </div>
 
 <div class="row">
@@ -28,7 +28,8 @@
     <p class="alert-info">Choice dates</p>
     <form method="post">{% csrf_token %}
         <input type="hidden" value="{{object.uuid}}" name="uuid">
-        {% for d in object.datebook_set.all %}
+        {% for d in object.datebook_set.all|dictsort:"date" %}
+        {% if d.job in user.jobprofile.job.all %}
         {% busy_in_date d.date request.user as busy %}
         <div class="form-check">
             {% if busy %}
@@ -38,18 +39,28 @@
             </label> <span> Impegnato: </span>{{busy}}
             {% else %}
             <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}"  name="date_id"
-                   {% if request.user in d.users.all %}
+                   {% if request.user in d.users.all or request.user in d.users_confirm.all %}
                    checked
+                   {% endif %}
+                   {% if request.user in d.users_confirm.all %}
+                    disabled
                    {% endif %}
             >
             <label class="form-check-label fw-bold " for="check_{{d.id}}">
                 {{d.date}}  <span class="fw-normal">{{d.job}}</span>
+                {% if request.user in d.users_confirm.all %}
+                <span class="alert-success border border-success p-1">Confermato</span>
+                {% endif %}
             </label>
             {% endif %}
         </div>
+        {% endif %}
         {% endfor %}
         <button class="btn btn-success" type="submit" value="yes" name="response">Accept/Modify</button>
+        {% session_confirm as confirmed %}
+        {% if confirmed != True %}
         <button class="btn btn-danger" type="submit" value="decline" name="decline">Decline invitation</button>
+        {% endif %}
     </form>
 
 </div>

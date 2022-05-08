@@ -229,60 +229,7 @@ def requestAssociateToCompany(request):
     return JsonResponse({})
 
 
-# * MAP START * #
-
-
-@login_required(login_url="/account/login/")
-def openMap(request, session_id=None):
-    # print("companyDetailView")
-    context = {}
-    if session_id:
-        u = request.user
-        company_id = request.session.get("company_id")
-        c = Company.objects.filter(pk=company_id, admins=u)
-        # print(c.associates.all())
-        if c:
-            c = c[0]
-            qs_results = Agenda.objects.filter(user__associates_company=c)
-            sb = SessionBook.objects.get(company=c, id=session_id)
-            if timezone.now() > sb.expire_date:
-                messages.add_message(request, messages.ERROR,
-                                     _(mark_safe("Your Work Session is expired on <b>{}</b>".format(sb.expire_date))))
-                return HttpResponseRedirect(reverse_lazy("companies:sessionbook-list"))
-            context.update(company=c)
-            context.update(sessionbook=sb)
-            context.update(jobs=[x.title for x in sb.jobs.all()])
-            context.update(initial_date_start="{}-{:02d}-{:02d}".format(sb.start_date.year,
-                                                                        sb.start_date.month, sb.start_date.day))
-            context.update(initial_date_end="{}-{:02d}-{:02d}".format(sb.end_date.year,
-                                                                      sb.end_date.month, sb.end_date.day))
-            context.update(qs_results=qs_results)
-
-            # urls
-            context.update(favoriteuser_url=reverse('companies:favoriteuser'))  # add/remove favorite user
-            context.update(optionlist_url=reverse('companies:optionusers',
-                                                  args=[session_id]))  # add/remove option list user
-            context.update(retrive_optionlist_url=reverse('companies:retriveoptionlist',
-                                                          args=[session_id]))  # add/remove option list user
-            context.update(user_job_info_url=reverse('job:user-job-info'))
-            # url per la ricerca dei markers jobprofile AGENDA sulla mappa
-            context.update(api_markers_agenda_url="/maps/api/agendafree/")
-            context.update(api_markers_agenda_url2="/maps/api/agendafree2/")
-            # url per la ricerca dei markers jobprofile AGENDA BUSY sulla mappa
-            context.update(api_markers_agendabusy_url="/maps/api/agendabusy/")
-            context.update(api_markers_agendabusy_url2="/maps/api/agendabusy2/")
-            # url per la ricerca dei markers DEFAULT POSITION sulla mappa
-            context.update(api_markers_defaultposition_url="/maps/api/defaultposition/")
-            context.update(api_markers_defaultposition_url2="/maps/api/defaultposition2/")
-            context.update(api_search_job_url="/maps/api/search_job/")  # url per la ricerca dei markers sulla mappa
-            return render(request, "companies/openmap.html", context)
-    return redirect("account:index")
-
-
-# * MAP END * #
-
-
-# * BOOKING VIEWS * #
+# * BOOKING * #
 
 
 @method_decorator(login_required, name='dispatch')
@@ -375,40 +322,56 @@ class SessionBookUpdateView(UpdateView):
     def form_valid(self, form, dates_form):
         # print("companies.SessionBookUpdateView.form_valid")
         sb = self.object
-        # se hanno cambiato start_date o end_date o jobs ...
-        if form.has_changed():
 
-            # Aggiorna i Jobs
+        # se hanno cambiato start_date or end_date or jobs ...
+        if form.has_changed():
+            # Preleva le scelte del FORM (no del formset)
             jobs_choosen = form.cleaned_data['jobs']  # Ritorna tipo QuerySet Job
             sd = form.cleaned_data['start_date']
             ed = form.cleaned_data['end_date']
 
-            # Aggiorna le date
-            if 'start_date' in form.changed_data or 'end_date' in form.changed_data or 'jobs' in form.changed_data:
-                # Aggiorna jobs
-                to_delete = sb.datebook_set.all().exclude(job__in=jobs_choosen)  # QuerySet DateBook
-                to_delete.delete()
-                jobs_to_add = jobs_choosen.exclude(job_datebook__in=sb.datebook_set.all())
-                self._addJobs(form, jobs_to_add)
+            # Lista di tipi date dai valori inseriti nel FORM
+            new_range_dates_list = [sd + datetime.timedelta(days=i) for i in range((ed-sd).days + 1)]
+            # print("new_range_dates_list", new_range_dates_list)
 
-                # Aggiorna date
-                delta = ed - sd
-                new_range_dates = [sd + datetime.timedelta(days=i) for i in range(delta.days + 1)]  # Nuovo intervallo
-                sb.datebook_set.exclude(date__range=(sd, ed)).delete()  # Cancella le date fuori dal nuovo intervallo
-                exclude_dates_to_add = [x for x in sb.datebook_set.values_list("date",
-                                                                               flat=True).filter(date__range=(sd, ed))]
-                # Lista date da aggiungere
-                new_add_dates = [x for x in new_range_dates if x not in exclude_dates_to_add]
-                # Aggiunge le date, se ci sono
-                for job in sb.jobs.all():
-                    for day in new_add_dates:
-                        db = DateBook(session=sb, date=day, job=job)
-                        db.save()
+            # Lista di nuovi tipi date che si aggiungono alle vecchie (se presenti)
+            old_dates_list = [x.date for x in sb.datebook_set.all()]  # range date
+            new_add_dates_list = [x for x in new_range_dates_list if x not in old_dates_list]
+            # print("new_add_dates_list pre", new_add_dates_list)
 
-        # inline_formset
+            # Nuovi jobs che sono aggiunti nel FORM
+            new_jobs_list = jobs_choosen.exclude(job_datebook__in=sb.datebook_set.all())
+            # print("new_jobs_list pre", new_jobs_list)
+
+            # Vecchi jobs che sono rimasti (non cancellati dal FORM)
+            old_jobs_list = sb.jobs.filter(pk__in=jobs_choosen)  # pregressi jobs salvati ancora validi
+            # print("old_jobs_list pre", old_jobs_list)
+
+            # Aggiorna date e jobs
+            if 'start_date' in form.changed_data \
+                    or 'end_date' in form.changed_data \
+                    or 'jobs' in form.changed_data:
+
+                # Cancella i vecchi jobs eliminati dal form, se presenti in DateBook
+                jobs_to_delete = sb.datebook_set.all().exclude(job__in=jobs_choosen)
+                jobs_to_delete.delete()
+
+                # Cancella le vecchie date eliminati dal form, se presenti in DateBook
+                dates_to_delete = sb.datebook_set.all().exclude(date__in=new_range_dates_list)
+                dates_to_delete.delete()
+
+                # Aggiunge nuovi jobs alle date del FORM
+                self._addJobs(new_range_dates_list, new_jobs_list)
+
+                # Aggiunge le nuove date ai vecchi jobs
+                self._addJobs(new_add_dates_list, old_jobs_list)
+
+        # Salva le nuove scelte di SessionBook e DateBook (quest'ultimo per i valori del formset inline_formset)
         self.object = form.save()
         dates_form.instance = self.object
         dates_form.save()
+
+        # Crea i messaggi di sistema
         if form.has_changed():
             messages.add_message(self.request, messages.SUCCESS,
                                  _(mark_safe("Session ID:{} <b>{}</b> have just been modified.".format(self.object.id, self.object))))
@@ -431,16 +394,20 @@ class SessionBookUpdateView(UpdateView):
                                   dates_form=dates_form,
                                   ))
 
-    def _addJobs(self, form, jobs):
+    def _addJobs(self, dates, jobs):
+        """
+        Funzione che aggiunge job e date al DateBook
+        :param dates: list date type
+        :param jobs: list instance Job
+        """
+        # print("companies.views.SessionBookUpdateView._addJobs")
         sb = self.object
-        sd = form.cleaned_data['start_date']
-        ed = form.cleaned_data['end_date']
-        delta = ed - sd
         for job in jobs:
-            for i in range(delta.days + 1):
-                day = sd + datetime.timedelta(days=i)
+            for day in dates:
                 db = DateBook(session=sb, job=job, date=day)
                 db.save()
+
+
 
     def get_success_url(self):
         return reverse_lazy("companies:sessionbook-list")
@@ -452,6 +419,7 @@ class SessionBookDeleteView(DeleteView):
     success_url = reverse_lazy('companies:sessionbook-list')
 
 
+# Gestione Self Booking Utente invitato
 @method_decorator(login_required, name='dispatch')
 class SessionBookDetailView(View):
     """
@@ -463,7 +431,7 @@ class SessionBookDetailView(View):
     pk = None
 
     def get_session_object(self, *args, **kwargs):
-        # print("companies.views.SessionBookDetailView.get_session_object")
+        print("companies.views.SessionBookDetailView.get_session_object")
         request = kwargs['request']
         if request.method == "GET":
             uuid = request.GET.get("uuid")
@@ -484,7 +452,7 @@ class SessionBookDetailView(View):
             messages.add_message(request, messages.ERROR,
                                  mark_safe(_('Work session request. You are not in list or you have been declined invitation.')))
         else:
-            # Utente non presente in lista invito, oppure ha declinato
+            # Utente non presente in lista invito, oppure ha declinato, oppure parametri ricerca errati
             messages.add_message(request, messages.WARNING,
                              mark_safe(_('Request without result')))
         return self.model.objects.none()
@@ -516,6 +484,7 @@ class SessionBookDetailView(View):
                     messages.add_message(request, messages.WARNING,
                                      mark_safe(_('You have removed the booked date <b>{}</b>'.format(date.date))))
                 # todo: notifica alla company la modifica di prenotazione
+                # todo: inserisce OPZIONE in agenda
                 return render(request, self.template_name, {'object': obj})
 
             # Utente declina l'invito. Non ha successiva possibilità di prenotare
@@ -534,6 +503,7 @@ class SessionBookDetailView(View):
         return render(request, self.template_name, {'object': obj})
 
 
+# Gestione Comfirm utenti prenotati
 @login_required(login_url="/account/login/")
 def sessionBookUsers(request, pk):
     # print("companies.views.sessionBookUsers")
@@ -548,14 +518,71 @@ def sessionBookUsers(request, pk):
         if users:
             for user_id in users:
                 u = User.objects.get(pk=user_id)
-                db.users_confirm.add(u)
+                if db.users_confirm.count() < db.number_user:
+                    db.users_confirm.add(u)
+                else:
+                    messages.add_message(request, messages.ERROR,
+                                         _(mark_safe("Operators <b>{}</b> are fully booked for the dates <b>{}</b>"
+                                                     "".format(db.job.title, db.date))))
+                # todo: notifica all'utente la conferma
+                # todo: inserisce in agenda dell'utente l'impegno BUSY
         if users_confirm:
             for user_id in users_confirm:
                 u = User.objects.get(pk=user_id)
                 db.users_confirm.remove(u)
+                # todo: notifica all'utente la rimozione dalla conferma
         db.save()
     return render(request, "companies/sessionbook_users.html", context={'sb': sb})
 
+
+# * MAP * #
+
+
+@login_required(login_url="/account/login/")
+def openMap(request, session_id=None):
+    # print("companyDetailView")
+    context = {}
+    if session_id:
+        u = request.user
+        company_id = request.session.get("company_id")
+        c = Company.objects.filter(pk=company_id, admins=u)
+        # print(c.associates.all())
+        if c:
+            c = c[0]
+            qs_results = Agenda.objects.filter(user__associates_company=c)
+            sb = SessionBook.objects.get(company=c, id=session_id)
+            if timezone.now() > sb.expire_date:
+                messages.add_message(request, messages.ERROR,
+                                     _(mark_safe("Your Work Session is expired on <b>{}</b>".format(sb.expire_date))))
+                return HttpResponseRedirect(reverse_lazy("companies:sessionbook-list"))
+            context.update(company=c)
+            context.update(sessionbook=sb)
+            context.update(jobs=[x.title for x in sb.jobs.all()])
+            context.update(initial_date_start="{}-{:02d}-{:02d}".format(sb.start_date.year,
+                                                                        sb.start_date.month, sb.start_date.day))
+            context.update(initial_date_end="{}-{:02d}-{:02d}".format(sb.end_date.year,
+                                                                      sb.end_date.month, sb.end_date.day))
+            context.update(qs_results=qs_results)
+
+            # urls
+            context.update(favoriteuser_url=reverse('companies:favoriteuser'))  # add/remove favorite user
+            context.update(optionlist_url=reverse('companies:optionusers',
+                                                  args=[session_id]))  # add/remove option list user
+            context.update(retrive_optionlist_url=reverse('companies:retriveoptionlist',
+                                                          args=[session_id]))  # add/remove option list user
+            context.update(user_job_info_url=reverse('job:user-job-info'))
+            # url per la ricerca dei markers jobprofile AGENDA sulla mappa
+            context.update(api_markers_agenda_url="/maps/api/agendafree/")
+            context.update(api_markers_agenda_url2="/maps/api/agendafree2/")
+            # url per la ricerca dei markers jobprofile AGENDA BUSY sulla mappa
+            context.update(api_markers_agendabusy_url="/maps/api/agendabusy/")
+            context.update(api_markers_agendabusy_url2="/maps/api/agendabusy2/")
+            # url per la ricerca dei markers DEFAULT POSITION sulla mappa
+            context.update(api_markers_defaultposition_url="/maps/api/defaultposition/")
+            context.update(api_markers_defaultposition_url2="/maps/api/defaultposition2/")
+            context.update(api_search_job_url="/maps/api/search_job/")  # url per la ricerca dei markers sulla mappa
+            return render(request, "companies/openmap.html", context)
+    return redirect("account:index")
 
 
 @login_required(login_url="/account/login/")
@@ -582,24 +609,30 @@ def favoriteuser(request):
 def list_users_from_map(request, session_id):
     """
     Aggiunte/Toglie dalla lista 'list_users_from_map' in sessione
-    un utente visualizzato sulla mappa
+    un utente visualizzato sulla mappa.
+    Per rimuovere usa il metodo sicuro 'user_option_list_secure_remove'.
+
+    :return bool True if add/added in list, False if remove from list
     """
     company_id = request.session.get("company_id", 1)
     c = SessionBook.objects.get(id=session_id, company__id=company_id)
     user_id = request.GET.get("user_id")
     u = User.objects.get(id=user_id)
+    option = True
     if c.user_option_list.filter(pk=user_id):
-        c.user_option_list.remove(u)
-        option = False
+        # todo: prima di rimuovere dalla lista, controllare se non è nelle liste opzione/conferma
+        # c.user_option_list.remove(u)
+        if c.user_option_list_secure_remove(u) == True:
+            option = False
     else:
         c.user_option_list.add(u)
-        option = True
     return JsonResponse({'option': option})
 
 
 @login_required(login_url="/account/login/")
 def retrive_users_from_map(request, session_id):
     """Render Template della lista di utenti selezionati dalla mappa"""
+    print("companies.views.retrive_users_from_map")
     company_id = request.session.get("company_id")
     sb = SessionBook.objects.get(id=session_id, company__id=company_id)
     listusers_obj = sb.user_option_list.all()
@@ -608,8 +641,10 @@ def retrive_users_from_map(request, session_id):
             {
                 'user': x.getFullName,
                 'id': x.id,
-                'jobs': [y.title for y in x.jobprofile.job.all()]
+                'jobs': [y.title for y in x.jobprofile.job.all()],
+                'booked': x.id in x.sessionbook_set.get(pk=sb.id).booked_users(),
             } for x in listusers_obj]
+        print(l_users)
         return JsonResponse(l_users, safe=False)
     context = {
         "objects_list": listusers_obj
@@ -646,6 +681,3 @@ def response_user_invite(request, session_id):
     # print(res)
     # print(uuid)
     return JsonResponse({'send': True})
-
-
-# * END BOOKING VIEWS * #
