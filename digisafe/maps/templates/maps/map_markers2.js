@@ -212,7 +212,7 @@ async function retrive_option_list(){
     geojson.forEach( function(item, index){
         var tooltip = item.jobs;
         if(item.booked){
-            var link  = `<i class="bi bi-bookmark-check-fill"></i>`;
+            var link  = `<i class="bi bi-lock-fill"></i>`;
             var booked = `User Booked.`
         }else{
             var link  = `<a onclick="option_list(this)" user_id="${item.id}">
