@@ -9,8 +9,14 @@
 </style>
 <h1>Work Sessions</h1>
 {% for ws in object_list %}
-<div class="row align-items-center">
-    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch">
+<div class="row mb-2 align-items-center">
+    <div class="col border border-secondary mx-md-1 p-1 alert-secondary align-self-stretch  order-first text-truncate">
+        <a href="{% url 'companies:sessionbook-bookresponse' ws.id %}?uuid={{ws.uuid}}" >
+            <span class="badge bg-secondary">id: {{ws.id}}</span>
+            <div class="">{{ws.name}}</div>
+        </a>
+    </div>
+    <div class="col-md border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch">
         {% if user.id in ws.confirmed_users %}
         <div class="clearfix"></div>
         Confermato
@@ -43,21 +49,15 @@
         Invitato
         {% endif %}
     </div>
-    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch  order-first">
-        <a href="{% url 'companies:sessionbook-bookresponse' ws.id %}?uuid={{ws.uuid}}" >
-            {{ws.name}}
-            <span class="badge bg-secondary">id: {{ws.id}}</span>
-        </a>
-    </div>
-    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch text-center ">
+    <div class="col border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch text-center ">
         <div class="align-middle align-content-center">
             <div>{{ws.expire_date}}</div>
         </div>
     </div>
-    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch text-center">
+    <div class="col border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch text-center">
         <div>{{ws.start_date}} / {{ws.end_date}}</div>
     </div>
-    <div class="col border border-secondary mx-1 p-1 alert-secondary align-self-stretch text-center">
+    <div class="col-md border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch text-center">
         <div>
             <div class="d-flex">
 

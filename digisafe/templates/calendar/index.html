@@ -3,13 +3,18 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="">
 
 {# include 'calendar/modal.html' #}
 
 <DIV class="m-2">
+
+    {# TITOLO #}
     <h1 class="bg-primary bg-opacity-25 text-dark fs-3 p-2"><span class="">{% translate 'Agenda Panel' %}</span></h1>
+
     <div class="calendar">
+
+        {# BARRA NAVIGAZIONE MESE #}
         <h1 class="calendar-head text-center fs-1">
             <div class="float-start"><a href="{% url 'account:calendar' %}"><i class="bi bi-calendar-event"></i></a></div>
             {% calendar_before_month_name year month as before %}
@@ -19,13 +24,18 @@
             <div class="d-inline "><a href="{% url 'account:calendar-set' next|date:'Y' next|date:'n' %}"><i class="bi bi-arrow-right-square"></i></a></div>
         </h1>
 
+        {# CALENDARIO #}
         <div class="calendar-body">
+
+            {# NOMI SETTIMANA #}
             <div class="row">
             {% calendar_day_name as day_names %}
             {% for day_name in day_names %}
-                <div class="col {% if day_name == 'Saturday' or day_name == 'Sunday' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}   fw-bold text-center border mb-1">{{day_name}}</div>
+                <div class="card col px-0 text-truncate {% if day_name == 'Saturday' or day_name == 'Sunday' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}   fw-bold text-center border mb-1">{{day_name}}</div>
             {% endfor %}
             </div>
+
+            {# DISTRIBUZIONE MESE #}
             {% calendar_tmpl year month as weeks %}
             {% for week in weeks %}
             <div class="row">
@@ -49,12 +59,12 @@
                                 {% if event.anonymous %}
                                 <p>{% translate 'Busy' %}</p>
                                 {% else %}
-                                <div id="event_id_{{event.id}}" class="text-truncate badge bg-secondary">
-                                    <a id="calendar_edit_event" data-toggle="modal" href="{% url 'account:calendar-edit' event.id day.year day.month day.day %}" data-target="#modal" title="Edit event" data-tooltip>
+                                <div id="event_id_{{event.id}}" class="text-truncate ">
+                                    <a class="badge bg-secondary" id="calendar_edit_event" data-toggle="modal" href="{% url 'account:calendar-edit' event.id day.year day.month day.day %}" data-target="#modal" title="Edit event" data-tooltip>
                                     {{event.object}}
                                     </a>
-                                </div>
 
+                                </div>
                                 {% endif %}
                             </div>
                             {% empty %}

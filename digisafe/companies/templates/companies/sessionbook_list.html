@@ -2,7 +2,7 @@
 {% load i18n static %}
 
 {% block content %}
-<div class="container">
+<div class="">
     <div>
         <h1>Book sessions list</h1>
     </div>
@@ -25,6 +25,7 @@
     </div>
 
     {# HEAD GRIGLIA #}
+    <div class="row  d-none d-lg-block g-1">
     <div class="row g-1">
         <div class="col ">
             <p class=" fw-bold text-white bg-secondary text-center">Actions</p>
@@ -51,42 +52,36 @@
             <p class=" fw-bold text-white bg-secondary text-center">Overview</p>
         </div>
     </div>
+    </div>
 
     {# BODY COLONNE GRIGLIA #}
     {% for sb in sessionbook_list %}
-    <div class="row mb-2 pb-1 g-1 border-bottom">
-        <div class="col text-center">
-                <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
-                   data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
-                <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success  "
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="Update Session"><i class="bi bi-pencil-fill"></i></a>
-                <a href="{% url 'companies:sessionbook-delete' sb.id %}" class="btn btn-danger  "
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash-fill"></i></a>
+    <div class="row mb-3 mb-lg-2 pb-1 g-1 border-bottom alert-secondary">
+        <div class="col-md">
+            <div class="overflow-scroll" style="max-height: 8rem;">
+                <span class="text-break">{{sb.name}}</span>
+            </div>
         </div>
         <div class="col">
             <div class="overflow-scroll" style="max-height: 8rem;">
-                <span class="text-break">{{sb.name}}</span></div>
-        </div>
-        <div class="col">
-            <div class="overflow-scroll" style="max-height: 8rem;">
-                {{sb.expire_date}}</div>
+                {{sb.expire_date}}
+            </div>
         </div>
         <div class="col">
             <div><i class="bi bi-align-start"></i> {{sb.start_date}} <br>
                  <i class="bi bi-align-end"></i> {{sb.end_date}}</div>
         </div>
-        <div class="col  ">
+        <div class="col-lg">
             <div class="overflow-scroll" style="max-height: 8rem;" ><span class="text-break">{{sb.note}}</span></div>
         </div>
         <div class="col m-0 p-0 border rounded p-0 m-0 align-self-start">
-
             <div class="text-center d-grid gap-0">
                 <a class="btn btn-outline-primary btn-sm m-0 p-0 width-100" href="{% url 'companies:sessionbook-users' sb.id %}">
                     <i class="float-start bi bi-person-lines-fill"></i>
                     <span class=""> Manage </span>
                 </a>
             </div>
-            <div class="row text-center p-0 m-0 mt-1 alert-info">
+            <div class="row text-center p-0 m-0 mt-1 mx-2 mx-lg-0 alert-info">
                 <div class="col "data-bs-toggle="tooltip" title="Resources"><i class="bi bi-person"></i> {{sb.total_users_request}}</div>
                 <div class="col "data-bs-toggle="tooltip" title="Dates"><i class="bi bi-calendar3-week"></i> {{sb.datebook_set.all|length}}</div>
                 <div class="col "data-bs-toggle="tooltip" title="Jobs"><i class="bi bi-briefcase"></i> {{sb.jobs.all|length}}</div>
@@ -106,6 +101,14 @@
                     <span class="">Confermati</span> </div>
             </div>
             {% if sb.is_full %}<div class="text-center my-1 alert-success border border-success"><i class="bi bi-clipboard-check"></i> Full</div>{% endif %}
+        </div>
+        <div class="col-lg order-lg-first text-center">
+                <a href="{% url 'companies:openmap' sb.id %}" class="btn btn-info  "  data-bs-toggle="tooltip"
+                   data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
+                <a href="{% url 'companies:sessionbook-update' sb.id %}" class="btn btn-success  "
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Update Session"><i class="bi bi-pencil-fill"></i></a>
+                <a href="{% url 'companies:sessionbook-delete' sb.id %}" class="btn btn-danger  "
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash-fill"></i></a>
         </div>
     </div>
     {% endfor %}
