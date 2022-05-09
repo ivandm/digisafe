@@ -4,12 +4,12 @@
 {% block content %}
 <div class="">
     {# BOTTONI MAPPA E MODIFICA #}
-        <div class="flex-row z-index-tooltip submit-row float-end p-1 m-0 border rounded alert-secondary">
-                <a class="btn btn-info" href="{% url 'companies:openmap' sb.id %}"  data-bs-toggle="tooltip"
-                   data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
-                <a class="btn btn-success" href="{% url 'companies:sessionbook-update' sb.id %}"
-               data-bs-toggle="tooltip" data-bs-placement="top" title="Update Session"><i class="bi bi-pencil-fill"></i></a>
-        </div>
+    <div class="flex-row submit-row float-end p-1 m-0 border rounded alert-secondary">
+            <a class="btn btn-info" href="{% url 'companies:openmap' sb.id %}"  data-bs-toggle="tooltip"
+               data-bs-placement="top" title="Open map"><i class="bi bi-map-fill"></i></a>
+            <a class="btn btn-success" href="{% url 'companies:sessionbook-update' sb.id %}"
+           data-bs-toggle="tooltip" data-bs-placement="top" title="Update Session"><i class="bi bi-pencil-fill"></i></a>
+    </div>
 
     {# DATI DELLA WORK SESSION #}
     <div class="bg-light p-lg-3 border float-start float-lg-none my-2">
