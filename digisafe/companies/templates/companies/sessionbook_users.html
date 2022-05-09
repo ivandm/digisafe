@@ -107,17 +107,27 @@
         </div>
         <div class="col-lg align-self-stretch">
             <div class="row mt-1 mt-lg-0 align-self-stretch">
+                {# HEAD #}
                 <div class="d-lg-none p-0">
                     <div class="row m-0 p-0">
                         <div class="col bg-secondary mx-1 text-center border border-secondary">Users self booked</div>
                         <div class="col bg-secondary mx-1 text-center border-start border-end border-2 border-secondary">Users company confirmed</div>
                     </div>
                 </div>
+
+                {# BOOKED #}
                 <div class="col mx-1 border {% if date.is_full %} alert-success {% endif %} align-self-stretch">
                     <form method="post">{% csrf_token %}
                         <input type="hidden" name="datebook_id" value="{{date.id}}">
+                        <div class="col-1 m-0 p-0 align-self-stretch text-center float-end">
+                            <button class="btn m-0 p-0" type="submit" id="confirm" name="confirm"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Add confirm list"
+                            {% if fulldate %} disabled {% endif %}>
+                                <i class="bi bi-arrow-right-square"></i></button>
+                        </div>
+                        <div class="clearfix"></div>
                         <div class="row align-items-center">
-                            <div class="col align-self-stretch ">
+                            <div class="col align-self-stretch px-0">
                                 {% if fulldate %}
                                 {% for user in date.user_booked %}
                                 <div class="form-check">
@@ -137,28 +147,27 @@
                                 {% endfor %}
                                 {% endif %}
                             </div>
-                            <div class="col-1 m-0 p-0 align-self-stretch text-center">
-                                <button class="btn m-0 p-0" type="submit" id="confirm" name="confirm"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Add confirm list"
-                                {% if fulldate %} disabled {% endif %}>
-                                    <i class="bi bi-arrow-right-square"></i></button>
-                            </div>
+
                         </div>
                     </form>
                 </div>
+
+                {# CONFIRMED #}
                 <div class="col mx-1 border border-2 {% if date.is_full %} border-success alert-success
                                             {% else %} border-danger {% endif %}
                                             align-self-stretch align-self-center ">
                     <form method="post">{% csrf_token %}
                         <input type="hidden" name="datebook_id" value="{{date.id}}">
                         <div class="row align-items-center">
-                            <div class="col-1 m-0 p-0 align-self-stretch  text-center">
+                            <div class="col-1 m-0 p-0 align-self-stretch text-center float-start">
                                 <button class="btn m-0 p-0" type="submit" id="confirm" name="confirm"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Remove confirm list"
                                 {%if total_confirmed <= 0 %}disabled{% endif %} >
-                                    <i class="bi bi-arrow-left-square"></i></button>
+                                    <i class="bi bi-arrow-left-square"></i>
+                                </button>
                             </div>
-                            <div class="col align-self-stretch ">
+                            <div CLASS="clearfix"></div>
+                            <div class="col align-self-stretch px-0">
                                 {% for user in date.users_confirm.all %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="{{user.id}}" name="users_confirm" id="flexCheckDefault_{{user.id}}">
