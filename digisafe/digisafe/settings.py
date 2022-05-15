@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: latin-1 -*-
 """
 Django settings for digisafe project.
