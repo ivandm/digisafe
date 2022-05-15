@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 
 
 def _get_city_name(self, field):
-    print("maps.gisFields.PointField.getCityName")
+    # print("maps.gisFields.PointField.getCityName")
     user_agent = "https://nominatim.openstreetmap.org/"
     geolocator = Nominatim(user_agent=user_agent)
     lang = translation.get_language()
@@ -30,7 +30,7 @@ class PointField(gismodel.PointField):
     description = _("The base GIS field with digisafe custom methods.")
 
     def contribute_to_class(self, cls, name, **kwargs):
-        print("maps.gisFields.PointField.contribute_to_class")
+        # print("maps.gisFields.PointField.contribute_to_class")
         # print(cls, name)
         # print(kwargs)
         super().contribute_to_class(cls, name, **kwargs)

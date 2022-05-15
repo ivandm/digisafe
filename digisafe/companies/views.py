@@ -475,11 +475,11 @@ class SessionBookDetailView(View):
         return HttpResponseRedirect(reverse_lazy("account:index"))
 
     def post(self, request, pk):
-        print("companies.views.SessionBookDetailView.post")
+        # print("companies.views.SessionBookDetailView.post")
         # print(request.POST)
         self.pk = pk  # id SessionBook
         obj = self.get_session_object(request=request)
-        if obj and not obj.is_expired:
+        if obj and not obj.is_expired():
             # Utente prenota alcune date
             if request.POST.get("response", "").lower() == "yes":
                 date_ids = request.POST.getlist("date_id", [])
