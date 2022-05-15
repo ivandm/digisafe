@@ -26,7 +26,6 @@ djangorestframework-gis~=0.18.0
 djangorestframework~=3.13.0
 geopy
 django-bootstrap-datepicker-plus
-dateutil
 django-money
 # icalendar
 # django-ical
