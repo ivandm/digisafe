@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: latin-1 -*-
 """
 Django settings for digisafe project.
@@ -293,4 +294,4 @@ BOOTSTRAP_JS = "/static/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"
 
 # Currency settings
 CURRENCIES = ('USD', 'EUR', 'GBP')
-CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('GBP', 'GBP £')]
+CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR ?'), ('GBP', 'GBP �')]
