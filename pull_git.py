@@ -23,6 +23,10 @@ os.system(cmd)
 # os.remove("clinica/settings_config.py")
 # os.rename('clinica/settings_config_.py', 'clinica/settings_config.py')
 
+cmd = 'python3 pip install -r digisafe/requirements.txt'
+print(cmd)
+os.system(cmd)
+
 cmd = 'python3 digisafe/manage.py collectstatic -c --no-post-process --noinput'
 print(cmd)
 os.system(cmd)
