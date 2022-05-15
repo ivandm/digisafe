@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 
 from .models import SessionBook, DateBook, Company, Profile
 from countries.forms import ChainedCountryForm
+from account.forms import OSMWidget
 
 
 class SearchUserJobLocationForm(forms.Form):
@@ -17,10 +18,11 @@ class SearchUserJobLocationForm(forms.Form):
 class SessionBookForm(forms.ModelForm):
     class Meta:
         model = SessionBook
-        fields = ("name", "address", "expire_date",  "start_date",  "end_date", "jobs", "note")
+        fields = ("name", "city", "expire_date",  "start_date",  "end_date", "jobs", "note")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
-            "address": forms.TextInput(attrs={"class": "form-control"}),
+            # "address": forms.TextInput(attrs={"class": "form-control"}),
+            'city': OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
             "expire_date": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local"}),
             "start_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
             "end_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
@@ -67,10 +69,11 @@ class SessionBookForm(forms.ModelForm):
 class SessionBookUpdateForm(SessionBookForm):
     class Meta:
         model = SessionBook
-        fields = ("name", "address", "expire_date", "start_date", "end_date", "jobs", "note")
+        fields = ("name", "city", "expire_date", "start_date", "end_date", "jobs", "note")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
-            "address": forms.TextInput(attrs={"class": "form-control"}),
+            # "address": forms.TextInput(attrs={"class": "form-control"}),
+            'city': OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
             "expire_date": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local"}),
             "start_date": forms.DateInput(attrs={"class": "form-control bg-danger text-white", "type": "date"}),
             "end_date": forms.DateInput(attrs={"class": "form-control bg-danger text-white", "type": "date"}),
@@ -82,6 +85,14 @@ class SessionBookUpdateForm(SessionBookForm):
             'jobs': 'Attenzione. Eliminando una scelta si cancellano i dati già inseriti.',
         }
 
+
+class SessionBookDetailForm(forms.ModelForm):
+    class Meta:
+        model = SessionBook
+        fields = ("city",)
+        widgets = {
+            'city': OSMWidget(attrs={'map_width': 200, 'map_height': 200}),
+        }
 
 class DateBookForm(forms.ModelForm):
     min_number_user = 0  # numero minimo nel campo type="number"

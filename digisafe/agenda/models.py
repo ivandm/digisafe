@@ -1,14 +1,14 @@
 from django.db import models
 from django.contrib.gis.db import models as gismodel
-from django.contrib.gis.geos import Point, Polygon
 from django.conf import settings
-from django.utils.translation import ngettext, gettext as _
+from django.utils.translation import gettext as _
 
 from django.utils import translation
 from functools import partial
 from geopy.geocoders import Nominatim
+from companies.models import DateBook
 
-
+from maps import gisfields
 class AgendaFeatures(gismodel.Model):
     user = gismodel.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -42,12 +42,14 @@ class Agenda(gismodel.Model):
         on_delete=models.CASCADE,
     )
     timestamp = gismodel.DateTimeField(auto_now=True)
-    city = gismodel.PointField()
+    # city = gismodel.PointField()
+    city = gisfields.PointField()
     busy = models.BooleanField(default=True)
     date_start = gismodel.DateTimeField()
     date_end = gismodel.DateTimeField()
     object = gismodel.CharField(max_length=100, default="", blank=False)
     description = gismodel.TextField(max_length=500, default="", blank=True)
+    datebook = models.ForeignKey(DateBook, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return "Agenda Events: {} {}/{}".format(self.object, self.date_start.date(), self.date_end.date())

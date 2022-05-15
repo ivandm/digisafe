@@ -1,0 +1,13 @@
+{% extends "pricelist/index_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<h1 class="fw-bold fs-2">Price Delete</h1>
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete price profile <b>"{{ object.name }}"</b>?</p>
+    <p class="alert-danger p-1">If you confirm, every work session associate with price
+        <b>{{object.name}}</b> profile will not be elaborate! You should to <b>loss money</b>!"</p>
+    {{ form }}
+    <input type="submit" value="Confirm">
+</form>
+{% endblock %}

@@ -82,7 +82,6 @@
 
     {# BOOKED BODY GRID #}
     {% for date in sb.datebook_set.all %}
-    {% with fulldate=date.is_full total_confirmed=date.users_confirm.count %}
     <div class="row mb-2 mb-lg-1">
         <div class="d-none d-md-block d-lg-none p-0">
             <div class="row m-0 p-0">
@@ -122,13 +121,13 @@
                         <div class="col-1 m-0 p-0 align-self-stretch text-center float-end">
                             <button class="btn m-0 p-0" type="submit" id="confirm" name="confirm"
                             data-bs-toggle="tooltip" data-bs-placement="top" title="Add confirm list"
-                            {% if fulldate %} disabled {% endif %}>
+                            {% if date.is_full %} disabled {% endif %}>
                                 <i class="bi bi-arrow-right-square"></i></button>
                         </div>
                         <div class="clearfix"></div>
                         <div class="row align-items-center">
                             <div class="col align-self-stretch px-0">
-                                {% if fulldate %}
+                                {% if date.is_full %}
                                 {% for user in date.user_booked %}
                                 <div class="form-check">
                                     <label class="form-check-label" for="flexCheckDefault_{{user.id}}">
@@ -147,7 +146,6 @@
                                 {% endfor %}
                                 {% endif %}
                             </div>
-
                         </div>
                     </form>
                 </div>
@@ -186,7 +184,6 @@
         <div class="d-lg-none border-bottom border-secondary border-1 alert-secondary py-1"></div>
     </div>
 
-    {% endwith %}
     {% endfor %}
 
 </div>

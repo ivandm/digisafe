@@ -54,10 +54,12 @@ var normal_markers = 0,
     ;
 
 /* Map device position request */
-map.
-    locate()
-    .on("locationfound", (e) => map.setView(e.latlng, 8))
-    .on("locationerror", () => map.setView([41.9027835,12.4963655], 8));
+//map.
+//    locate()
+//    .on("locationfound", (e) => map.setView(e.latlng, 8))
+//    .on("locationerror", () => map.setView([41.9027835,12.4963655], 8));
+
+map.setView([{{sessionbook.city.y}},{{sessionbook.city.x}}], 8);
 
 /* MAP EVENT */
 map.on("moveend", render_markers);
@@ -177,12 +179,19 @@ async function render_markers() {
 }
 
 /* Manage user action. Add/Remove Favorite, Option list etc. */
-/* Add/Remove user in SessionBook.user_option_list related field */
+
+// todo: Add/Remove all users visible on map box
+
+/* Add/Remove single user in SessionBook.user_option_list related field */
 async function option_list(e){
     var user_id =  $(e).attr("user_id");
     var url = `{{optionlist_url}}?user_id=${user_id}`;
     const response = await fetch(url);
     const geojson = await response.json();
+    console.log(geojson);
+    if(typeof geojson.option === "string"){
+        alert (geojson.option);
+    }
     retrive_option_list();
 }
 
@@ -211,13 +220,19 @@ async function retrive_option_list(){
     var html_list_li = "";
     geojson.forEach( function(item, index){
         var tooltip = item.jobs;
-        if(item.booked){
+        if(item.booked==true){
+            /* Aggiunto */
             var link  = `<i class="bi bi-lock-fill"></i>`;
             var booked = `User Booked.`
-        }else{
+        }else if(item.booked==false){
+            /* Rimosso */
             var link  = `<a onclick="option_list(this)" user_id="${item.id}">
                             <i class="bi bi-eraser-fill"></i></a>`;
             var booked = `User NOT Booked.`
+        }else{
+            /* Problema su aggiunta o rimozione */
+            booked = item.booked
+            alert(item.booked)
         }
 
         html_list_li += `<li data-bs-toggle="tooltip" data-bs-placement="left" title="${booked} ${tooltip}">

@@ -55,15 +55,18 @@ def calendar_is_today(year, month, day):
     return d==today
 
 @register.simple_tag
-def busy_in_date(date, user):
+def busy_in_date(date, user, datebook):
     """
     Verifica una data impegnata di User in Agenda
     :param date: datetime
     :param user: int
+    :param user: DateSession object
     :return: str dd-mm-aaaa oppure False
     """
     q = Agenda.objects.filter(
-        user=user, date_start__date__lte=date, date_end__date__gte=date)
+        user=user, date_start__date__lte=date, date_end__date__gte=date).exclude(
+        datebook=datebook
+    )
     if q:
         return "{}".format(q[0].object)
     return False

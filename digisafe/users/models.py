@@ -6,15 +6,18 @@ from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.db.models import Q
 
 import os
 import io
 from PIL import ImageFile as PillowImageFile
+from datetime import datetime
 
 from countries.models import Country, City
 from courses.models import Courses
 from institutions.models import Institution
 from job.models import Job
+
 
 # Costanti usate qui
 SIGN_MAX_SIZE = (500, 250)  # in pixels
@@ -64,8 +67,48 @@ class User(AbstractUser):
         )
 
     def agenda_future(self):
+        """
+        Restituisce una lista di impegni in agenda che iniziano dalla data odierna.
+        :return: QuerySet list object
+        """
         now = timezone.now()
         return self.agenda_set.filter(date_start__gte=now)
+
+    def agenda_add_book(self, datebook):
+        """
+        Aggiunge un impegno di booking di una work session in agenda
+        :param datebook: DateBook object
+        :return: None
+        """
+        # import Agenda non spostare, causa errore 'circular import'
+        from agenda.models import Agenda
+        a = Agenda(
+            user=self,
+            city=datebook.session.city,
+            date_start=datetime.combine(datebook.date, datetime.min.time()),
+            date_end=datetime.combine(datebook.date, datetime.max.time()),
+            object="{} book".format(datebook.session.company.name),
+            description=datebook.session.note,
+            datebook=datebook
+        )
+        a.save()
+
+    def agenda_remove_book(self, datebook):
+        """
+        Rimuove un impegno di booking di una work session in agenda"
+        :param datebook: DateBook object
+        :return: None
+        """""
+        self.agenda_set.get(datebook=datebook).delete()
+
+    def agenda_remove_sessionbook(self, sessionbook):
+        """
+        Rimuove dall'agenda tutti gli eventi prenotati corrispondenti alla work session 'sessionbook'
+        :param sessionbook: SessionBook object
+        :return: None
+        """
+        for datebook in self.sessionbook_set.get(pk=sessionbook.id).datebook_set.all():
+            self.agenda_set.get(datebook=datebook).delete()
 
     def qualification_exp_in_one_year(self):
         one_year = timezone.now() + timezone.timedelta(days=365)
@@ -74,6 +117,14 @@ class User(AbstractUser):
     def qualifications_valid(self):
         now = timezone.now()
         return [p.protocol for p in self.learners_set.all() if p.protocol.getExpiration() > now.date()]
+
+    def sessionbook_list(self):
+        """
+        Lista di sessioni invitate future
+        :return:
+        """
+        now = timezone.now()
+        return self.sessionbook_set.filter(Q(start_date__gte=now.date()) | Q(end_date__gte=now.date()))
 
 class Anagrafica(models.Model):
     user = models.OneToOneField(

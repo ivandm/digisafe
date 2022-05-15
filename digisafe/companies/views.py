@@ -18,7 +18,8 @@ import datetime
 from users.models import User
 from agenda.models import Agenda
 from .models import Company, requestAssociatePending, SessionBook, DateBook
-from .forms import SessionBookForm, SessionBookUpdateForm, DateBookFormSet, SettingsForm, ProfileFormSet
+from .forms import SessionBookForm, SessionBookUpdateForm, DateBookFormSet, SettingsForm, \
+    ProfileFormSet, SessionBookDetailForm
 
 
 # Home del menu Company, Seleziona la Company
@@ -323,6 +324,7 @@ class SessionBookUpdateView(UpdateView):
         # print("companies.SessionBookUpdateView.form_valid")
         sb = self.object
 
+        # todo: bug. inserisce doppie date alcune volte
         # se hanno cambiato start_date or end_date or jobs ...
         if form.has_changed():
             # Preleva le scelte del FORM (no del formset)
@@ -419,7 +421,7 @@ class SessionBookDeleteView(DeleteView):
     success_url = reverse_lazy('companies:sessionbook-list')
 
 
-# Gestione Self Booking Utente invitato
+# Gestione Self Booking Utente invitato. Vedi TMPL account/session_detail.html
 @method_decorator(login_required, name='dispatch')
 class SessionBookDetailView(View):
     """
@@ -431,7 +433,7 @@ class SessionBookDetailView(View):
     pk = None
 
     def get_session_object(self, *args, **kwargs):
-        print("companies.views.SessionBookDetailView.get_session_object")
+        # print("companies.views.SessionBookDetailView.get_session_object")
         request = kwargs['request']
         if request.method == "GET":
             uuid = request.GET.get("uuid")
@@ -444,13 +446,15 @@ class SessionBookDetailView(View):
             ws = self.model.objects.filter(
                                             pk=self.pk,
                                             uuid=uuid,
-                                            expire_date__gte=now,
+                                            # expire_date__gte=now,
                                             user_option_list=request.user,
                                             ).exclude(user_decline_list=request.user).distinct()
             if ws:
                 return ws[0]
             messages.add_message(request, messages.ERROR,
-                                 mark_safe(_('Work session request. You are not in list or you have been declined invitation.')))
+                                 mark_safe(_('Work session request <b>id {}</b>. '
+                                             'You are not in list or you have '
+                                             'been declined invitation.'.format(self.pk))))
         else:
             # Utente non presente in lista invito, oppure ha declinato, oppure parametri ricerca errati
             messages.add_message(request, messages.WARNING,
@@ -462,50 +466,84 @@ class SessionBookDetailView(View):
         obj = self.get_session_object(request=request)
         if obj:
             # user ha visto l'invito
-            return render(request, self.template_name, {'object': obj})
+            form = SessionBookDetailForm(instance=obj)
+            return render(request, self.template_name,
+                          {
+                              'object': obj,
+                              'form': form,
+                          })
         return HttpResponseRedirect(reverse_lazy("account:index"))
 
     def post(self, request, pk):
-        # print("companies.views.SessionBookDetailView.post")
-        self.pk = pk
+        print("companies.views.SessionBookDetailView.post")
+        # print(request.POST)
+        self.pk = pk  # id SessionBook
         obj = self.get_session_object(request=request)
-        if obj:
+        if obj and not obj.is_expired:
             # Utente prenota alcune date
-            if self.request.POST.get("response", "").lower() == "yes":
-                date_ids = self.request.POST.getlist("date_id", [])
+            if request.POST.get("response", "").lower() == "yes":
+                date_ids = request.POST.getlist("date_id", [])
+
+                # todo: creare un metodo di classe per obj.datebook_set.filter (SessionBook)
+                # prenota solo le nuove date escludendo le date già prenotate
                 for date in obj.datebook_set.filter(id__in=date_ids).exclude(users=request.user):
-                    date.users.add(request.user)
+                    date.user_book_add(request.user)
                     date.save()
                     messages.add_message(request, messages.SUCCESS,
                                          mark_safe(_('You have booked the date <b>{}</b>'.format(date.date))))
+                    # inserisce OPZIONE in agenda utente
+                    request.user.agenda_add_book(date)
+
+                # rimuove le date già prenotate che non trova nella lista dal form
                 for date in obj.datebook_set.filter(users=request.user).exclude(id__in=date_ids):
-                    date.users.remove(request.user)
+                    date.user_book_remove(request.user)
                     date.save()
                     messages.add_message(request, messages.WARNING,
                                      mark_safe(_('You have removed the booked date <b>{}</b>'.format(date.date))))
+                    # rimuove OPZIONE in agenda utente
+                    request.user.agenda_remove_book(date)
+
                 # todo: notifica alla company la modifica di prenotazione
-                # todo: inserisce OPZIONE in agenda
-                return render(request, self.template_name, {'object': obj})
+
+                # Aggiorna le note
+                for d in obj.datebook_set.all():
+                    if d.job in request.user.jobprofile.job.all():
+                        d.user_note = self.request.POST.get("user_note_{}".format(d.id))
+                        d.save()
+
+                form = SessionBookDetailForm(instance=obj)
+                return render(request, self.template_name,
+                              {
+                                  'object': obj,
+                                  'form': form,
+                              })
 
             # Utente declina l'invito. Non ha successiva possibilità di prenotare
             else:
                 # Viene aggiunto alla lista dei declinati
-                obj.user_decline_list.add(request.user)
-                obj.save()
-                # Viene cancellato dalle ventuali prenotazioni
-                for db in obj.datebook_set.all():
-                    db.users.remove(request.user)
-                    db.users_confirm.remove(request.user)
-                    db.save()
-                # todo: notifica alla company l'azione di declino
+                print("declina")
+                obj.user_decline_list_add(request.user)
+                # obj.save()
+                # request.user.agenda_remove_book(date)
                 return HttpResponseRedirect(reverse_lazy("account:index"))
 
+        # Data di prenotazione scaduta oppure obj non trovato (obj is none)
+        else:
+            messages.add_message(request, messages.ERROR,
+                                 mark_safe(_("Session is expired or some error occurred in request. "
+                                             "Can't modify anythings")))
         return render(request, self.template_name, {'object': obj})
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(SessionBookDetailView, self).get_context_data(*args, **kwargs)
+    #     context['form'] = SessionBookDetailView()
+    #     return context
 
 
 # Gestione Comfirm utenti prenotati
 @login_required(login_url="/account/login/")
 def sessionBookUsers(request, pk):
+    """Gestione Comfirm utenti prenotati"""
     # print("companies.views.sessionBookUsers")
     company_id = request.session.get("company_id")
     sb = SessionBook.objects.get(pk=pk, company__id=company_id)
@@ -525,7 +563,6 @@ def sessionBookUsers(request, pk):
                                          _(mark_safe("Operators <b>{}</b> are fully booked for the dates <b>{}</b>"
                                                      "".format(db.job.title, db.date))))
                 # todo: notifica all'utente la conferma
-                # todo: inserisce in agenda dell'utente l'impegno BUSY
         if users_confirm:
             for user_id in users_confirm:
                 u = User.objects.get(pk=user_id)
@@ -535,12 +572,12 @@ def sessionBookUsers(request, pk):
     return render(request, "companies/sessionbook_users.html", context={'sb': sb})
 
 
-# * MAP * #
+# * FUNZIONI PER MAP * #
 
 
 @login_required(login_url="/account/login/")
 def openMap(request, session_id=None):
-    # print("companyDetailView")
+    # print("companies.views.openMap")
     context = {}
     if session_id:
         u = request.user
@@ -608,30 +645,36 @@ def favoriteuser(request):
 @login_required(login_url="/account/login/")
 def list_users_from_map(request, session_id):
     """
-    Aggiunte/Toglie dalla lista 'list_users_from_map' in sessione
+    Aggiunte/Toglie dalla lista 'list_users_from_map' in SessionBook
     un utente visualizzato sulla mappa.
     Per rimuovere usa il metodo sicuro 'user_option_list_secure_remove'.
-
-    :return bool True if add/added in list, False if remove from list
+    :return JSON bool True if add in list, False if remove from list
     """
+    # print("companies.views.list_users_from_map")
     company_id = request.session.get("company_id", 1)
-    c = SessionBook.objects.get(id=session_id, company__id=company_id)
+    sessionbook = SessionBook.objects.get(id=session_id, company__id=company_id)
     user_id = request.GET.get("user_id")
     u = User.objects.get(id=user_id)
-    option = True
-    if c.user_option_list.filter(pk=user_id):
+
+    if sessionbook.invited_user(user_id):
         # prima di rimuovere dalla lista, controllare se non è nelle liste opzione/conferma
-        if c.user_option_list_secure_remove(u) == True:
-            option = False
+        res = sessionbook.user_option_list_secure_remove(u)
+        if res == True:
+            # print("rimosso")
+            option_list = False
+        else:
+            option_list = res
     else:
-        c.user_option_list.add(u)
-    return JsonResponse({'option': option})
+        # print("aggiunto")
+        option_list = sessionbook.user_option_list_add(u)
+    # print(option_list)
+    return JsonResponse({'option': option_list})
 
 
 @login_required(login_url="/account/login/")
 def retrive_users_from_map(request, session_id):
     """Render Template della lista di utenti selezionati dalla mappa"""
-    print("companies.views.retrive_users_from_map")
+    # print("companies.views.retrive_users_from_map")
     company_id = request.session.get("company_id")
     sb = SessionBook.objects.get(id=session_id, company__id=company_id)
     listusers_obj = sb.user_option_list.all()
@@ -643,7 +686,7 @@ def retrive_users_from_map(request, session_id):
                 'jobs': [y.title for y in x.jobprofile.job.all()],
                 'booked': x.id in x.sessionbook_set.get(pk=sb.id).booked_users(),
             } for x in listusers_obj]
-        print(l_users)
+        # print(l_users)
         return JsonResponse(l_users, safe=False)
     context = {
         "objects_list": listusers_obj

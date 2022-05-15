@@ -50,6 +50,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # Application definition
 INSTALLED_APPS = [
     'tinymce',
+    'djmoney',
     'maps.apps.MapsConfig',
     'companies.apps.CompaniesConfig',
     'account.apps.AccountConfig',
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
     'job.apps.JobConfig',
     'agenda.apps.AgendaConfig',
     'home.apps.HomeConfig',
+    'pricelist.apps.PricelistConfig',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -240,7 +242,7 @@ if DEPLOY:
     EMAIL_HOST = "smtp.ionos.co.uk"
     EMAIL_PORT = 587
     EMAIL_HOST_USER = "digisafe@ircot.net"
-    EMAIL_HOST_PASSWORD = "DigiSafeeMail@01012022_*"
+    EMAIL_HOST_PASSWORD = "5akglri#wyt@wab5n1vfos7_"
     # EMAIL_USE_SSL = True
     EMAIL_USE_TLS = True
 
@@ -287,3 +289,7 @@ BOOTSTRAP_CSS_ADMIN_CORRECT = "/static/css/admin_bootstrap_correct.css"
 
 #  JS default
 BOOTSTRAP_JS = "/static/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"
+
+# Currency settings
+CURRENCIES = ('USD', 'EUR', 'GBP')
+CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('GBP', 'GBP £')]

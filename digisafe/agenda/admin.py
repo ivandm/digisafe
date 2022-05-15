@@ -15,7 +15,7 @@ class AgendaPropertyAdmin(gisadmin.OSMGeoAdmin):
 @admin.register(Agenda)
 class AgendaAdmin(gisadmin.OSMGeoAdmin):
     """Marker admin."""
-    list_display = ("user", "jobs", "city_name", "busy", "date_range", "object", "date_start", "date_end")
+    list_display = ("user", "jobs", "get_city_name", "busy", "date_range", "object", "date_start", "date_end")
     list_editable = ("object", "date_start", "date_end")
     search_fields = ['user__first_name', "user__last_name", "user__username"]
-    autocomplete_fields = ['user']
+    autocomplete_fields = ['user', 'datebook']

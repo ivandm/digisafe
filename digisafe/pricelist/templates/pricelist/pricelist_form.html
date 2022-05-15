@@ -1,0 +1,15 @@
+{% extends "pricelist/index_base.html" %}
+{% load i18n static djmoney %}
+
+{% block content %}
+<h1 class="fw-bold fs-2">Price Form</h1>
+<form class="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+<script>
+    $("label").addClass("col-2 col-md-3");
+    $("p").addClass("alert-secondary p-2");
+</script>
+{% endblock %}
+

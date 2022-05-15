@@ -1,0 +1,22 @@
+{% extends "pricelist/index_base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<h1 class="fw-bold fs-2">Price list</h1>
+<div class="my-3">
+    <a class="btn btn-success" href="{% url 'pricelist:create' %}">New price profile</a>
+</div>
+<h1>Profili</h1>
+<div class="vstack gap-2">
+{% for article in object_list %}
+    <div class="row">
+        <a class="col-2" href="{% url 'pricelist:update' article.pk %}">{{ article.name }}</a>
+        <span class="col-2">Hour: <span class="badge bg-secondary">{{article.price}}</span></span>
+        <span class="col-2">{{article.get_slot_time_display}}</span>
+        <span class="col-1"><a class="text-danger p-1" href="{% url 'pricelist:delete' article.id %}"><i class="bi bi-x-octagon-fill"></i></a></span>
+    </div>
+{% empty %}
+    <div>No articles yet.</div>
+{% endfor %}
+</div>
+{% endblock %}

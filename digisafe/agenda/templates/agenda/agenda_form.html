@@ -49,12 +49,20 @@
         />
     </div>
     <form method="post">{% csrf_token %}
-        {{ form.as_p }}
+        <fieldset {% if form.instance.datebook %}disabled{% endif %}>
+            {{ form.as_p }}
+        </fieldset>
+
+        {% if form.instance.datebook %}
+        <p class="fw-bold"><mark>Work session booked date</mark></p>
+        <a class="btn btn-danger" href="{% url 'companies:sessionbook-bookresponse' form.instance.datebook.session.id %}?uuid={{form.instance.datebook.session.uuid}}">{% translate 'Modify booking' %}</a>
+        {% else %}
         <input type="submit" class="btn btn-primary" value="{% translate 'Save' %}">
-        <a class="btn btn-secondary" href="{% url 'account:calendar-set' year month %}">{% translate 'Cancel' %}</a>
-        {% if item.id %}
-            <a id="delete_button" class="btn btn-danger" href="{% url 'account:calendar-del' item.id %}">{% translate 'Delete' %}</a>
+            {% if item.id %}
+                <a id="delete_button" class="btn btn-danger" href="{% url 'account:calendar-del' item.id %}">{% translate 'Delete' %}</a>
+            {% endif %}
         {% endif %}
+        <a class="btn btn-secondary" href="{% url 'account:calendar-set' year month %}">{% translate 'Cancel' %}</a>
     </form>
 
 </div>

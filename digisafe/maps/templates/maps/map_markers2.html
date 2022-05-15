@@ -7,7 +7,7 @@
 <script src="{% static 'js/plugins/leaflet-search.js' %}"></script>
 
 <div class="w-auto">
-    {# javascript Bootstrap Toast Message #}
+    {#  Bootstrap Toast Message javascript #}
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
         <div id="liveToastMsg" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    {# Button trigger info session modal #}
+    {# Info map session modal #}
     <div class="alert alert-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Clicca su info per maggiori dettagli">
         {# BOTTONI MAPPA E MODIFICA #}
         <div class="flex-row submit-row float-end p-1 m-0 border rounded alert-secondary">
@@ -34,7 +34,11 @@
         <span>
             <a href="#" class="bi bi-info-circle-fill  fs-5" data-bs-toggle="modal" data-bs-target="#infoModal"><i class="bi bi-map"></i></a>
         </span>
-        <span class="ps-1">Sessione: ID <b>{{sessionbook.id}}</b> / NAME <b>{{sessionbook.name}}</b> / EXP DATE <b>{{sessionbook.expire_date}}</b></span>
+        <span class="ps-1">Sessione: ID <b>{{sessionbook.id}}</b> /
+            NAME <b>{{sessionbook.name}}</b> /
+            EXP DATE <b>{{sessionbook.expire_date}}</b> /
+            LAT, LNG: <b>{{sessionbook.get_city_latlon}}</b> ({{sessionbook.get_city_name}})
+        </span>
     </div>
 
     {# Info session Modal Panel #}

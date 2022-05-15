@@ -30,6 +30,7 @@ urlpatterns = [
     path('institutions/', include(('institutions.urls', 'institutions'), namespace='institutions')),
     path('maps/', include(('maps.urls', 'maps'), namespace='maps')),
     path('jobs/', include(('job.urls', 'job'), namespace='job')),
+    path('pricelist/', include(('pricelist.urls', 'job'), namespace='pricelist')),
 
     path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()), #completamento automatico del campo
     path('admin/', admin.site.urls),

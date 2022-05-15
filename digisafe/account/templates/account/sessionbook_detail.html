@@ -7,10 +7,14 @@
     <div class="col-2"><span class="">Name session:</span></div>
     <div class="col"><p class="fw-bold  text-break">{{ object.name }}</p></div>
 </div>
-
 <div class="row">
-    <div class="col-2"><span class="">Address session:</span></div>
-    <div class="col"><p class="fw-bold">{{ object.address }}</p></div>
+    <div class="col-2"><span class="">City</span></div>
+    <div class="col"><p class="fw-bold">{{ object.get_city_name }}</p></div>
+</div>
+<div class="row">
+    {{form.media}}
+    <div class="col-2"><span class="">Map:</span></div>
+    <div class="col"><p class="fw-bold">{{ form.city }}</p></div>
 </div>
 
 <div class="row">
@@ -27,40 +31,68 @@
     <h2>Dates:</h2>
     <p class="alert-info">Choice dates</p>
     <form method="post">{% csrf_token %}
+        <fieldset
+            {% if object.is_expired %}
+            disabled
+            {% endif %}
+        >
+
         <input type="hidden" value="{{object.uuid}}" name="uuid">
         {% for d in object.datebook_set.all|dictsort:"date" %}
-        {% if d.job in user.jobprofile.job.all %}
-        {% busy_in_date d.date request.user as busy %}
-        <div class="form-check">
-            {% if busy %}
-            <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}" name="date_id" disabled>
-            <label class="form-check-label text-decoration-line-through" for="check_{{d.id}}">
-                {{d.date}}
-            </label> <span> Impegnato: </span>{{busy}}
-            {% else %}
-            <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}"  name="date_id"
-                   {% if request.user in d.users.all or request.user in d.users_confirm.all %}
-                   checked
-                   {% endif %}
-                   {% if request.user in d.users_confirm.all %}
-                    disabled
-                   {% endif %}
-            >
-            <label class="form-check-label fw-bold " for="check_{{d.id}}">
-                {{d.date}}  <span class="fw-normal">{{d.job}}</span>
+        <fieldset>
+            {% if d.job in user.jobprofile.job.all %}
+            {% busy_in_date d.date request.user d as busy %}
+            <div class="form-check">
+                {% if busy %}
+                <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}" name="date_id" disabled>
+                <label class="form-check-label text-decoration-line-through" for="check_{{d.id}}">
+                    {{d.date}}
+                </label> <span> Impegnato: </span>{{busy}}
+                {% else %}
+                {# Inserire type="hidden" quando il checkbox è disabilitato perché altrimenti non invia e cancella la data #}
                 {% if request.user in d.users_confirm.all %}
-                <span class="alert-success border border-success p-1">Confermato</span>
+                <input type="hidden" value="{{d.id}}" name="date_id">
                 {% endif %}
-            </label>
+                <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}"  name="date_id"
+                       {% if request.user in d.users.all or request.user in d.users_confirm.all %}
+                       checked
+                       {% endif %}
+                       {% if request.user in d.users_confirm.all or d.is_full == True %}
+                        disabled
+                       {% endif %}
+                >
+                <label class="form-check-label fw-bold " for="check_{{d.id}}">
+                    {{d.date}}
+                    <span class="fw-normal">{{d.job}}</span>
+                    <span class="badge bg-secondary"
+                          data-bs-toggle="tooltip" data-bs-placement="top" title="Operatori richiesti">
+                        {{d.number_user}}
+                    </span>
+                    {% if d.is_full %}
+                    <span> AL COMPLETO </span>
+                    {% endif %}
+                    {% if request.user in d.users_confirm.all %}
+                    <span class="alert-success border border-success p-1">Confermato</span>
+                    {% endif %}
+                </label>
+
+                {# NOTE UTENTE #}
+                <div>
+                    <label class="" for="note_{{d.id}}">Annotazione utente sulla data (es. Data saltata, 2 ore extra ...) </label>
+                    <input class="form-control" type="text" id="note_{{d.id}}" maxlength="255"
+                           name="user_note_{{d.id}}" value="{{d.user_note}}">
+                </div>
+                {% endif %}
+            </div>
             {% endif %}
-        </div>
-        {% endif %}
+        </fieldset>
         {% endfor %}
         <button class="btn btn-success" type="submit" value="yes" name="response">Accept/Modify</button>
         {% session_confirm as confirmed %}
         {% if confirmed != True %}
-        <button class="btn btn-danger" type="submit" value="decline" name="decline">Decline invitation</button>
+        <button class="btn btn-danger" type="submit" value="decline" name="decline">{% translate "Decline invitation" %}</button>
         {% endif %}
+        </fieldset>
     </form>
 
 </div>
