@@ -488,5 +488,29 @@ class WorkSessionView(ListView):
     def get_queryset(self):
         # print("account.views.WorkSessionView.get_queryset")
         qs = SessionBook.objects.filter(user_option_list=self.request.user)
-        # print(qs)
+        filter = self.request.GET.get("filter", False)
+        booked = self.request.GET.get("booked", False)
+        confirmed = self.request.GET.get("confirmed", False)
+        if booked and not confirmed:
+            qs = qs.filter(datebook_set__users=self.request.user).distinct()
+        if confirmed and not booked:
+            qs = qs.filter(datebook_set__users_confirm=self.request.user).distinct()
+        if booked and confirmed:
+            qs = qs.filter(
+                Q(datebook_set__users=self.request.user) |
+                Q(datebook_set__users_confirm=self.request.user)
+            ).distinct()
+        if filter:
+            try:
+                data = datetime.datetime.strptime(filter, "%d/%m/%Y")
+                qs = qs.filter(
+                    datebook_set__date=data.date(),
+                ).distinct()
+                # print("data", data.date())
+            except:
+                qs = qs.filter(
+                    Q(company__name__icontains=filter) |
+                    Q(name__icontains=filter)
+
+                )
         return qs

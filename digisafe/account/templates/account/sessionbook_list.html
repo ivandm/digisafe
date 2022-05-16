@@ -8,6 +8,30 @@
     }
 </style>
 <h1>Work Sessions</h1>
+
+{# MODULO DI RICERCA #}
+<div>
+    <form method="get">{% csrf_token %}
+        <div class="input-group mb-1">
+            <input class="form-control" type="text" name="filter"
+                   placeholder="Company, Session name, date dd/mm/yyyy">
+            <button class="btn btn-outline-secondary" type="submit" name="cerca" ><i class="bi bi-search"></i></button>
+
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-check me-3">
+                <input class="form-check-input" type="checkbox" name="booked" id="booked">
+                <label class="form-check-label" for="booked">only Booked </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="confirmed" id="confirmed">
+                <label class="form-check-label" for="confirmed">only Confirmed </label>
+            </div>
+        </div>
+
+
+    </form>
+</div>
 {% for ws in object_list %}
 <div class="row mb-2 align-items-center">
     <div class="col border border-secondary mx-md-1 p-1 alert-secondary align-self-stretch  order-first text-truncate">
@@ -51,6 +75,7 @@
     </div>
     <div class="col border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch text-center ">
         <div class="align-middle align-content-center">
+            <div>Expire date</div>
             <div>{{ws.expire_date}}</div>
         </div>
     </div>
@@ -72,6 +97,5 @@
     </div>
 
 </div>
-
 {% endfor %}
 {% endblock %}
