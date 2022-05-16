@@ -25,7 +25,7 @@
                 Date
             </div>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_{{ws.id}}">
-                {% for d in ws.booked_dates %}
+                {% for d in ws.confirmed_dates %}
                     {% if d.0 == user.id %}<li><span class="dropdown-item">{{d.1}}</span></li>{% endif %}
                 {% endfor %}
             </ul>
