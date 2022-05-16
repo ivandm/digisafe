@@ -1,5 +1,5 @@
 {% extends "companies/index_base.html" %}
-{% load i18n static %}
+{% load i18n static companytags %}
 
 {% block content %}
 <div class="">
@@ -81,7 +81,7 @@
     </div>
 
     {# BOOKED BODY GRID #}
-    {% for date in sb.datebook_set.all|sort_by:'date' %}
+    {% for date in sb.datebook_set.all|sort_by:'date,job__title' %}
     <div class="row mb-2 mb-lg-1">
         <div class="d-none d-md-block d-lg-none p-0">
             <div class="row m-0 p-0">
