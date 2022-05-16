@@ -309,7 +309,7 @@ Link to choose the date
         :return: QuerySet list object
         """
         # print("companies.models.SessionBook.booked_dates")
-        datas = self.datebook_set.all().values_list('users', 'date').order_by('users')
+        datas = self.datebook_set.all().values_list('users', 'date', 'job__title').order_by('users')
         return datas
 
     def confirmed_dates(self):
@@ -318,7 +318,7 @@ Link to choose the date
         :return: QuerySet list object
         """
         # print("companies.models.SessionBook.booked_dates")
-        datas = self.datebook_set.all().values_list('users_confirm', 'date').order_by('users')
+        datas = self.datebook_set.all().values_list('users_confirm', 'date', 'job__title').order_by('users')
         return datas
 
     def confirmed_users(self):
