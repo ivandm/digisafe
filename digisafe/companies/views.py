@@ -479,6 +479,8 @@ class SessionBookDetailView(View):
         # print(request.POST)
         self.pk = pk  # id SessionBook
         obj = self.get_session_object(request=request)
+
+        # Data di prenotazione valida
         if obj and not obj.is_expired():
             # Utente prenota alcune date
             if request.POST.get("response", "").lower() == "yes":
@@ -544,7 +546,7 @@ class SessionBookDetailView(View):
 @login_required(login_url="/account/login/")
 def sessionBookUsers(request, pk):
     """Gestione Comfirm utenti prenotati"""
-    # print("companies.views.sessionBookUsers")
+    print("companies.views.sessionBookUsers")
     company_id = request.session.get("company_id")
     sb = SessionBook.objects.get(pk=pk, company__id=company_id)
     if request.POST:
@@ -552,17 +554,30 @@ def sessionBookUsers(request, pk):
         users = request.POST.getlist("users")
         users_confirm = request.POST.getlist("users_confirm")
 
-        db = DateBook.objects.get(pk=datebook_id)
+        db = DateBook.objects.get(pk=datebook_id).order_by("date", "job__title")
+
+        # aggiunge un utente dalla lista confermati della DateBook db
         if users:
             for user_id in users:
                 u = User.objects.get(pk=user_id)
                 if db.users_confirm.count() < db.number_user:
+                    # todo: controllo se lo stesso utente è stato confermato nella stessa data (per altro job)
+                    user_already_confirmed = sb.datebook_set.filter(date=db.date, users_confirm=u)
+                    print(user_already_confirmed)
+                    if user_already_confirmed:
+                        messages.add_message(request, messages.WARNING,
+                                             _(mark_safe("!!! Operator <b>{}</b> is already confirmed as <b>{}</b> on <b>{}</b>"
+                                                         "".format(u.getFullName,
+                                                                   [x.job.title for x in user_yet_confirmed],
+                                                                   db.date))))
                     db.users_confirm.add(u)
                 else:
                     messages.add_message(request, messages.ERROR,
                                          _(mark_safe("Operators <b>{}</b> are fully booked for the dates <b>{}</b>"
                                                      "".format(db.job.title, db.date))))
                 # todo: notifica all'utente la conferma
+
+        # rimuove un utente dalla lista confermati della DateBook db
         if users_confirm:
             for user_id in users_confirm:
                 u = User.objects.get(pk=user_id)
