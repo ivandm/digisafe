@@ -546,7 +546,7 @@ class SessionBookDetailView(View):
 @login_required(login_url="/account/login/")
 def sessionBookUsers(request, pk):
     """Gestione Comfirm utenti prenotati"""
-    print("companies.views.sessionBookUsers")
+    # print("companies.views.sessionBookUsers")
     company_id = request.session.get("company_id")
     sb = SessionBook.objects.get(pk=pk, company__id=company_id)
     if request.POST:
@@ -563,12 +563,12 @@ def sessionBookUsers(request, pk):
                 if db.users_confirm.count() < db.number_user:
                     # todo: controllo se lo stesso utente è stato confermato nella stessa data (per altro job)
                     user_already_confirmed = sb.datebook_set.filter(date=db.date, users_confirm=u)
-                    print(user_already_confirmed)
+                    # print(user_already_confirmed)
                     if user_already_confirmed:
                         messages.add_message(request, messages.WARNING,
                                              _(mark_safe("!!! Operator <b>{}</b> is already confirmed as <b>{}</b> on <b>{}</b>"
                                                          "".format(u.getFullName,
-                                                                   [x.job.title for x in user_yet_confirmed],
+                                                                   [x.job.title for x in user_already_confirmed],
                                                                    db.date))))
                     db.users_confirm.add(u)
                 else:
