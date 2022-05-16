@@ -554,7 +554,7 @@ def sessionBookUsers(request, pk):
         users = request.POST.getlist("users")
         users_confirm = request.POST.getlist("users_confirm")
 
-        db = DateBook.objects.get(pk=datebook_id).order_by("date", "job__title")
+        db = DateBook.objects.get(pk=datebook_id)
 
         # aggiunge un utente dalla lista confermati della DateBook db
         if users:
