@@ -108,7 +108,7 @@ class User(AbstractUser):
         :return: None
         """
         for datebook in self.sessionbook_set.get(pk=sessionbook.id).datebook_set.all():
-            self.agenda_set.get(datebook=datebook).delete()
+            self.agenda_set.filter(datebook=datebook).delete()
 
     def qualification_exp_in_one_year(self):
         one_year = timezone.now() + timezone.timedelta(days=365)
@@ -125,6 +125,7 @@ class User(AbstractUser):
         """
         now = timezone.now()
         return self.sessionbook_set.filter(Q(start_date__gte=now.date()) | Q(end_date__gte=now.date()))
+
 
 class Anagrafica(models.Model):
     user = models.OneToOneField(
