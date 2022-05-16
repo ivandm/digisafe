@@ -24,7 +24,7 @@ if IPAddr == "77.68.51.150":
     CURRENT_SITE = "digisafe.ircot.net"
     HTTP = "https://"
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = False
 else:
     DEPLOY = False
     CURRENT_SITE = "localhost:8000"
