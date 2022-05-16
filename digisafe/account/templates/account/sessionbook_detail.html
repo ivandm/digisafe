@@ -16,27 +16,21 @@
     <div class="col-2"><span class="">Map:</span></div>
     <div class="col"><p class="fw-bold">{{ form.city }}</p></div>
 </div>
-
 <div class="row">
     <div class="col-2"><span class="">Session notes:</span></div>
     <div class="col"><p class="fw-bold text-break">{{ object.note }}</p></div>
 </div>
-
 <div class="row">
     <div class="col-2"><span class="">Session expiration date:</span></div>
     <div class="col"><p class="fw-bold">{{ object.expire_date }}</p></div>
 </div>
 
+{# DATE #}
 <div>
     <h2>Dates:</h2>
     <p class="alert-info">Choice dates</p>
     <form method="post">{% csrf_token %}
-        <fieldset
-            {% if object.is_expired %}
-            disabled
-            {% endif %}
-        >
-
+        <fieldset {% if object.is_expired %} disabled {% endif %}>
         <input type="hidden" value="{{object.uuid}}" name="uuid">
         {% for d in object.datebook_set.all|dictsort:"date" %}
         <fieldset>
@@ -47,7 +41,7 @@
                 <input class="form-check-input" type="checkbox" value="{{d.id}}" id="check_{{d.id}}" name="date_id" disabled>
                 <label class="form-check-label text-decoration-line-through" for="check_{{d.id}}">
                     {{d.date}}
-                </label> <span> Impegnato: </span>{{busy}}
+                </label> <span> Data già impegnata </span>
                 {% else %}
                 {# Inserire type="hidden" quando il checkbox è disabilitato perché altrimenti non invia e cancella la data #}
                 {% if request.user in d.users_confirm.all %}
