@@ -1,0 +1,51 @@
+{% load i18n static %}
+
+
+<div class="vstack gap-2 m-2">
+    <h4 class="fw-bold ">Price list</h4>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input id="search_{{session_id}}"  type="text" class="form-control" placeholder="Search">
+    </div>
+
+    <form method="post" class="modal-content">{% csrf_token %}
+        <input type="hidden" name="session_id" value="{{session_id}}">
+        <table>
+            <tbody class="" id="search_target_{{session_id}}">
+            {% for article in object_list %}
+                <tr class="">
+                    <td class="col">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="price_id" id="price_id" value="{{ article.id }}">
+                            <label class="form-check-label">
+                                {{ article.name }}
+                            </label>
+                        </div>
+                    </td>
+                    <td class="col-2"><span class="badge bg-secondary">{{article.price}}</span></td>
+                    <td class="col-2">{{article.get_slot_time_display}}</td>
+                    <td class="col-1">
+                        {% if article.isBlock %}
+                        <i class="bi bi-lock-fill p-1"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <div>No articles yet.</div>
+            {% endfor %}
+            </tbody>
+        </table>
+    <input type="submit" class="m-1" value="Cambia">
+    </form>
+</div>
+<script>
+$(document).ready(function(){
+  $("#search_{{session_id}}").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#search_target_{{session_id}} tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>

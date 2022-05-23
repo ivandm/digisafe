@@ -188,10 +188,10 @@ async function option_list(e){
     var url = `{{optionlist_url}}?user_id=${user_id}`;
     const response = await fetch(url);
     const geojson = await response.json();
-    console.log(geojson);
-    if(typeof geojson.option === "string"){
-        alert (geojson.option);
-    }
+//    console.log(geojson);
+//    if(typeof geojson.option === "string"){
+//        alert (geojson.option);
+//    }
     retrive_option_list();
 }
 

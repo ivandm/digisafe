@@ -27,5 +27,6 @@ djangorestframework~=3.13.0
 geopy~=2.2.0
 django-bootstrap-datepicker-plus~=4.0.0
 django-money~=2.1.1
+django-bootstrap-modal-forms~=2.2.0
 # icalendar
 # django-ical

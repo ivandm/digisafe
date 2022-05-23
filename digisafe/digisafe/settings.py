@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     "rest_framework",
     "rest_framework_gis",
+    'bootstrap_modal_forms',
     # 'django.contrib.sites',
 
     # plugin

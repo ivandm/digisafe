@@ -43,7 +43,60 @@
                 {# Invited list #}
                     <div class="">
                         {% for user in sb.user_option_list.all %}
-                        <div>{{user}}</div>
+                        <div>
+                            {% get_price sb user as price_list %}
+                            {%if price_list %}
+                            {# CALCOLA IL PREZZO DELL'UTENTE #}
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">{{user.getFullName}}'s Price</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                      {% for price in price_list %}
+                                        <table>
+                                          <tbody>
+                                          <tr>
+                                              <td>{{price.price.name}} </td>
+                                              <td>{{price.price.price}} {{price.price.get_slot_time_display}}</td>
+                                              <td>{{price.price.note}}</td>
+                                          </tr>
+                                          </tbody>
+                                      </table>
+                                      {% for accessory in price.price.extrapricelist_set.all %}
+                                      <table>
+                                          <tbody>
+                                              <tr>
+                                                  <td>{{accessory.name}}</td>
+                                                  <td>
+                                                      {{accessory.get_add_minus_display}} {{accessory.qta}}
+                                                      {% if accessory.unit == 'MONEY' %}
+                                                        {{price.price.price.currency}}
+                                                      {% else %}
+                                                      {{accessory.get_unit_display}}
+                                                      {% endif %}
+                                                  </td>
+                                              </tr>
+                                          </tbody>
+                                      </table>
+
+                                      {% endfor %}
+                                      <p class="fw-bold">{{price.price.get_total}}</p>
+                                      <p class="fw-bold fst-italic text-decoration-underline alert-warning fs-6">N.B. L'importo totale potrebbe subire variazioni in base alle leggi fiscali della nazione in cui si applicano.</p>
+                                      {% endfor %}
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary m-0 p-1" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-cash-stack"></i></button>
+                            {%endif%}
+                            <span>{{user}}</span>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>

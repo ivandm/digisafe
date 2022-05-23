@@ -20,7 +20,7 @@ from job.models import Job
 
 
 # Costanti usate qui
-SIGN_MAX_SIZE = (500, 250)  # in pixels
+SIGN_MAX_SIZE = (500, 250)  # in pixels. La grandezza della firma
 
 
 class User(AbstractUser):

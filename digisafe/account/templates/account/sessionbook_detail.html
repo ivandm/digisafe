@@ -4,13 +4,18 @@
 {% block content %}
 <h1 class="fw-bold">Invite to book on Work session {{object.id}}</h1>
 {# NOTIFICHE #}
-<div class="">
+<div class="alert-info p-1">
+    <div>
+        {% if object.is_expired %} <h3 class="badge alert-warning">Work Session scaduta</h3> {% endif %}
+    </div>
     {% if user.id in object.booked_users and not user.id in object.confirmed_users %}
-    <span class="badge bg-secondary fs-4">Prenotato</span>
+    <h3 class="badge bg-secondary fs-5">Prenotato</h3>
     {% elif user.id in object.confirmed_users %}
-    <span class="badge bg-success fs-4">Confermato</span>
+    <h3 class="badge bg-success fs-5">Confermato</h3>
     {% endif %}
 </div>
+
+{# INFO SESSIONE #}
 <div class="row">
     <div class="col-2"><span class="">Name session:</span></div>
     <div class="col"><p class="fw-bold  text-break">{{ object.name }}</p></div>
@@ -33,16 +38,39 @@
     <div class="col"><p class="fw-bold">{{ object.expire_date }}</p></div>
 </div>
 
-{# DATE #}
 <div>
-    <h2>Dates:</h2>
-    <p class="alert-info">Choice dates</p>
+    {# FORM PRICE #}
+    <div class="modal fade " tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div class="border p-1 alert-success">
+        <h2>Price profile:</h2>
+        <fieldset {% if object.is_expired %} disabled {% endif %}>
+                <p>Profilo assegnato:</p>
+                <span class="alert-warning" id="price-table"></span>
+            {% if not user.id in object.confirmed_users %}
+            <button id="modal-list" class="btn btn-primary" data-form-url="{% url 'pricelist:modal-list' %}" data-get-url="{% url 'pricelist:modal-getprice' }%" modal-target="dialog-price">
+                Assign price profile
+            </button>
+            {% endif %}
+            <script type="text/javascript">
+            {% include 'pricelist/async_pricelistmodal.js' %}
+            </script>
+        </fieldset>
+    </div>
+
+    {# FORM PRICE #}
     <form method="post">{% csrf_token %}
+        <h2>Dates:</h2>
+        <p class="alert-info">Chosen dates</p>
         <fieldset {% if object.is_expired %} disabled {% endif %}>
             <input type="hidden" value="{{object.uuid}}" name="uuid">
+
             {% for d in object.datebook_set.all|dictsort:"date" %}
+            {% if d.job in user.jobprofile.job.all %}
             <fieldset>
-                {% if d.job in user.jobprofile.job.all %}
                 {% busy_in_date d.date request.user d as busy %}
                 <div class="form-check">
                     {% if busy %}
@@ -86,8 +114,8 @@
                     </div>
                     {% endif %}
                 </div>
-                {% endif %}
             </fieldset>
+            {% endif %}
             {% endfor %}
 
             {# BOTTONI #}

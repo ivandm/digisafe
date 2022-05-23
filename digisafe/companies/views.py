@@ -11,7 +11,6 @@ from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib import messages
 from django.utils.safestring import mark_safe
-from django.forms import modelformset_factory
 
 import datetime
 
@@ -20,6 +19,8 @@ from agenda.models import Agenda
 from .models import Company, requestAssociatePending, SessionBook, DateBook
 from .forms import SessionBookForm, SessionBookUpdateForm, DateBookFormSet, SettingsForm, \
     ProfileFormSet, SessionBookDetailForm
+from pricelist.forms import SessionPriceForm
+from pricelist.models import SessionPrice
 
 
 # Home del menu Company, Seleziona la Company
@@ -462,15 +463,22 @@ class SessionBookDetailView(View):
         return self.model.objects.none()
 
     def get(self, request, pk):
+        # print("companies.views.SessionBookDetailView.get")
         self.pk = pk
         obj = self.get_session_object(request=request)
         if obj:
             # user ha visto l'invito
             form = SessionBookDetailForm(instance=obj)
+
+            u = self.request.user
+            ps = SessionPrice.objects.get_or_create(session=obj, user=u)
+            price = SessionPriceForm(user=u, instance=ps[0])
+
             return render(request, self.template_name,
                           {
                               'object': obj,
                               'form': form,
+                              'priceform': price,
                           })
         return HttpResponseRedirect(reverse_lazy("account:index"))
 
@@ -480,14 +488,23 @@ class SessionBookDetailView(View):
         self.pk = pk  # id SessionBook
         obj = self.get_session_object(request=request)
 
+        # u = self.request.user
+        # ps = SessionPrice.objects.get_or_create(session=obj, user=u)[0]
+        # price = SessionPriceForm(user=u, instance=ps)
+        # price.instance.user = u
+        # if u.id not in obj.confirmed_users():
+        #     price = SessionPriceForm(data=request.POST, user=u, instance=ps)
+        #     price.instance.sessione = obj
+        #     price.save()
+
         # Data di prenotazione valida
-        if obj and not obj.is_expired():
+        if not obj.is_expired():
             # Utente prenota alcune date
             if request.POST.get("response", "").lower() == "yes":
                 date_ids = request.POST.getlist("date_id", [])
 
-                # todo: creare un metodo di classe per obj.datebook_set.filter (SessionBook)
                 # prenota solo le nuove date escludendo le date già prenotate
+                # todo: creare un metodo di classe per obj.datebook_set.filter (SessionBook)
                 for date in obj.datebook_set.filter(id__in=date_ids).exclude(users=request.user):
                     date.user_book_add(request.user)
                     date.save()
@@ -518,23 +535,23 @@ class SessionBookDetailView(View):
                               {
                                   'object': obj,
                                   'form': form,
+                                  # 'priceform': price,
                               })
 
             # Utente declina l'invito. Non ha successiva possibilità di prenotare
-            else:
+            elif request.POST.get("response", "").lower() == "decline":
                 # Viene aggiunto alla lista dei declinati
-                print("declina")
                 obj.user_decline_list_add(request.user)
                 # obj.save()
                 # request.user.agenda_remove_book(date)
-                return HttpResponseRedirect(reverse_lazy("account:index"))
+            return HttpResponseRedirect(reverse_lazy("account:index"))
 
         # Data di prenotazione scaduta oppure obj non trovato (obj is none)
         else:
             messages.add_message(request, messages.ERROR,
                                  mark_safe(_("Session is expired or some error occurred in request. "
                                              "Can't modify anythings")))
-        return render(request, self.template_name, {'object': obj})
+        return render(request, self.template_name, {'object': obj, 'priceform': price,})
 
     # def get_context_data(self, *args, **kwargs):
     #     context = super(SessionBookDetailView, self).get_context_data(*args, **kwargs)

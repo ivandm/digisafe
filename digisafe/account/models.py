@@ -20,5 +20,3 @@ class TmpPassword(models.Model):
         else:
             ip = request.META.get('REMOTE_ADDR')
         self.ip = ip
-        
-        

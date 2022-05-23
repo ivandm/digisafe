@@ -2,14 +2,93 @@
 {% load i18n static djmoney %}
 
 {% block content %}
-<h1 class="fw-bold fs-2">Price Form</h1>
+<h1 class="fw-bold fs-2" xmlns="http://www.w3.org/1999/html">
+    {% if form.instance.isBlock %}<i class="bi bi-lock-fill"></i>{% endif %}
+    Price Profile <span class="fs-4">"{{form.name.value}}"</span>
+</h1>
+
+
+
 <form class="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
+    <fieldset {% if form.instance.isBlock %}disabled{% endif %}>
+        {# FORM PRINCIPALE #}
+        {{form.media}}
+        <div>
+            {{ form.as_p }}
+        </div>
+
+        {# FORM PRINCIPALE #}
+        {% if extraset %}
+        <h2>Accessori all'imponibile</h2>
+        {{ extraset.management_form }}
+        {% for extra in extraset %}
+        {{extra.id}}
+        <div class="row mb-3">
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text" id="{{extra.name.auto_id}}">{{extra.name.label}}</span>
+                    {{extra.name}}
+                </div>
+                <ul class="errorlist">
+                        {% for error in extra.name.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+            </div>
+            <div class="col-lg-2">
+                <div class="input-group input-group-sm ">
+                    <span class="input-group-text" id="{{extra.qta.auto_id}}">{{extra.qta.label}}</span>
+                    {{extra.qta}}
+                </div>
+                <ul class="errorlist">
+                    {% for error in extra.qta.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text" id="{{extra.unit.auto_id}}">{{extra.unit.label}}</span>
+                    {{extra.unit}}
+                </div>
+                <ul class="errorlist">
+                    {% for error in extra.unit.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                {{extra.add_minus}}
+                <ul class="errorlist">
+                    {% for error in extra.unit.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-1">
+                <span>{{ extra.DELETE }} Delete</span>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </fieldset>
+    <div class="submit-row">
+        {% if form.instance.isBlock %}
+        <div>Il profilo è utilizzato. Non puoi modificarlo.</div>
+        {% else %}
+        <input class="default" type="submit" name="save_close" value="Save and close">
+        <input type="submit" value="Save and continue" name="_continue">
+        {% endif %}
+        <a class="btn btn-secondary" href="{% url 'pricelist:list' %}" class="closelink">Close</a>
+    </div>
+
+
 </form>
 <script>
     $("label").addClass("col-2 col-md-3");
     $("p").addClass("alert-secondary p-2");
 </script>
+
+
 {% endblock %}
 

@@ -117,3 +117,4 @@ class AgendaFeaturesForm(forms.ModelForm):
 
 
 AgendaFeaturesFormSet = inlineformset_factory(User, AgendaFeatures, form=AgendaFeaturesForm, can_delete=False)
+
