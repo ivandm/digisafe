@@ -4,52 +4,53 @@
 {% block content %}
 <div class="">
     <div>
-        <h1>Book sessions list</h1>
+        <h1>{% translate "Book sessions list" %}</h1>
     </div>
 
     {# RICERCA #}
     <div>
         <form method="get">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" id="floatingInputValue" placeholder="Ricerca per nome e note"
+                <input type="text" class="form-control" id="floatingInputValue" placeholder="{% translate 'Search by name and notes' %}"
                        aria-label="Ricerca per nome e note" aria-describedby="search"
                        value="{{request.GET.qs}}" name="qs">
-                <button id="search" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Cerca</button>
+                <button id="search" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
             </div>
         </form>
     </div>
 
     {# ADD SESSION #}
     <div class="my-2">
-        <a class="btn btn-success bi-plus-circle-fill" href="{% url 'companies:sessionbook-create' %}"> Add new session</a>
+        <a class="btn btn-success bi-plus-circle-fill" href="{% url 'companies:sessionbook-create' %}">
+            {% translate "New session" %}</a>
     </div>
 
     {# HEAD GRIGLIA #}
     <div class="row  d-none d-lg-block g-1">
     <div class="row g-1">
         <div class="col ">
-            <p class=" fw-bold text-white bg-secondary text-center">Actions</p>
+            <p class=" fw-bold text-white bg-secondary text-center">{% translate "Actions" %}</p>
         </div>
 
         <div class="col ">
             <p class=" fw-bold text-white bg-secondary text-center">
-                <i class="bi bi-bookmark"></i> Bookmark name</p>
+                <i class="bi bi-bookmark"></i> {% translate "Work session" %}</p>
         </div>
         <div class="col ">
             <p class=" fw-bold text-white bg-secondary text-center">
-                <i class="bi bi-calendar-x"></i> Expire date</p>
+                <i class="bi bi-calendar-x"></i> {% translate "Expire date" %}</p>
         </div>
         <div class="col ">
             <p class=" fw-bold text-white bg-secondary text-center">
-                <i class="bi bi-calendar-range"></i> Start/End dates</p>
+                <i class="bi bi-calendar-range"></i> {% translate "Start/End dates" %}</p>
         </div>
         <div class="col ">
             <p class=" fw-bold text-white bg-secondary text-center">
-                <i class="bi bi-card-text"></i> Notes</p>
+                <i class="bi bi-card-text"></i> {% translate "Notes" %}</p>
         </div>
 
         <div class="col ">
-            <p class=" fw-bold text-white bg-secondary text-center">Overview</p>
+            <p class=" fw-bold text-white bg-secondary text-center">{% translate "Overview" %}</p>
         </div>
     </div>
     </div>
@@ -78,7 +79,7 @@
             <div class="text-center d-grid gap-0">
                 <a class="btn btn-outline-primary btn-sm m-0 p-0 width-100" href="{% url 'companies:sessionbook-users' sb.id %}">
                     <i class="float-start bi bi-person-lines-fill"></i>
-                    <span class=""> Manage </span>
+                    <span class=""> {% translate "Manage" %} </span>
                 </a>
             </div>
             <div class="row text-center p-0 m-0 mt-1 mx-2 mx-lg-0 alert-info">
@@ -89,16 +90,16 @@
             <div class="row row-cols-2  p-0 m-0 mt-1">
                 <div class="col  m-0 p-0 pe-1 text-truncate">
                     <span class="badge bg-secondary">{{sb.user_option_list.all|length}}</span>
-                    <span class="text-truncate">Invitati</span> </div>
+                    <span class="text-truncate">{% translate "Invited" %}</span> </div>
                 <div class="col m-0 p-0 ps-1 text-danger text-truncate">
                     <span class="badge bg-danger ">{{sb.user_decline_list.all|length}}</span>
-                    <span class="text-truncate">Rifiutati</span> </div>
+                    <span class="text-truncate">{% translate "Declined" %}</span> </div>
                 <div class="col m-0 p-0 pe-1 text-danger text-truncate">
                     <span class="badge bg-primary">{{sb.total_users_booked}}</span>
-                    <span class="">Prenotati</span> </div>
+                    <span class="">{% translate "Booked" %}</span> </div>
                 <div class="col m-0 p-0 ps-1 text-danger text-truncate">
                     <span class="badge bg-success">{{sb.total_users_confirmed}}</span>
-                    <span class="">Confermati</span> </div>
+                    <span class="">{% translate "Confirmed" %}</span> </div>
             </div>
             {% if sb.is_full %}<div class="text-center my-1 alert-success border border-success"><i class="bi bi-clipboard-check"></i> Full</div>{% endif %}
         </div>
@@ -122,7 +123,7 @@
             {% endif %}
 
             <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                {% translate "Page" %} {{ page_obj.number }} {% translate "of" %} {{ page_obj.paginator.num_pages }}
             </span>
 
             {% if page_obj.has_next %}

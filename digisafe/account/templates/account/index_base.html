@@ -1,4 +1,5 @@
 {% extends "home/home_base.html" %}
+{% load i18n static %}
 
 {% block nav-bar-sub-brand %}
 <span class="navbar-brand text-black fw-bold">
@@ -9,10 +10,10 @@
 {% block nav-bar-sub-content %}
 <div class="navbar-nav me-auto mb-4 mb-lg-0">
     <a class="nav-link" href="{% url 'account:index' %}"><i class="bi bi-house"></i> Dashboard</a>
-    <a class="nav-link" href="{% url 'account:courses' %}"><i class="bi bi-mortarboard"></i> Qualifications</a>
-    <a class="nav-link" href="{% url 'account:settings' request.user.id %}"><i class="bi bi-gear"></i> Settings</a>
-    <a class="nav-link" href="{% url 'account:calendar' %}"><i class="bi bi-calendar3"></i> Agenda</a>
-    <a class="nav-link" href="{% url 'pricelist:list' %}"><i class="bi bi-receipt-cutoff"></i> Price list</a>
-    <a class="nav-link" href="{% url 'account:worksessions' %}"><i class="bi bi-journal-bookmark-fill"></i> Works</a>
+    <a class="nav-link" href="{% url 'account:courses' %}"><i class="bi bi-mortarboard"></i> {% translate "Qualifications" %}</a>
+    <a class="nav-link" href="{% url 'account:settings' request.user.id %}"><i class="bi bi-gear"></i> {% translate "Settings" %}</a>
+    <a class="nav-link" href="{% url 'account:calendar' %}"><i class="bi bi-calendar3"></i> {% translate "Agenda" %}</a>
+    <a class="nav-link" href="{% url 'pricelist:list' %}"><i class="bi bi-receipt-cutoff"></i> {% translate "Price list" %}</a>
+    <a class="nav-link" href="{% url 'account:worksessions' %}"><i class="bi bi-journal-bookmark-fill"></i> {% translate "Works" %}</a>
 </div>
 {% endblock %}

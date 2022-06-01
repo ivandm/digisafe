@@ -53,7 +53,7 @@ input[type="submit"], button {
         margin: 0;
         font-weight: 400;
         line-height: 1.85;
-        text-align: left;
+        text-align: center;
     }
 
     #user-tools a {

@@ -50,14 +50,14 @@ class SessionBookForm(forms.ModelForm):
             end_date = cleaned_data.get("end_date")
             if end_date < start_date:
                 raise forms.ValidationError(
-                    _('Data iniziale %(ds)s inferiore a quella finale %(de)s'),
+                    _('Start date %(ds)s lower to end date %(de)s'),
                     code='invalid',
                     params={'ds': start_date, 'de': end_date, },
                 )
             if exp_date.date() > start_date:
                 raise forms.ValidationError(
-                    _('Data di scadenza %(lab_ed)s %(ed)s '
-                      'dovrebbe essere antecedente o uguale a quella di inizio %(ds)s'
+                    _('Expire date %(lab_ed)s %(ed)s '
+                      'it should be earlier than or equal to the beginning %(ds)s'
                       ),
                     code='invalid',
                     params={'ds': start_date,
@@ -80,9 +80,9 @@ class SessionBookUpdateForm(SessionBookForm):
             "note": forms.Textarea(attrs={"class": "form-control"}),
         }
         help_texts = {
-            'start_date': 'Attenzione. Modificando la data e salvando, si cancellano le date già registrate.',
-            'end_date': 'Attenzione. Modificando la data e salvando, si cancellano le date già registrate.',
-            'jobs': 'Attenzione. Eliminando una scelta si cancellano i dati già inseriti.',
+            'start_date': _('Attenzione. Modificando la data e salvando, si cancellano le date già registrate.'),
+            'end_date': _('Attenzione. Modificando la data e salvando, si cancellano le date già registrate.'),
+            'jobs': _('Attenzione. Eliminando una scelta si cancellano i dati già inseriti.'),
         }
 
 
@@ -93,6 +93,7 @@ class SessionBookDetailForm(forms.ModelForm):
         widgets = {
             'city': OSMWidget(attrs={'map_width': 200, 'map_height': 200}),
         }
+
 
 class DateBookForm(forms.ModelForm):
     min_number_user = 0  # numero minimo nel campo type="number"

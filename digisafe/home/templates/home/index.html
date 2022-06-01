@@ -9,18 +9,38 @@
 
 <div class="container">
     <h1 class="text-center m-3"></h1>
-    <div class="">
+    <div class="text-center border-bottom m-4">
         <h1 class="text-center">
             {% translate "Professional, Technician and Business Network Organization" %}
         </h1>
-        <p><img src="{% static 'imgs/home/online-learning.png' %}"> Gestione Centro di Formazione</p>
-        <p><img src="{% static 'imgs/home/macro.png' %}"> Gestione Ente di Formazione</p>
-        <p><img src="{% static 'imgs/home/company.png' %}"> Gestione Aziendale</p>
-        <p><img src="{% static 'imgs/home/civil_engineer.png' %}"> Gestione Professionisti</p>
-        <p><img src="{% static 'imgs/home/operator.png' %}"> Gestione Operatori</p>
-        <p><img src="{% static 'imgs/home/teacher.png' %}"> Gestione Docenti</p>
-        <p><img src="{% static 'imgs/home/network.png' %}"> Mercato Elettronico Privato</p>
+        <p><img src="{% static 'imgs/home/online-learning.png' %}"> {% translate "Manage Training Center" %}</p>
+        <p> {% translate "Manage Training Institution" %} <img src="{% static 'imgs/home/macro.png' %}"></p>
+        <p><img src="{% static 'imgs/home/company.png' %}"> {% translate "Manage Company" %}</p>
+        <p> {% translate "Manage Professionals" %} <img src="{% static 'imgs/home/civil_engineer.png' %}"></p>
+        <p><img src="{% static 'imgs/home/operator.png' %}"> {% translate "Manage Technicians" %}</p>
+        <p> {% translate "Manage Trainers" %} <img src="{% static 'imgs/home/teacher.png' %}"></p>
+        <p><img src="{% static 'imgs/home/network.png' %}"> {% translate "Private Electronic Market" %}</p>
     </div>
+    <div class="text-center">
+        <img class="img-fluid rounded float-start m-4" src="{% static 'imgs/home/responsive.jpg' %}">
+        <h1 class=" fw-bold">{% translate "Total Responsive technology" %}</h1>
+    </div>
+    <div class="clearfix m-4 border-bottom"></div>
+    <div class="text-center fw-bold">
+        <img class="img-fluid rounded float-end m-4" src="{% static 'imgs/home/mappa.png' %}">
+        <h1 class=" fw-bold">{% translate "Map easy use search" %}</h1>
+    </div>
+    <div class="clearfix mb-4 border-bottom"></div>
+    <div class="text-center mb-4 fw-bold">
+        <img class="img-fluid rounded float-start m-4" src="{% static 'imgs/home/timeline.png' %}">
+        <h1 class=" fw-bold">{% translate "Timeline free and busy users" %}</h1>
+    </div>
+    <div class="clearfix mb-4 border-bottom"></div>
+    <div class="text-center mb-4 fw-bold">
+        <img class="img-fluid  rounded float-end m-4" src="{% static 'imgs/home/agenda.png' %}">
+        <h1 class=" fw-bold">{% translate "Synchronized calendar" %}</h1>
+    </div>
+    <div class="clearfix mb-4 border-bottom"></div>
 </div>
 
 

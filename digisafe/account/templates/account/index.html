@@ -12,7 +12,7 @@
         {% with user.agenda_future as agenda_future %}
         <a href="{% url 'account:calendar' %}" class="float-end btn btn-primary">...</a>
         <h2 class="border-bottom border-secondary d-inline-flex">
-            Impegni in agenda futuri
+            {% translate "Future agenda commitments" %}
             <span class="badge bg-secondary ms-2"> {{agenda_future|length}}</span>
         </h2>
         <div class="">
@@ -35,7 +35,7 @@
         {% with user.sessionbook_list as sessionbook_list %}
         <a href="{% url 'account:worksessions' %}" class="float-end btn btn-primary">...</a>
         <h2 class="border-bottom border-secondary d-inline-flex">
-            Work session invitate
+            {% translate "Work session invited" %}
             <span class="badge bg-secondary ms-2"> {{sessionbook_list|length}}</span>
         </h2>
         <div>
@@ -56,7 +56,7 @@
         {% with user.jobprofile.job.all as jobprofiles %}
         <a style="display:none;" href="" class="float-end btn btn-primary">...</a>
         <h2 class="border-bottom border-secondary d-inline-flex">
-            Profili lavorativi
+            {% translate "Job profiles" %}
             <span class="badge bg-secondary ms-2"> {{jobprofiles|length}}</span>
         </h2>
         <div>
@@ -74,9 +74,9 @@
         <div>
             <a href="{% url 'account:courses' %}" class="float-end btn btn-primary">...</a>
             <h2 class="border-bottom border-secondary d-inline-flex">
-                Qualifiche
-                <span class="badge bg-secondary ms-2"> Valide {{user.qualifications_valid|length}}</span>
-                <span class="badge bg-secondary ms-2"> In scadenza {{exp_in_one_year|length}}</span>
+                {% translate "Qualifications" %}
+                <span class="badge bg-secondary ms-2"> {% translate "Effective" %} {{user.qualifications_valid|length}}</span>
+                <span class="badge bg-secondary ms-2"> {% translate "Expiring" %} {{exp_in_one_year|length}}</span>
             </h2>
             {% with user.qualification_exp_in_one_year as exp_in_one_year %}
             <div>

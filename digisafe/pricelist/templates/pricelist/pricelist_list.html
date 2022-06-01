@@ -2,11 +2,11 @@
 {% load i18n static %}
 
 {% block content %}
-<h1 class="fw-bold fs-2">Price list</h1>
+<h1 class="fw-bold fs-2">{% translate "Price list" %}</h1>
 <div class="my-3">
-    <a class="btn btn-success" href="{% url 'pricelist:create' %}">New price profile</a>
+    <a class="btn btn-success" href="{% url 'pricelist:create' %}">{% translate "New price profile" %}</a>
 </div>
-<h1>Profili</h1>
+<h1>{% translate "Profiles" %}</h1>
 <div class="vstack gap-2">
 {% for article in object_list %}
     <div class="row">
@@ -24,7 +24,7 @@
         </span>
     </div>
 {% empty %}
-    <div>No articles yet.</div>
+    <div>{% translate "No price list yet" %}</div>
 {% endfor %}
 </div>
 {% endblock %}

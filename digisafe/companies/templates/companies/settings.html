@@ -11,8 +11,8 @@
         <form method="post" enctype="multipart/form-data">{% csrf_token %}
             {{form.as_p}}
             {{profile.as_p}}
-            <button class="btn btn-success">Aggiorna</button>
-            <a href="{% url 'companies:home' %}" class="btn btn-secondary">Annulla</a>
+            <button class="btn btn-success">{% translate "Update" %}</button>
+            <a href="{% url 'companies:home' %}" class="btn btn-secondary">{% translate "Cancel" %}</a>
         </form>
     </div>
 </div>

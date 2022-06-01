@@ -566,6 +566,7 @@ def sessionBookUsers(request, pk):
     # print("companies.views.sessionBookUsers")
     company_id = request.session.get("company_id")
     sb = SessionBook.objects.get(pk=pk, company__id=company_id)
+    sb_form = SessionBookDetailForm(instance=sb)
     if request.POST:
         datebook_id = request.POST.get("datebook_id")
         users = request.POST.getlist("users")
@@ -601,7 +602,10 @@ def sessionBookUsers(request, pk):
                 db.users_confirm.remove(u)
                 # todo: notifica all'utente la rimozione dalla conferma
         db.save()
-    return render(request, "companies/sessionbook_users.html", context={'sb': sb})
+    return render(request, "companies/sessionbook_users.html", context={
+        'sb': sb,
+        'sb_form': sb_form,
+    })
 
 
 # * FUNZIONI PER MAP * #

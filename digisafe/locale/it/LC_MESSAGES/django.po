@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-14 08:32+0100\n"
+"POT-Creation-Date: 2022-06-01 08:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,58 +18,290 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: account/forms.py:25
-msgid "Repeat passord"
+#: account/forms.py:60
+msgid "Repeat password"
 msgstr "Ripeti password"
 
-#: account/forms.py:34
+#: account/forms.py:69
 msgid "Passwords aren't the same."
 msgstr "Le password non sono le stesse."
 
-#: account/models.py:23
-msgid "Last update"
-msgstr "Ultimo aggiornamento"
+#: account/templates/account/calendar_event_form.html:12
+msgid "Modify"
+msgstr "Modifica"
 
-#: account/views.py:71
+#: account/templates/account/calendar_event_form.html:41
+#: agenda/templates/agenda/agenda_form.html:62
+#: templates/admin/submit_line.html:8
+msgid "Delete"
+msgstr "Elimina"
+
+#: account/templates/account/change_password.html:14
+#: account/templates/account/login.html:12
+#: account/templates/account/reset_password.html:14
+#: templates/admin/change_form_protocol.html:58
+msgid "Please correct the error below."
+msgstr "Per favore correggi l'errore sotto."
+
+#: account/templates/account/change_password.html:14
+#: account/templates/account/login.html:12
+#: account/templates/account/reset_password.html:14
+#: templates/admin/change_form_protocol.html:58
+msgid "Please correct the errors below."
+msgstr "Per favore correggi gli errori sotto."
+
+#: account/templates/account/change_password.html:31
+#: account/templates/account/reset_password.html:35
+msgid "Send"
+msgstr "Invia"
+
+#: account/templates/account/home_courses.html:6
+msgid "Owner Courses Panel"
+msgstr "Pannello corsi personali"
+
+#: account/templates/account/home_courses.html:11
+msgid "Course"
+msgstr "Corso"
+
+#: account/templates/account/home_courses.html:16
+#: companies/templates/companies/associate_user.html:11
+#: companies/templates/companies/user_to_associate.html:11
+#: maps/templates/maps/searchplace.html:19
+msgid "Search"
+msgstr "Cerca"
+
+#: account/templates/account/home_courses_object.html:9
+msgid "Valid"
+msgstr "Valido"
+
+#: account/templates/account/home_courses_object.html:11
+msgid "Expired"
+msgstr "Scaduto"
+
+#: account/templates/account/home_courses_object.html:13
+#: account/templates/account/home_courses_object.html:53
+msgid "Not passed"
+msgstr "Non superato"
+
+#: account/templates/account/home_courses_object.html:38
+msgid "Digital certificate"
+msgstr "Certificato digitale"
+
+#: account/templates/account/home_courses_object.html:45
+msgid "Institution certificate"
+msgstr "Attestato ente"
+
+#: account/templates/account/home_profile.html:4
+msgid "Profile Panel"
+msgstr "Pannelo del profilo personale"
+
+#: account/templates/account/home_profile.html:8
+msgid "Pending request"
+msgstr "Richiesta in attesa"
+
+#: account/templates/account/home_profile.html:13
+msgid "Accept"
+msgstr "Accetta"
+
+#: account/templates/account/home_profile.html:14
+msgid "Refuse"
+msgstr "Rifiuta"
+
+#: account/templates/account/home_profile.html:45
+msgid "Accepted"
+msgstr "Accettato"
+
+#: account/templates/account/home_profile.html:49
+msgid "Refused"
+msgstr "Rifiutato"
+
+#: account/templates/account/index.html:15
+msgid "Future agenda commitments"
+msgstr "Impegni in agenda futuri"
+
+#: account/templates/account/index.html:38
+msgid "Work session invited"
+msgstr "Work session invitate"
+
+#: account/templates/account/index.html:59
+msgid "Job profiles"
+msgstr "Profili lavorativi"
+
+#: account/templates/account/index.html:77
+#: account/templates/account/index_base.html:13
+msgid "Qualifications"
+msgstr "Qualifiche"
+
+#: account/templates/account/index.html:78
+msgid "Effective"
+msgstr "Valide"
+
+#: account/templates/account/index.html:79
+msgid "Expiring"
+msgstr "In scadenza"
+
+#: account/templates/account/index_base.html:14
+#: companies/templates/companies/index_base.html:21
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: account/templates/account/index_base.html:15
+msgid "Agenda"
+msgstr "Agenda"
+
+#: account/templates/account/index_base.html:16
+#: pricelist/templates/pricelist/pricelist_list.html:5
+msgid "Price list"
+msgstr "Prezziari"
+
+#: account/templates/account/index_base.html:17
+msgid "Works"
+msgstr "Works"
+
+#: account/templates/account/login.html:31
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+"YSei autenticato come %(username)s, ma non sei autorizzato ad accedere a "
+"questa pagina. Vorresti loggarti con un differente account?"
+
+#: account/templates/account/login.html:51
+msgid "Forgotten your password or username?"
+msgstr "Password e username dimenticati?"
+
+#: account/templates/account/login.html:55
+msgid "Log in"
+msgstr "Entra"
+
+#: account/templates/account/lost_login.html:21
+#: companies/templates/companies/get_user_list_detail.html:11
+#: templates/admin/edit_inline/check_block.html:53
+msgid "Request"
+msgstr "Richiesta"
+
+#: account/templates/account/sessionbook_detail.html:126
+msgid "Decline invitation"
+msgstr "Declina invito"
+
+#: account/templates/account/sessionbook_list.html:17
+msgid "Company, Session name, date dd/mm/yyyy"
+msgstr "Azienda, nome sessione, data dd/mm/yyyy"
+
+#: account/templates/account/sessionbook_list.html:24
+msgid "only Booked"
+msgstr "solo Invitati"
+
+#: account/templates/account/sessionbook_list.html:28
+msgid "only Confirmed"
+msgstr "solo Confermati"
+
+#: account/templates/account/sessionbook_list.html:46
+#: companies/templates/companies/sessionbook_list.html:102
+msgid "Confirmed"
+msgstr "Confermato"
+
+#: account/templates/account/sessionbook_list.html:49
+#: companies/templates/companies/sessionbook_users.html:131
+msgid "Dates"
+msgstr "Date"
+
+#: account/templates/account/sessionbook_list.html:60
+#: companies/templates/companies/sessionbook_list.html:99
+msgid "Booked"
+msgstr "Prenotato"
+
+#: account/templates/account/sessionbook_list.html:73
+#: companies/templates/companies/sessionbook_list.html:93
+msgid "Invited"
+msgstr "Invitato"
+
+#: account/templates/account/sessionbook_list.html:78
+#: companies/templates/companies/sessionbook_list.html:41
+msgid "Expire date"
+msgstr "Data scadenza"
+
+#: account/templates/account/settings.html:11
+msgid "Account Settings"
+msgstr "Impostazioni account"
+
+#: account/views.py:156 account/views.py:157 account/views.py:158
+#: account/views.py:159 account/views.py:222 account/views.py:223
+#: account/views.py:224 account/views.py:225
+msgid "You are busy in that date range."
+msgstr "Sei impegnato in questo periodo"
+
+#: account/views.py:293
 msgid "Invalid username or password."
 msgstr "Username o password non valide."
 
-#: account/views.py:98
+#: account/views.py:323
 #, python-brace-format
 msgid "New auth code was sent to {0}."
 msgstr "Il nuovo auth code è stato inviato a {0}."
 
-#: account/views.py:99
+#: account/views.py:324
 msgid "Check your email. Beware it's not in spam."
 msgstr "Controlla la tua email. Attenzione che non sia nello spam."
 
-#: account/views.py:103
+#: account/views.py:336
 msgid "Digi.Safe. new credentials"
 msgstr "Nuove credenziali Digi.Safe."
 
-#: account/views.py:111
+#: account/views.py:344
 #, python-brace-format
 msgid "Email {0} doesn't check into database."
 msgstr "Email {0} non trovata nel database."
 
-#: account/views.py:130
+#: account/views.py:365
 msgid "Error in request. Check your auth code and try again."
 msgstr "Errore nella richiesta. Controlla il tuo auth code e riprova."
 
-#: account/views.py:132 account/views.py:160
+#: account/views.py:367 account/views.py:396
 msgid "Password has been changed."
 msgstr "La password è stata cambiata."
 
-#: account/views.py:137 account/views.py:166
+#: account/views.py:372 account/views.py:402
 msgid "Digi.Safe. new password"
 msgstr "Nuova passowrd Digi.Safe."
 
-#: account/views.py:145 account/views.py:173
+#: account/views.py:380 account/views.py:409
 msgid "Invalid header found."
 msgstr "Header non valido."
 
+#: agenda/models.py:68
+msgid "<b>{}</b> <br><b>{}</b> <br>Busy from {} to {}"
+msgstr "<b>{}</b> <br><b>{}</b> <br>Impegnato dal {} al {}"
+
+#: agenda/templates/agenda/agenda_confirm_delete.html:7
+msgid "Are you sure you want to delete this object?"
+msgstr "Sei sicuro di voler cancellare?"
+
+#: agenda/templates/agenda/agenda_confirm_delete.html:9
+msgid "Confirm"
+msgstr "Conferma"
+
+#: agenda/templates/agenda/agenda_form.html:48
+msgid "Enter the city name"
+msgstr "Nome citta'"
+
+#: agenda/templates/agenda/agenda_form.html:58
+msgid "Modify booking"
+msgstr "Modifica prenotazione"
+
+#: agenda/templates/agenda/agenda_form.html:60
+#: templates/admin/submit_line.html:5
+msgid "Save"
+msgstr "Salva"
+
+#: agenda/templates/agenda/agenda_form.html:65
+#: companies/templates/companies/settings.html:15
+msgid "Cancel"
+msgstr "Annulla"
+
 #: centers/models.py:13 digisafe/storage.py:10 institutions/models.py:18
-#: protocol/models.py:27 users/models.py:107
+#: protocol/models.py:27 users/models.py:186
 #, python-brace-format
 msgid "The maximum file size that can be uploaded is {0}"
 msgstr "Massima dimensione del file da caricare {0}"
@@ -80,19 +312,320 @@ msgstr "Massima dimensione del file da caricare {0}"
 msgid "Unsupported file extension. Valid extension are '{0}'"
 msgstr "Estenzione del file non supportata. Estenzione valida '{0}'"
 
-#: companies/views.py:39
+#: companies/forms.py:53
+#, python-format
+msgid "Start date %(ds)s lower to end date %(de)s"
+msgstr ""
+
+#: companies/forms.py:59
+#, python-format
+msgid ""
+"Expire date %(lab_ed)s %(ed)s it should be earlier than or equal to the "
+"beginning %(ds)s"
+msgstr ""
+"Data scadenza %(lab_ed)s %(ed)s dovrebbe essere antecedente o uguale alla "
+"data iniziale %(ds)s"
+
+#: companies/forms.py:83 companies/forms.py:84
+msgid ""
+"Attenzione. Modificando la data e salvando, si cancellano le date già "
+"registrate."
+msgstr ""
+
+#: companies/forms.py:85
+msgid "Attenzione. Eliminando una scelta si cancellano i dati già inseriti."
+msgstr ""
+
+#: companies/models.py:20
+msgid "name"
+msgstr "nome"
+
+#: companies/models.py:71
+msgid "country"
+msgstr "stato"
+
+#: companies/models.py:78
+msgid "city"
+msgstr "città"
+
+#: companies/models.py:81
+msgid "description"
+msgstr "descrizione"
+
+#: companies/templates/companies/associate_user.html:6
+#: companies/templates/companies/associate_user.html:17
+#: companies/templates/companies/user_to_associate.html:6
+#: companies/templates/companies/user_to_associate.html:17
+#: templates/protocol/action_list_objects.html:6
+msgid "User"
+msgstr "Utente"
+
+#: companies/templates/companies/associate_user.html:18
+#: companies/templates/companies/user_to_associate.html:18
+#: templates/protocol/action_list_objects.html:8
+msgid "Info"
+msgstr ""
+
+#: companies/templates/companies/associate_user.html:19
+#: templates/protocol/action_list_objects.html:7
+msgid "Action"
+msgstr "Azione"
+
+#: companies/templates/companies/associate_user.html:28
+msgid "Dissociate"
+msgstr "Dissocia"
+
+#: companies/templates/companies/associate_user.html:57
+msgid "Dissociated"
+msgstr "Dissociato"
+
+#: companies/templates/companies/get_user_list_detail.html:9
+#: companies/templates/companies/user_to_associate.html:53
+msgid "Pending..."
+msgstr "In attesa..."
+
+#: companies/templates/companies/index.html:7
+msgid "Dashboard panel"
+msgstr "Dashboard"
+
+#: companies/templates/companies/index.html:12
+#: companies/templates/companies/index.html:32
+msgid "Associate users"
+msgstr "Utenti associati"
+
+#: companies/templates/companies/index.html:15
+msgid "Seacrh users"
+msgstr "Cerca utenti"
+
+#: companies/templates/companies/index.html:25
+msgid "Users available"
+msgstr "Utenti disponibili"
+
+#: companies/templates/companies/index_base.html:10
+msgid "Company"
+msgstr "Azienda"
+
+#: companies/templates/companies/index_base.html:18
+#: companies/templates/companies/select.html:11
+msgid "Select"
+msgstr "Seleziona"
+
+#: companies/templates/companies/index_base.html:22
+msgid "Sessions"
+msgstr "Sessioni"
+
+#: companies/templates/companies/public_view.html:11
+msgid "Detail public view"
+msgstr "Dettagli pubblici"
+
+#: companies/templates/companies/public_view.html:12
+msgid "Logo not upload"
+msgstr "Logo non caricato"
+
+#: companies/templates/companies/select.html:6
+msgid "Dashboard Companies"
+msgstr "Dashboard aziende"
+
+#: companies/templates/companies/select.html:8
+msgid "Managed companies"
+msgstr "Aziende gestite"
+
+#: companies/templates/companies/sessionbook_list.html:7
+msgid "Book sessions list"
+msgstr "Lista work session"
+
+#: companies/templates/companies/sessionbook_list.html:14
+msgid "Search by name and notes"
+msgstr "Ricerca per nome e note"
+
+#: companies/templates/companies/sessionbook_list.html:25
+msgid "New session"
+msgstr "Nuova sessione"
+
+#: companies/templates/companies/sessionbook_list.html:32
+#: templates/admin/change_form_object_tools.html:46
+#: templates/protocol/action_list.html:12
+msgid "Actions"
+msgstr "Azioni"
+
+#: companies/templates/companies/sessionbook_list.html:37
+#, fuzzy
+#| msgid "Work session invited"
+msgid "Work session"
+msgstr "Work session invitate"
+
+#: companies/templates/companies/sessionbook_list.html:45
+msgid "Start/End dates"
+msgstr "Data inizio/fine"
+
+#: companies/templates/companies/sessionbook_list.html:49
+#: companies/templates/companies/sessionbook_users.html:30
+msgid "Notes"
+msgstr "Note"
+
+#: companies/templates/companies/sessionbook_list.html:53
+msgid "Overview"
+msgstr "Panoramica"
+
+#: companies/templates/companies/sessionbook_list.html:82
+msgid "Manage"
+msgstr "Gestione"
+
+#: companies/templates/companies/sessionbook_list.html:96
+msgid "Declined"
+msgstr "Declinato"
+
+#: companies/templates/companies/sessionbook_list.html:126
+#: templates/protocol/exam_print_firstpage.html:91
+#: templates/protocol/exam_print_signpage.html:79
+#: templates/protocol/register_print_firstpage.html:101
+#: templates/protocol/register_print_listpage.html:56
+#: templates/protocol/register_print_signpage.html:105
+msgid "Page"
+msgstr "Pagina"
+
+#: companies/templates/companies/sessionbook_list.html:126
+#: templates/protocol/register_print_firstpage.html:101
+#: templates/protocol/register_print_listpage.html:56
+#: templates/protocol/register_print_signpage.html:105
+msgid "of"
+msgstr "di"
+
+#: companies/templates/companies/sessionbook_users.html:13
+msgid "Open map"
+msgstr "Apri mappa"
+
+#: companies/templates/companies/sessionbook_users.html:15
+msgid "Update Session"
+msgstr "Aggiorna sessione"
+
+#: companies/templates/companies/sessionbook_users.html:22
+msgid "Session name"
+msgstr "Nome sessione"
+
+#: companies/templates/companies/sessionbook_users.html:26
+msgid "Location"
+msgstr "Luogo"
+
+#: companies/templates/companies/sessionbook_users.html:34
+msgid "Expiration date"
+msgstr "Data scadenza"
+
+#: companies/templates/companies/sessionbook_users.html:42
+msgid "Users in session"
+msgstr "Utenti in sessione"
+
+#: companies/templates/companies/sessionbook_users.html:46
+msgid "Invited users"
+msgstr "Utenti invitati"
+
+#: companies/templates/companies/sessionbook_users.html:113
+msgid "Declined users"
+msgstr "Utenti declinati"
+
+#: companies/templates/companies/sessionbook_users.html:126
+#: companies/templates/companies/sessionbook_users.html:136
+#: companies/templates/companies/sessionbook_users.html:172
+msgid "Users booked"
+msgstr "Utenti prenotati"
+
+#: companies/templates/companies/sessionbook_users.html:132 users/models.py:330
+msgid "Jobs"
+msgstr "Mansioni"
+
+#: companies/templates/companies/sessionbook_users.html:133
+#: companies/templates/companies/sessionbook_users.html:150
+msgid "Number"
+msgstr "Numero"
+
+#: companies/templates/companies/sessionbook_users.html:137
+#: companies/templates/companies/sessionbook_users.html:174
+msgid "Users confirmed"
+msgstr "Utenti confermati"
+
+#: companies/templates/companies/sessionbook_users.html:148
+#: templates/protocol/certificate_user.html:112
+#: templates/protocol/exam_print_firstpage.html:69
+#: templates/protocol/register_print_firstpage.html:58
+#: templates/protocol/register_print_firstpage.html:94
+msgid "Date"
+msgstr "Data"
+
+#: companies/templates/companies/sessionbook_users.html:149
+msgid "Job"
+msgstr "Mansione"
+
+#: companies/templates/companies/sessionbook_users.html:154
+msgid "Date:"
+msgstr "Data"
+
+#: companies/templates/companies/sessionbook_users.html:159
+msgid "Job:"
+msgstr "Mansione:"
+
+#: companies/templates/companies/sessionbook_users.html:161
+msgid "Nothing request in this date"
+msgstr "Nessuna richiesta in questa data"
+
+#: companies/templates/companies/sessionbook_users.html:164
+msgid "Number:"
+msgstr "Numero:"
+
+#: companies/templates/companies/sessionbook_users.html:184
+msgid "Confirm selected"
+msgstr "Conferma selezionati"
+
+#: companies/templates/companies/sessionbook_users.html:223
+msgid "Remove selected"
+msgstr "Rimuove selezionati"
+
+#: companies/templates/companies/settings.html:8
+msgid "Settings "
+msgstr "Impostazioni"
+
+#: companies/templates/companies/settings.html:14 protocol/models.py:168
+#: templates/protocol/certificate_content.html:12
+msgid "Update"
+msgstr "Aggiorna"
+
+#: companies/templates/companies/user_to_associate.html:19
+msgid "Associate"
+msgstr "Associa"
+
+#: companies/views.py:154
 msgid "No users matches the given query."
 msgstr "Nessun utente corrispondente alla ricerca."
 
-#: countries/models.py:10
-#, fuzzy
-#| msgid "Country"
-msgid "countries"
-msgstr "Stato"
-
-#: countries/models.py:28
-msgid "cities"
+#: companies/views.py:456
+msgid ""
+"Work session request <b>id {}</b>. You are not in list or you have been "
+"declined invitation."
 msgstr ""
+
+#: companies/views.py:462
+msgid "Request without result"
+msgstr "Richiesta senza risultato"
+
+#: companies/views.py:512
+msgid "You have booked the date <b>{}</b>"
+msgstr ""
+
+#: companies/views.py:521
+msgid "You have removed the booked date <b>{}</b>"
+msgstr ""
+
+#: companies/views.py:552
+msgid ""
+"Session is expired or some error occurred in request. Can't modify anythings"
+msgstr ""
+
+#: countries/models.py:11
+msgid "countries"
+msgstr "Stati"
+
+#: countries/models.py:30
+msgid "cities"
+msgstr "Citta'"
 
 #: courses/models.py:84
 msgid "Low"
@@ -114,178 +647,277 @@ msgstr "Per corso"
 msgid "Per trainer"
 msgstr "Per docente"
 
-#: digisafe/settings.py:253
+#: digisafe/settings.py:275
 msgid "Italian"
 msgstr "Italiano"
 
-#: digisafe/settings.py:254
+#: digisafe/settings.py:276
 msgid "English"
 msgstr "Inglese"
 
+#: home/templates/home/base.html:61
+msgid "Welcome,"
+msgstr "Benvenuto,"
+
+#: home/templates/home/base.html:69
+msgid "View site"
+msgstr "Vedi sito"
+
+#: home/templates/home/base.html:72
+msgid "Change password"
+msgstr "Cambia password"
+
+#: home/templates/home/base.html:75
+msgid "Admin"
+msgstr ""
+
+#: home/templates/home/base.html:77
+msgid "Log out"
+msgstr "Esci"
+
+#: home/templates/home/base.html:111
+msgid "Go"
+msgstr "Vai"
+
+#: home/templates/home/home_base.html:6
+msgid "Digi.Safe."
+msgstr ""
+
+#: home/templates/home/index.html:14
+msgid "Professional, Technician and Business Network Organization"
+msgstr "Organizzazione per Professionisti, Tecnici e network Business"
+
+#: home/templates/home/index.html:16
+msgid "Manage Training Center"
+msgstr "Gestione Centro di Formazione"
+
+#: home/templates/home/index.html:17
+msgid "Manage Training Institution"
+msgstr "Attestato Ente"
+
+#: home/templates/home/index.html:18
+msgid "Manage Company"
+msgstr "Gestione Aziende"
+
+#: home/templates/home/index.html:19
+msgid "Manage Professionals"
+msgstr "Gestione Professionisti"
+
+#: home/templates/home/index.html:20
+msgid "Manage Technicians"
+msgstr "Gestione Operatori"
+
+#: home/templates/home/index.html:21
+msgid "Manage Trainers"
+msgstr "Gestione Docenti"
+
+#: home/templates/home/index.html:22
+msgid "Private Electronic Market"
+msgstr "Mercato Elettronico Privato"
+
+#: home/templates/home/index.html:26
+msgid "Total Responsive technology"
+msgstr "Tecnologia responsive"
+
+#: home/templates/home/index.html:31
+msgid "Map easy use search"
+msgstr "Ricerca facilitata su mappa"
+
+#: home/templates/home/index.html:36
+msgid "Timeline free and busy users"
+msgstr "Timeline utenti liberi e impegnati"
+
+#: home/templates/home/index.html:41
+msgid "Synchronized calendar"
+msgstr "Calendario sicronizzato"
+
 #: institutions/models.py:45
 msgid "Min values is 0"
-msgstr ""
+msgstr "Valore minimo 0"
 
 #: institutions/models.py:58
 msgid "Use custom registry files"
 msgstr "Utilizza file personali"
 
 #: institutions/models.py:59
-#, fuzzy
-#| msgid "Insert request"
 msgid "Days before insert request"
-msgstr "Inserisci richiesta"
+msgstr "Giorni prima dell'inserimento richiesta"
 
 #: institutions/models.py:116
 msgid "Check that if this file is mandatory"
 msgstr "Controlla se il file è richiesto"
 
-#: protocol/admin.py:290
+#: maps/gisfields.py:30
+msgid "The base GIS field with digisafe custom methods."
+msgstr "Campo GIS con metodi personali digisafe"
+
+#: maps/templates/maps/searchplace.html:6
+msgid "Map"
+msgstr "Mappa"
+
+#: maps/templates/maps/searchplace.html:11
+msgid "Select center"
+msgstr "Seleziona per centrare"
+
+#: maps/templates/maps/searchplace.html:13
+msgid "Save position"
+msgstr "Salva la posizione"
+
+#: maps/templates/maps/searchplace.html:16
+msgid "Address Lookup"
+msgstr "Ricerca indirizzo"
+
+#: pricelist/templates/pricelist/pricelist_list.html:7
+msgid "New price profile"
+msgstr "Nuovo profilo prezzo"
+
+#: pricelist/templates/pricelist/pricelist_list.html:9
+msgid "Profiles"
+msgstr "Profili"
+
+#: pricelist/templates/pricelist/pricelist_list.html:27
+msgid "No price list yet"
+msgstr "Nessun prezziario ancora"
+
+#: protocol/admin.py:285
 #, python-brace-format
 msgid "{0} File documentation have not been signed yet."
 msgstr "{0} file non firmato ancora."
 
-#: protocol/admin.py:740
+#: protocol/admin.py:747
 msgid "Create new protocol"
 msgstr "Crea nuovo protocollo"
 
-#: protocol/admin.py:771 protocol/admin.py:776 protocol/admin.py:781
-#, fuzzy
-#| msgid "Certificate protocol"
+#: protocol/admin.py:778 protocol/admin.py:783 protocol/admin.py:788
 msgid "Notify protocol"
-msgstr "Protocollo certificato"
+msgstr "Notifica protocollo"
 
-#: protocol/admin.py:845
+#: protocol/admin.py:825
 msgid "Set request"
 msgstr "Assegnata richiesta"
 
-#: protocol/admin.py:850
+#: protocol/admin.py:830 protocol/admin.py:831
 msgid "New protocol request: {}"
 msgstr ""
 
-#: protocol/admin.py:882
+#: protocol/admin.py:864
 #, python-brace-format
 msgid "{0} Need an institution. Choice one. Status wasn't change."
 msgstr "{0} necessita di un ente. Scegline uno. Stato non cambiato."
 
-#: protocol/admin.py:885
+#: protocol/admin.py:868
 msgid "Set load by director"
 msgstr "Assegnato in carico dal direttore"
 
-#: protocol/admin.py:886 protocol/admin.py:887 protocol/admin.py:894
-#: protocol/admin.py:904 protocol/admin.py:941 protocol/admin.py:942
-#: protocol/admin.py:943 protocol/admin.py:944 protocol/admin.py:955
-#: protocol/admin.py:956 protocol/admin.py:957 protocol/admin.py:958
-#: protocol/admin.py:1002 protocol/admin.py:1003 protocol/admin.py:1052
-#: protocol/admin.py:1053 protocol/admin.py:1059 protocol/admin.py:1060
-#: protocol/admin.py:1063 protocol/admin.py:1064
+#: protocol/admin.py:869 protocol/admin.py:870 protocol/admin.py:873
+#: protocol/admin.py:876 protocol/admin.py:884 protocol/admin.py:885
+#: protocol/admin.py:896 protocol/admin.py:897 protocol/admin.py:935
+#: protocol/admin.py:936 protocol/admin.py:937 protocol/admin.py:938
+#: protocol/admin.py:949 protocol/admin.py:950 protocol/admin.py:951
+#: protocol/admin.py:952 protocol/admin.py:993 protocol/admin.py:994
+#: protocol/admin.py:1042 protocol/admin.py:1043 protocol/admin.py:1049
+#: protocol/admin.py:1050 protocol/admin.py:1053 protocol/admin.py:1054
 msgid "Notify protocol {}. {}"
 msgstr ""
 
-#: protocol/admin.py:893
+#: protocol/admin.py:883
 msgid "Set authorized by director"
 msgstr "Assegnato autorizzato dal direttore"
 
-#: protocol/admin.py:902
+#: protocol/admin.py:894
 msgid "Set denied by director"
 msgstr "Assegnato rifiutato dal direttore"
 
-#: protocol/admin.py:940
+#: protocol/admin.py:934
 msgid "Set authorized from institution"
 msgstr "Assegnato autorizzato dall'ente"
 
-#: protocol/admin.py:953
+#: protocol/admin.py:947
 msgid "Set denied from institution. Return modify."
 msgstr "Assegnato rifiutato dall'ente. Ritorna alla modifica."
 
-#: protocol/admin.py:1000
+#: protocol/admin.py:991
 msgid "Set finish"
 msgstr "Assegnato terminato"
 
-#: protocol/admin.py:1051
+#: protocol/admin.py:1041
 msgid "Set close"
 msgstr "Assegnato chiuso"
 
-#: protocol/admin.py:1066
+#: protocol/admin.py:1056
 msgid "Request integration."
 msgstr "Richiesta integrazione."
 
-#: protocol/admin.py:1075
+#: protocol/admin.py:1066
 #, python-brace-format
 msgid "{0}'s Certificate has not been loaded yet."
 msgstr "Il certificato di {0} non è stato ancora caricato."
 
-#: protocol/forms.py:36
+#: protocol/forms.py:31
 #, python-format
-msgid "Learnser number error: Max admited is %(learners)s (Min is 0)."
+msgid "Learner number error: Max admitted is %(learners)s (Min is 0)."
 msgstr ""
 
-#: protocol/forms.py:44
-#, fuzzy
-#| msgid "Center name"
-msgid "Center is mondatory"
-msgstr "Nome del centro"
+#: protocol/forms.py:39
+msgid "Center is mandatory"
+msgstr "Nome del centro obbligatorio"
 
-#: protocol/forms.py:77
+#: protocol/forms.py:72
 #, python-format
 msgid "Invalid user: %(user)s. The user is a learner."
 msgstr ""
 
-#: protocol/forms.py:89
+#: protocol/forms.py:84
 #, python-format
 msgid ""
 "Invalid date: Cannot insert request before %(date)s or change date if the "
 "course has been authorized"
 msgstr ""
 
-#: protocol/forms.py:97
+#: protocol/forms.py:93
 #, python-format
 msgid ""
 "Invalid time: End time %(end_time)s is lower than start time %(start_time)s."
 msgstr ""
 
-#: protocol/forms.py:103
+#: protocol/forms.py:99
 #, python-format
 msgid ""
 "Invalid date for user: %(user)s. The user is busy on %(date)s from "
 "%(start_time)s and %(end_time)s."
 msgstr ""
 
-#: protocol/forms.py:110
+#: protocol/forms.py:108
 #, python-format
 msgid ""
 "Invalid time for date: %(date)s. The time from %(start_time)s and "
 "%(end_time)s is busy on theory session."
 msgstr ""
 
-#: protocol/forms.py:147
+#: protocol/forms.py:143
 #, python-format
 msgid ""
 "User busy: %(user)s. The user is busies in other course on these date and "
 "time session."
 msgstr ""
 
-#: protocol/forms.py:153
+#: protocol/forms.py:149
 #, python-format
 msgid "Invalid user: %(user)s. The user is a trainer."
 msgstr ""
 
-#: protocol/forms.py:163
+#: protocol/forms.py:161
 msgid "Write in the box to text integration information message"
 msgstr ""
 
 #: protocol/forms.py:167
 msgid ""
-"Without fill this form doesn't chage the status in case of denied choise"
+"Without fill this form doesn't change the status in case of denied choice"
 msgstr ""
 
 #: protocol/models.py:167
 msgid "New"
 msgstr "Formazione"
-
-#: protocol/models.py:168 templates/protocol/certificate_content.html:12
-msgid "Update"
-msgstr "Aggiornamento"
 
 #: protocol/models.py:282
 #, python-brace-format
@@ -304,62 +936,62 @@ msgstr ""
 msgid "Qualification update within {0} years."
 msgstr ""
 
-#: protocol/models.py:386 templates/admin/edit_inline/check_block.html:27
+#: protocol/models.py:388 templates/admin/edit_inline/check_block.html:27
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Theory"
 msgstr "Teorica"
 
-#: protocol/models.py:387 templates/admin/edit_inline/check_block.html:38
+#: protocol/models.py:389 templates/admin/edit_inline/check_block.html:38
 #: templates/protocol/register_print_signpage.html:47
 #: templates/protocol/register_print_signpage.html:58
 #: templates/protocol/register_print_signpage.html:69
 msgid "Practice"
 msgstr "Pratica"
 
-#: protocol/models.py:395
+#: protocol/models.py:397
 msgid "In presence"
 msgstr "In presenza"
 
-#: protocol/models.py:396
+#: protocol/models.py:398
 msgid "On the web"
 msgstr "Sul web"
 
-#: protocol/models.py:412
+#: protocol/models.py:414
 #, python-brace-format
 msgid "Session {data} {inizio}/{fine}"
 msgstr "Sessione {data} {inizio}/{fine}"
 
-#: protocol/models.py:499
+#: protocol/models.py:501
 msgid "Certificate Institution"
 msgstr "Attestato Ente"
 
-#: protocol/models.py:507
+#: protocol/models.py:509
 #, python-brace-format
 msgid "User: {nome} {cognome} ({user}) "
 msgstr "Utente: {nome} {cognome} ({user}) "
 
-#: protocol/models.py:553 templates/admin/change_form_object_tools.html:14
+#: protocol/models.py:554 templates/admin/change_form_object_tools.html:14
 #: templates/protocol/register_print_firstpage.html:7
 msgid "Attendance register"
 msgstr "Registro presenze"
 
-#: protocol/models.py:554 templates/admin/change_form_object_tools.html:19
+#: protocol/models.py:555 templates/admin/change_form_object_tools.html:19
 #: templates/protocol/exam_print_firstpage.html:7
 #: templates/protocol/exam_print_firstpage.html:20
 msgid "Exam reporter"
 msgstr "Verbale esami"
 
-#: protocol/models.py:555
+#: protocol/models.py:556
 msgid "Privacy"
 msgstr ""
 
-#: protocol/models.py:556
+#: protocol/models.py:557
 msgid "Other"
 msgstr "Altro"
 
-#: protocol/models.py:620 templates/protocol/exam_print_firstpage.html:41
+#: protocol/models.py:621 templates/protocol/exam_print_firstpage.html:41
 #: templates/protocol/exam_print_signpage.html:26
 #: templates/protocol/register_print_firstpage.html:97
 #: templates/protocol/register_print_signpage.html:54
@@ -369,7 +1001,7 @@ msgstr "Altro"
 msgid "Sign"
 msgstr "Firma"
 
-#: protocol/models.py:640
+#: protocol/models.py:641
 msgid "Authorization"
 msgstr "Autorizzazione"
 
@@ -377,155 +1009,6 @@ msgstr "Autorizzazione"
 #, python-brace-format
 msgid "Prot_{0}_register"
 msgstr ""
-
-#: templates/account/change_password.html:14 templates/account/login.html:12
-#: templates/account/reset_password.html:14
-#: templates/admin/change_form_protocol.html:58
-msgid "Please correct the error below."
-msgstr ""
-
-#: templates/account/change_password.html:14 templates/account/login.html:12
-#: templates/account/reset_password.html:14
-#: templates/admin/change_form_protocol.html:58
-msgid "Please correct the errors below."
-msgstr ""
-
-#: templates/account/change_password.html:31
-#: templates/account/reset_password.html:35
-msgid "Send"
-msgstr "Invia"
-
-#: templates/account/home_admin.html:4
-msgid "Company Admin Panel"
-msgstr "Pannello amministrazione aziendale"
-
-#: templates/account/home_admin.html:8
-msgid "Company list"
-msgstr "Lista aziende"
-
-#: templates/account/home_admin.html:13
-msgid "Dashboard Companies"
-msgstr "Dashboard aziende"
-
-#: templates/account/home_admin.html:15
-msgid "List companies you are admin"
-msgstr "Lista aziende gestite"
-
-#: templates/account/home_admin.html:18
-msgid "Open"
-msgstr "Apri"
-
-#: templates/account/home_companies.html:4 templates/account/index.html:22
-msgid "Associate companies"
-msgstr "Aziende associate"
-
-#: templates/account/home_companies.html:10
-#: templates/companies/associate_user.html:19
-#: templates/protocol/action_list_objects.html:7
-msgid "Action"
-msgstr "Azione"
-
-#: templates/account/home_companies.html:35
-#: templates/companies/associate_user.html:28
-msgid "Dissociate"
-msgstr "Dissocia"
-
-#: templates/account/home_courses.html:4
-msgid "Owner Courses Panel"
-msgstr "Pannello corsi personali"
-
-#: templates/account/home_courses.html:9
-msgid "Course"
-msgstr "Corso"
-
-#: templates/account/home_courses.html:14
-#: templates/companies/associate_user.html:11
-#: templates/companies/user_to_associate.html:11
-#: templates/maps/searchplace.html:19
-msgid "Search"
-msgstr "Cerca"
-
-#: templates/account/home_courses_object.html:9
-msgid "Valid"
-msgstr "Valido"
-
-#: templates/account/home_courses_object.html:11
-msgid "Expired"
-msgstr "Scaduto"
-
-#: templates/account/home_courses_object.html:13
-#: templates/account/home_courses_object.html:53
-msgid "Not passed"
-msgstr "Non superato"
-
-#: templates/account/home_courses_object.html:38
-msgid "Digital certificate"
-msgstr "Certificato digitale"
-
-#: templates/account/home_courses_object.html:45
-msgid "Institution certificate"
-msgstr "Attestato ente"
-
-#: templates/account/home_profile.html:4
-msgid "Profile Panel"
-msgstr "Pannelo del profilo personale"
-
-#: templates/account/home_profile.html:8
-msgid "Pending request"
-msgstr "Richiesta in attesa"
-
-#: templates/account/home_profile.html:13
-msgid "Accept"
-msgstr "Accetta"
-
-#: templates/account/home_profile.html:14
-msgid "Refuse"
-msgstr "Rifiuta"
-
-#: templates/account/home_profile.html:45
-msgid "Accepted"
-msgstr "Accettato"
-
-#: templates/account/home_profile.html:49
-msgid "Refused"
-msgstr "Rifiutato"
-
-#: templates/account/index.html:14
-msgid "PROFILES PAGE"
-msgstr "PAGINA PROFILI"
-
-#: templates/account/index.html:19
-msgid "Personal profile"
-msgstr "Profilo personale"
-
-#: templates/account/index.html:26
-msgid "Owner courses"
-msgstr "Corsi personali"
-
-#: templates/account/index.html:30
-msgid "Admin profile"
-msgstr "Profilo amministratore"
-
-#: templates/account/login.html:31
-#, python-format
-msgid ""
-"You are authenticated as %(username)s, but are not authorized to access this "
-"page. Would you like to login to a different account?"
-msgstr ""
-
-#: templates/account/login.html:51
-msgid "Forgotten your password or username?"
-msgstr ""
-
-#: templates/account/login.html:55
-msgid "Log in"
-msgstr "Entra"
-
-#: templates/account/lost_login.html:21
-#: templates/admin/edit_inline/check_block.html:53
-#: templates/companies/get_user_list_detail.html:11
-msgid "Request"
-msgstr "Richiesta"
 
 #: templates/admin/auth/user/add_form.html:6
 msgid ""
@@ -549,11 +1032,6 @@ msgstr "Firma verbale"
 #: templates/admin/change_form_object_tools.html:40
 msgid "Sign register"
 msgstr "Firma registro"
-
-#: templates/admin/change_form_object_tools.html:46
-#: templates/protocol/action_list.html:12
-msgid "Actions"
-msgstr "Azioni"
 
 #: templates/admin/change_form_object_tools.html:52
 msgid "History"
@@ -717,14 +1195,6 @@ msgstr "Vedi"
 msgid "No certification"
 msgstr "Nessuna certificazione"
 
-#: templates/admin/submit_line.html:5
-msgid "Save"
-msgstr "Salva"
-
-#: templates/admin/submit_line.html:8
-msgid "Delete"
-msgstr "Elimina"
-
 #: templates/admin/submit_line.html:10
 msgid "Save as new"
 msgstr "Salva come nuovo"
@@ -779,62 +1249,17 @@ msgstr "Fine"
 msgid "Ok and Close"
 msgstr "Ok e Chiudi"
 
-#: templates/companies/associate_user.html:6
-#: templates/companies/associate_user.html:17
-#: templates/companies/user_to_associate.html:6
-#: templates/companies/user_to_associate.html:17
-#: templates/protocol/action_list_objects.html:6
-msgid "User"
-msgstr "Utente"
+#: templates/calendar/index.html:13
+msgid "Agenda Panel"
+msgstr "Agenda"
 
-#: templates/companies/associate_user.html:18
-#: templates/companies/user_to_associate.html:18
-#: templates/protocol/action_list_objects.html:8
-msgid "Info"
-msgstr ""
+#: templates/calendar/index.html:60
+msgid "Busy"
+msgstr "Impegnato"
 
-#: templates/companies/associate_user.html:57
-#, fuzzy
-#| msgid "Associate users"
-msgid "Dissociated"
-msgstr "Utenti associati"
-
-#: templates/companies/get_user_list_detail.html:9
-#: templates/companies/user_to_associate.html:53
-msgid "Pending..."
-msgstr "In attesa..."
-
-#: templates/companies/index.html:14
-msgid "Dashboard panel"
-msgstr "Dashboard"
-
-#: templates/companies/index.html:18 templates/companies/index.html:33
-msgid "Associate users"
-msgstr "Utenti associati"
-
-#: templates/companies/index.html:19
-msgid "Seacrh users"
-msgstr "Cerca utenti"
-
-#: templates/companies/index.html:20 templates/companies/index.html:39
-msgid "Maps"
-msgstr "Mappe"
-
-#: templates/companies/index.html:26
-msgid "Users available"
-msgstr "Utenti disponibili"
-
-#: templates/companies/public_view.html:11
-msgid "Detail public view"
-msgstr "Dettagli pubblici"
-
-#: templates/companies/public_view.html:12
-msgid "Logo not upload"
-msgstr "Logo non caricato"
-
-#: templates/companies/user_to_associate.html:19
-msgid "Associate"
-msgstr "Associa"
+#: templates/calendar/index.html:72
+msgid "Free"
+msgstr "Libero"
 
 #: templates/error_pages/email_404.html:10
 msgid "Error"
@@ -843,50 +1268,6 @@ msgstr "Errore"
 #: templates/error_pages/email_404.html:12
 msgid "Check carefully. Email doesn't exist"
 msgstr "Cerca attentamente. Email inesistente"
-
-#: templates/home/base.html:46
-msgid "Welcome,"
-msgstr "Benvenuto,"
-
-#: templates/home/base.html:53
-msgid "View site"
-msgstr ""
-
-#: templates/home/base.html:56
-msgid "Change password"
-msgstr ""
-
-#: templates/home/base.html:59
-msgid "Admin"
-msgstr ""
-
-#: templates/home/base.html:61
-msgid "Log out"
-msgstr "Esci"
-
-#: templates/home/home_base.html:6
-msgid "Digi.Safe."
-msgstr ""
-
-#: templates/home/index.html:14
-msgid "Professional and Technician Organization"
-msgstr ""
-
-#: templates/maps/searchplace.html:6
-msgid "Map"
-msgstr "Mappa"
-
-#: templates/maps/searchplace.html:11
-msgid "Select center"
-msgstr "Seleziona per centrare"
-
-#: templates/maps/searchplace.html:13
-msgid "Save position"
-msgstr "Salva la posizione"
-
-#: templates/maps/searchplace.html:16
-msgid "Address Lookup"
-msgstr "Ricerca indirizzo"
 
 #: templates/protocol/action_list.html:23
 msgid ""
@@ -963,13 +1344,6 @@ msgstr "Stato"
 msgid "Place"
 msgstr "Luogo"
 
-#: templates/protocol/certificate_user.html:112
-#: templates/protocol/exam_print_firstpage.html:69
-#: templates/protocol/register_print_firstpage.html:58
-#: templates/protocol/register_print_firstpage.html:94
-msgid "Date"
-msgstr "Data"
-
 #: templates/protocol/certificate_user.html:113
 msgid "Time"
 msgstr "Ora"
@@ -992,7 +1366,7 @@ msgstr ""
 
 #: templates/protocol/certificate_user.html:149
 msgid "Qualification expire date"
-msgstr ""
+msgstr "Data scadenza qualifica"
 
 #: templates/protocol/certificate_user.html:157
 msgid "Institution"
@@ -1086,14 +1460,6 @@ msgstr "Test pratico"
 msgid "OTHERS"
 msgstr "Altro"
 
-#: templates/protocol/exam_print_firstpage.html:91
-#: templates/protocol/exam_print_signpage.html:79
-#: templates/protocol/register_print_firstpage.html:101
-#: templates/protocol/register_print_listpage.html:56
-#: templates/protocol/register_print_signpage.html:105
-msgid "Page"
-msgstr "Pagina"
-
 #: templates/protocol/exam_print_signpage.html:11
 msgid "Exam attendances list"
 msgstr "Lista esame discenti"
@@ -1183,12 +1549,6 @@ msgstr "Nome del direttore"
 msgid "Stamp"
 msgstr "Timbro"
 
-#: templates/protocol/register_print_firstpage.html:101
-#: templates/protocol/register_print_listpage.html:56
-#: templates/protocol/register_print_signpage.html:105
-msgid "of"
-msgstr "di"
-
 #: templates/protocol/register_print_listpage.html:10
 #: templates/protocol/register_print_signpage.html:11
 msgid "Course code"
@@ -1270,57 +1630,53 @@ msgstr ""
 msgid "Double ckick on file to insert sign"
 msgstr ""
 
-#: users/admin.py:304
+#: users/admin.py:331
 #, python-format
 msgid "%s is a Trainer now"
 msgstr ""
 
-#: users/admin.py:316
+#: users/admin.py:343
 #, python-format
 msgid "%s is a director now"
 msgstr ""
 
-#: users/admin.py:328
+#: users/admin.py:355
 #, python-format
 msgid "%s is an administrator now"
 msgstr ""
 
-#: users/admin.py:345
+#: users/admin.py:372
 #, python-format
 msgid "%s is an institution now"
 msgstr "%s è un ente ora"
 
-#: users/admin.py:356
+#: users/admin.py:384
 #, python-format
 msgid "%d user is log now"
 msgstr "Utente %d è loggato"
 
-#: users/admin.py:362
+#: users/admin.py:389
 #, python-brace-format
 msgid ""
 "Dear,:\n"
 " {name} {surname}"
 msgstr ""
 
-#: users/admin.py:364
-#, fuzzy
-#| msgid "Username"
+#: users/admin.py:391
 msgid "Username: {}"
-msgstr "Nome utente"
+msgstr "Nome utente: {}"
 
-#: users/admin.py:366
+#: users/admin.py:393
 msgid "Password: {}"
 msgstr ""
 
-#: users/admin.py:370
+#: users/admin.py:397
 msgid "Link to login: {}{}"
 msgstr ""
 
-#: users/admin.py:371
-#, fuzzy
-#| msgid "Create new protocol"
+#: users/admin.py:398
 msgid "Create new account"
-msgstr "Crea nuovo protocollo"
+msgstr "Crea nuovo account"
 
 #: users/forms.py:16
 msgid "Username"
@@ -1342,38 +1698,103 @@ msgstr ""
 msgid "Password2"
 msgstr ""
 
-#: users/forms.py:35
+#: users/forms.py:36
 msgid "First name"
 msgstr ""
 
-#: users/forms.py:36
+#: users/forms.py:40
 msgid "Last name"
 msgstr ""
 
-#: users/forms.py:37
+#: users/forms.py:44
 msgid "Email"
 msgstr ""
 
-#: users/forms.py:61
+#: users/forms.py:68
 msgid "Invalid value: Fiscal code is used from other user."
 msgstr ""
 
-#: users/models.py:99
+#: users/models.py:175
 #, python-brace-format
 msgid "Max size is {0}x{1}px (w,h). You try load image size of {2}x{3}px"
 msgstr ""
+"Dimensione massima {0}x{1}px (w,h). Cerchi di caricare una immagine di "
+"dimension {2}x{3}px"
 
-#: users/models.py:101
+#: users/models.py:178
 msgid ""
-"Your sign file needs trasparency in background. We have not check it. Your "
-"file should be in .png and trasparence."
+"Your sign file needs transparency in background. We have not check it. Your "
+"file should be in .png with transparent."
 msgstr ""
+"Il tuo file firma necessita la trasparenza di fondo. Abbiamo notato che ne è "
+"sprovvisto. Il tuo file dovrebbe essere in .png con trasparenza."
 
-#: users/models.py:115
+#: users/models.py:195
 #, python-brace-format
 msgid "Unsupported file extension. Valid extetion is '{0}'"
-msgstr ""
+msgstr "Estensione file non supportata. Estensione valida '{0}'"
 
-#: users/models.py:241
+#: users/models.py:347
 msgid "Permitted courses"
-msgstr ""
+msgstr "Corsi permessi"
+
+#~ msgid "Add confirm list"
+#~ msgstr "Conferma selezionati"
+
+#~ msgid "Remove confirm list"
+#~ msgstr "Rimuovi selezionati"
+
+#~ msgid "Bookmark name"
+#~ msgstr "Work session"
+
+#, fuzzy
+#~| msgid "Invited"
+#~ msgid "Invitati"
+#~ msgstr "Invitato"
+
+#, fuzzy
+#~| msgid "Confirm"
+#~ msgid "Confermati"
+#~ msgstr "Conferma"
+
+#~ msgid "City"
+#~ msgstr "Citta'"
+
+#~ msgid "List of managed companies"
+#~ msgstr "Aziende gestite"
+
+#~ msgid "List companies you are admin"
+#~ msgstr "Lista aziende gestite"
+
+#~ msgid "Valide"
+#~ msgstr "Valido"
+
+#~ msgid "Gestione Centro di Formazione"
+#~ msgstr "Gestione Centro di Formazione"
+
+#~ msgid "Gestione Ente di Formazione"
+#~ msgstr "Gestione Ente di Formazione"
+
+#~ msgid "Gestione Aziendale"
+#~ msgstr "Gestione Aziendale"
+
+#~ msgid "Gestione Operatori"
+#~ msgstr "Gestione Operatori"
+
+#~ msgid "Gestione Docenti"
+#~ msgstr "Gestione Docenti"
+
+#~ msgid "Last update"
+#~ msgstr "Ultimo aggiornamento"
+
+#~ msgid "Company Admin Panel"
+#~ msgstr "Pannello amministrazione aziendale"
+
+#~ msgid "PROFILES PAGE"
+#~ msgstr "PAGINA PROFILI"
+
+#~ msgid "Owner courses"
+#~ msgstr "Corsi personali"
+
+#~ msgid "Maps"
+#~ msgstr "Mappe"

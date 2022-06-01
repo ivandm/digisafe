@@ -45,7 +45,6 @@
 
 </head>
 
-
 <body class="">
 <!-- Container -->
 <div class="container-fluid px-0">
@@ -62,7 +61,7 @@
                 {% translate 'Welcome,' %}
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
                 {% get_current_language as LANGUAGE_CODE %}
-                (Lang: {{ LANGUAGE_CODE }})
+                ({{ LANGUAGE_CODE }})
             {% endblock %}
             <div>
             {% block userlinks %}
@@ -86,7 +85,8 @@
     {% endblock %}
     <!-- END Header -->
     
-    <!-- Nav-bar -->
+    <!-- Nav-bar-menu -->
+    {# MAIN MENU #}
     <nav class="navbar navbar-expand-lg px-1 navbar-dark bg-dark">
         <div class="container-fluid fs-5">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,9 +94,28 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarMenu">
                 {% block nav-bar %}{% endblock %}
+                {# LANGUAGE #}
+                <div>
+                    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                        <select name="language">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                    {{ language.code }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <input class="btn btn-sm p-1" type="submit" value="{% translate 'Go' %}">
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
+
+    {# SUB MENU #}
     {% block nav-bar-sub %}
     <nav class="navbar navbar-expand-lg px-2 bg-secondary">
         <div class="container-fluid fs-6">
@@ -109,13 +128,16 @@
             </div>
         </div>
     </nav>
+
     {% endblock %}
     <!-- END Nav-bar -->
-    
+
+    {# breadcrumbs #}
     <!-- breadcrumbs -->
     {% block breadcrumbs %}{% endblock %}
     <!-- END breadcrumbs -->
-    
+
+    {# messages #}
     {% block messages %}
       {% if messages %}
         <div class="content">
@@ -125,7 +147,8 @@
         </div>
       {% endif %}
     {% endblock messages %}
-    
+
+    {# CONTENT #}
     <div class="container-xl">
     {% block content %}
     <h1>HOME</h1>
@@ -134,6 +157,7 @@
 
     {# FOOTER #}
     {% block footer %}
+    <div class="clearfix"></div>
     <div class="border-top border-secondary mt-4 py-2 alert-secondary">
         <div class="align-items-center text-center">
           <span class="text-muted">© 2021 IRCoT Group</span>

@@ -264,7 +264,9 @@ COMPRESS_PRECOMPILERS = (
 # django-admin makemessages -a
 # The script should be run from one of two places: The root directory of your Django project or The root directory of
 # your Django project
+# Change files .po
 # django-admin compilemessages per compilare i messaggi
+#
 LOCALE_PATHS = [
     BASE_DIR / "locale/",
     # BASE_DIR / "digisafe/locale",

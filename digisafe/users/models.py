@@ -175,7 +175,7 @@ def validate_file_trasparence(value):
             raise ValidationError(_("Max size is {0}x{1}px (w,h). You try load image size of {2}x{3}px"
                                     .format(SIGN_MAX_SIZE[0], SIGN_MAX_SIZE[1], x, y)))
         if not hasattr(p.image, 'png'):
-            raise ValidationError(_("Your sign file needs trasparency in background. "
+            raise ValidationError(_("Your sign file needs transparency in background. "
                                     "We have not check it. Your file should be in .png with transparent."))
     return value
 

@@ -5,7 +5,7 @@
 <div>
       <h1 class="">{% translate 'Dashboard Companies' %}</h1>
       <div class="">
-        <p>{% translate 'List companies you are admin' %}</p>
+        <p>{% translate 'Managed companies' %}</p>
             {% for company in company_list %}
                 <div class="m-3">
                 <a href="{% url 'companies:set-company' company.id %}" class="btn btn-primary">{% translate 'Select' %}</a> {{company.name}}

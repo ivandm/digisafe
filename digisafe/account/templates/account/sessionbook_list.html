@@ -14,18 +14,18 @@
     <form method="get">{% csrf_token %}
         <div class="input-group mb-1">
             <input class="form-control" type="text" name="filter"
-                   placeholder="Company, Session name, date dd/mm/yyyy">
+                   placeholder="{% translate 'Company, Session name, date dd/mm/yyyy' %}">
             <button class="btn btn-outline-secondary" type="submit" name="cerca" ><i class="bi bi-search"></i></button>
 
         </div>
         <div class="input-group mb-3">
             <div class="form-check me-3">
                 <input class="form-check-input" type="checkbox" name="booked" id="booked">
-                <label class="form-check-label" for="booked">only Booked </label>
+                <label class="form-check-label" for="booked">{% translate "only Booked" %} </label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="confirmed" id="confirmed">
-                <label class="form-check-label" for="confirmed">only Confirmed </label>
+                <label class="form-check-label" for="confirmed">{% translate "only Confirmed" %} </label>
             </div>
         </div>
 
@@ -43,10 +43,10 @@
     <div class="col-md border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch">
         {% if user.id in ws.confirmed_users %}
         <div class="clearfix"></div>
-        Confermato
+        {% translate "Confirmed" %}
         <div class="dropdown float-end">
             <div class="btn btn-outline-primary btn-sm p-1 m-0 dropdown-toggle" id="dropdownMenuButton_{{ws.id}}" data-bs-toggle="dropdown" aria-expanded="false">
-                Date
+                {% translate "Dates" %}
             </div>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_{{ws.id}}">
                 {% for d in ws.confirmed_dates %}
@@ -57,7 +57,7 @@
         {% endif %}
         {% if user.id in ws.booked_users %}
         <div class="clearfix"></div>
-        Prenotato
+        {% translate "Booked" %}
         <div class="dropdown float-end">
             <div class="btn btn-outline-primary btn-sm p-1 m-0 dropdown-toggle" id="dropdownMenuButton_{{ws.id}}" data-bs-toggle="dropdown" aria-expanded="false">
                 Date
@@ -70,12 +70,12 @@
         </div>
         {% endif %}
         {% if user.id not in ws.confirmed_users and user.id not in ws.booked_users %}
-        Invitato
+        {% translate "Invited" %}
         {% endif %}
     </div>
     <div class="col border-md border-secondary mx-md-1 p-1 alert-secondary align-self-stretch text-center ">
         <div class="align-middle align-content-center">
-            <div>Expire date</div>
+            <div>{% translate "Expire date" %}</div>
             <div>{{ws.expire_date}}</div>
         </div>
     </div>

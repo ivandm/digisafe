@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db.models import Sum, Count
 from django.utils import timezone
+from django.utils.translation import gettext as _
 import os
 import uuid
 
@@ -16,23 +17,23 @@ from job.models import Job
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name=_("name"))
     active = models.BooleanField(default=True)
     admins = models.ManyToManyField(
                 User,
                 blank=True,
-                related_name = "admins_company"
+                related_name="admins_company"
             )
     associates = models.ManyToManyField(
                 User,
                 blank=True,
-                related_name = "associates_company"
+                related_name="associates_company"
             )
 
     favorite = models.ManyToManyField(
                 User,
                 blank=True,
-                related_name = "favorite_company"
+                related_name="favorite_company"
             )
 
     def __str__(self):
@@ -67,15 +68,17 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         null=True,
         # blank=True
+        verbose_name=_("country")
     )
     city = models.ForeignKey(
         City,
         on_delete=models.CASCADE,
         null=True,
         # blank=True
+        verbose_name=_("city")
     )
     address = models.CharField(max_length=255)
-    desc = models.TextField(default="")
+    desc = models.TextField(default="", verbose_name=_("description"))
     logo = models.FileField(
                     upload_to=file_path_name_company,
                     storage=storage.FileSystemStorage(location='static/imgs/', base_url="/imgs"),
