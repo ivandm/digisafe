@@ -28,6 +28,7 @@ class User(AbstractUser):
     owner = models.ForeignKey(
                             settings.AUTH_USER_MODEL,
                             on_delete=models.CASCADE,
+                            null=True,
                         )
     
     def __init__(self, *args, **kwargs):
