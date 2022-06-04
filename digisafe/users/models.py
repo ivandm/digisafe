@@ -32,7 +32,7 @@ class User(AbstractUser):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
     def __str__(self):
         try:
             fiscal_code = self.anagrafica.fiscal_code
@@ -45,7 +45,7 @@ class User(AbstractUser):
                             fiscal_code=fiscal_code)
         return "{utente} - {fiscal_code}".format(utente=self.username,
                                                  fiscal_code=fiscal_code)
-    
+
     def fiscal_code(self):
         return self.anagrafica.fiscal_code
 
@@ -144,17 +144,17 @@ class Anagrafica(models.Model):
                         null=True, blank=True
                     )
     fiscal_code = models.CharField(max_length=255, unique=True, blank=False, null=False)
-        
+
     def __str__(self):
         utente = self.user
         if self.user.first_name or self.user.last_name:
             utente = "{last_name} {first_name} {cf}".format(
                             first_name=self.user.first_name,
-                            last_name=self.user.last_name, 
+                            last_name=self.user.last_name,
                             cf=self.fiscal_code)
-        
+
         return "Anagrafica di {utente} ".format(utente=utente)
-    
+
     def getPlaceTemplate(self):
         return "{0} {1}".format(self.city, self.birthday)
 
@@ -207,11 +207,11 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         # name = self.get_alternative_name(file_root, file_ext)
         # print("ProtocolFileSystemStorage._save name", name)
         return super()._save(name, content)
-    
+
     def delete(self, name):
         # print("ProtocolFileSystemStorage.delete name", name)
         super().delete(name)
-    
+
     def signFile(self, name, data=None):
         file_root, file_ext = os.path.splitext(name)
         signedFilePath = file_root+"_signed"+file_ext
@@ -221,7 +221,7 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         else:
             master = name
         self.drawSigns(master, signedFilePath, data)
-        
+
     def getSignedFileName(self, name):
         # name: deve essere sempre il file originale
         if not name or type(name) != type(""):
@@ -232,7 +232,7 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         if self.exists(signedFile):
             return signedFile
         return name
-        
+
     def drawSigns(self, signFile, destFile, data):
         """
 
@@ -242,12 +242,9 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         :type destFile: il file con le firme messe
         :type data: data
         """
+        # print ("ProtocolFileSystemStorage.drawSigns")
         signFile_tmp = self.path(signFile+".tmp")
         destFile = self.path(destFile)
-        # print ("ProtocolFileSystemStorage.drawSigns")
-        # print ("signFile", signFile)
-        # print ("destFile", destFile)
-        # print ("signFile_tmp", signFile_tmp)
         if self.exists(signFile_tmp):
             print("Processo bloccato. File tmp esistente. Attendere la fine del processo in corso")
             return False
@@ -268,7 +265,7 @@ class ProtocolFileSystemStorage(FileSystemStorage):
                     # print(item["pdfcoord"])
                     c = item["pdfcoord"]
                     # print(c[0], c[1])
-                    can.drawString(c[0], c[1], "Hello world")        
+                    can.drawString(c[0], c[1], "Hello world")
             else:
                 can.drawString(0, 0, "")
             can.save()
@@ -278,7 +275,7 @@ class ProtocolFileSystemStorage(FileSystemStorage):
 
             # create a new PDF with Reportlab
             new_pdf = PdfFileReader(packet)
-            
+
             page = existing_pdf.getPage(pag)
             page.mergePage(new_pdf.getPage(0))
             output.addPage(page)
@@ -287,8 +284,8 @@ class ProtocolFileSystemStorage(FileSystemStorage):
         output.write(outputStream)
         outputStream.close()
         sign_file.close()
-        
-        # Rimuove la copia del file 
+
+        # Rimuove la copia del file
         os.remove(self.path(signFile_tmp))
 
 
@@ -347,19 +344,19 @@ class Subjects(models.Model):
                 help_text=_("Permitted courses")
             )
     note = models.TextField(default='', blank=True)
-    
+
     class Meta:
         pass
-        
+
     def __str__(self):
         return "{last_name} {first_name}'s subjects ".format(
-                                                        last_name=self.user.last_name, 
+                                                        last_name=self.user.last_name,
                                                         first_name=self.user.first_name)
-                                                        
+
 
 class Institutions(models.Model):
     """Enti esterni associati"""
-    
+
     user = models.OneToOneField(
             settings.AUTH_USER_MODEL,
             on_delete=models.CASCADE,
@@ -371,12 +368,12 @@ class Institutions(models.Model):
                 help_text="Enti associati"
             )
     note = models.TextField(default='', blank=True)
-    
+
     class Meta:
         pass
-        
+
     def __str__(self):
         return "{last_name} {first_name} ".format(
-                                                        last_name=self.user.last_name, 
+                                                        last_name=self.user.last_name,
                                                         first_name=self.user.first_name)
-                                                        
+

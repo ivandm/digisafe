@@ -110,9 +110,7 @@ class requestAssociatePending(models.Model):
 class SessionBook(gismodel.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    # address = models.CharField(max_length=255)
     city = gisfields.PointField()
-    # city = gismodel.PointField()
     note = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField()

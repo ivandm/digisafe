@@ -47,22 +47,32 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 INSTALLED_APPS = [
     'tinymce',
     'djmoney',
-    'maps.apps.MapsConfig',
-    'companies.apps.CompaniesConfig',
-    'account.apps.AccountConfig',
-    'institutions.apps.InstitutionsConfig',
-    'centers.apps.CentersConfig',
-    'widgets.apps.WidgetsConfig',
-    'protocol.apps.ProtocolConfig',
-    'courses.apps.CoursesConfig',
-    'users.apps.UsersConfig',
-    'countries.apps.CountriesConfig',
-    'digisafe.apps.DigiSafeAdminSite',  # 'django.contrib.admin',
-    'job.apps.JobConfig',
-    'agenda.apps.AgendaConfig',
-    'home.apps.HomeConfig',
-    'pricelist.apps.PricelistConfig',
 
+    # find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+    # find . -path "*/migrations/*.pyc"  -delete
+    #  per il reset del dadabase, commnetare tutto tranne
+    # 'users.apps.UsersConfig', 'job.apps.JobConfig',
+    # python3 -m manage migrate
+    # python3 -m manage makemigrations
+    # python3 -m manage migrate
+    #
+    'users.apps.UsersConfig',
+
+    'countries.apps.CountriesConfig',
+    'courses.apps.CoursesConfig',
+    'centers.apps.CentersConfig',
+    'institutions.apps.InstitutionsConfig',
+    'job.apps.JobConfig',
+    'protocol.apps.ProtocolConfig',
+    'companies.apps.CompaniesConfig',
+    'agenda.apps.AgendaConfig',
+    'pricelist.apps.PricelistConfig',
+    'account.apps.AccountConfig',
+    'maps.apps.MapsConfig',
+    'widgets.apps.WidgetsConfig',
+    'home.apps.HomeConfig',
+
+    'digisafe.apps.DigiSafeAdminSite',  # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -128,7 +138,7 @@ if DEPLOY:
         'default': {
             # 'ENGINE': 'django.db.backends.sqlite3',
             "ENGINE": "django.contrib.gis.db.backends.spatialite",
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / 'digisafe.sqlite3',
         }
     }
 else:
@@ -136,7 +146,7 @@ else:
         'default': {
             # 'ENGINE': 'django.db.backends.sqlite3',
             "ENGINE": "django.contrib.gis.db.backends.spatialite",
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / 'digisafe.sqlite3',
         }
     }
 

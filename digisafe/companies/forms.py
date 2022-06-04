@@ -18,7 +18,9 @@ class SearchUserJobLocationForm(forms.Form):
 class SessionBookForm(forms.ModelForm):
     class Meta:
         model = SessionBook
-        fields = ("name", "city", "expire_date",  "start_date",  "end_date", "jobs", "note")
+        fields = ("name", "city", "expire_date",  "start_date",  "end_date",
+                  "jobs",
+                  "note")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             # "address": forms.TextInput(attrs={"class": "form-control"}),
@@ -69,7 +71,9 @@ class SessionBookForm(forms.ModelForm):
 class SessionBookUpdateForm(SessionBookForm):
     class Meta:
         model = SessionBook
-        fields = ("name", "city", "expire_date", "start_date", "end_date", "jobs", "note")
+        fields = ("name", "city", "expire_date", "start_date", "end_date",
+                  "jobs",
+                  "note")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             # "address": forms.TextInput(attrs={"class": "form-control"}),
@@ -101,7 +105,9 @@ class DateBookForm(forms.ModelForm):
 
     class Meta:
         model = DateBook
-        fields = ("job", "date", "number_user")
+        fields = (
+            "job",
+            "date", "number_user")
         # fields = "__all__"
 
     def __init__(self, *args, **kwargs):
@@ -109,7 +115,6 @@ class DateBookForm(forms.ModelForm):
         self.fields["job"].disabled = True
         self.fields["date"].disabled = True
         # Or to set READONLY
-        # self.fields["job"].widget.attrs["readonly"] = True
         self.fields["job"].widget.attrs["class"] = "bg-secondary text-white"
         # self.fields["date"].widget.attrs["readonly"] = True
         self.fields["date"].widget.attrs["class"] = "bg-secondary text-white"

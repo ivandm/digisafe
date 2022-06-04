@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
@@ -34,9 +35,9 @@ urlpatterns = [
 
     path('admin/autocomplete_check_field/', CheckExistObjJsonView.as_view()), #completamento automatico del campo
     path('admin/', admin.site.urls),
-    
+
     path('tinymce/', include('tinymce.urls')),  # WYSIWYG editor
-    
+
     path('countries/', include('countries.urls')),
     path('protocol/', include('protocol.urls')),
     path('document/<str:path>/', protocol_download_file, name="protocol-download-file"),
@@ -48,5 +49,4 @@ handler404 = 'home.views.custom_page_not_found_view'
 handler500 = 'home.views.custom_error_view'
 handler403 = 'home.views.custom_permission_denied_view'
 handler400 = 'home.views.custom_bad_request_view'
-# print("settings.MEDIA_ROOT", static("/imgs/", document_root=settings.BASE_DIR))
 
