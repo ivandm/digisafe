@@ -14,6 +14,7 @@ from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 from django.utils import timezone
+from django.core.exceptions import PermissionDenied
 
 import datetime
 
@@ -187,15 +188,22 @@ class CalendarFormEventView(UpdateView):
     # fields = ['anonymous', 'date_start', 'date_end', 'object', 'description']
 
     @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         # print("CalendarFormEventView.dispatch")
         self.item_id = kwargs['pk']
         self.year = kwargs['year']
         self.month = kwargs['month']
         self.day = kwargs['day']
-        # print(args, kwargs)
-        return super(CalendarFormEventView, self).dispatch(*args, **kwargs)
+        return super(CalendarFormEventView, self).dispatch(request, *args, **kwargs)
 
+    def get_object(self, queryset=None):
+        # print("CalendarFormEventView.get_object")
+        obj = super(CalendarFormEventView, self).get_object()
+        # controlla se obj fa parte dell'utente loggato
+        if obj.user != self.request.user:
+            raise PermissionDenied()  # or Http404
+        return obj
+    
     def get_success_url(self):
         return reverse('account:calendar-set', args=[self.year, self.month])
 

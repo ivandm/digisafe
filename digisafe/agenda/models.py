@@ -9,6 +9,8 @@ from geopy.geocoders import Nominatim
 from companies.models import DateBook
 
 from maps import gisfields
+
+
 class AgendaFeatures(gismodel.Model):
     user = gismodel.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -35,6 +37,7 @@ class AgendaFeatures(gismodel.Model):
             return "{} ({})".format(city, country)
         except:
             return ""
+
 
 class Agenda(gismodel.Model):
     user = gismodel.ForeignKey(
