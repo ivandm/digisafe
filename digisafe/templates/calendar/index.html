@@ -31,7 +31,9 @@
             <div class="row">
             {% calendar_day_name as day_names %}
             {% for day_name in day_names %}
-                <div class="card col px-0 text-truncate {% if day_name == 'Saturday' or day_name == 'Sunday' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}   fw-bold text-center border mb-1">{{day_name}}</div>
+                <div class="card col px-0 text-truncate {% if day_name == 'Saturday' or day_name == 'Sunday' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}   fw-bold text-center border mb-1">
+                    {% translate day_name %}
+                </div>
             {% endfor %}
             </div>
 
@@ -43,7 +45,11 @@
                     {% calendar_event user day as events %}
                     <div class="card col text-center border-start border-end p-0 {% if not events %} bg-success {% endif %}" style="min-height: 100px;">
                         <div class="card-header {% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}  fw-bold p-0">
-                            <div class="float-start "><a class="{% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}" href="{% url 'account:calendar-add' year month day|date:'j' %}"><i class="bi bi-calendar-plus"></i></a></div>
+                            <div class="float-start ">
+                                <a class="{% if day|date:'w'  == '0' or day|date:'w'  == '6' %}text-white bg-primary{% else %}text-dark bg-light{% endif %}" href="{% url 'account:calendar-add' day|date:'Y' day|date:'m' day|date:'j' %}">
+                                    <i class="bi bi-calendar-plus"></i>
+                                </a>
+                            </div>
                             <div>
                             {% calendar_is_today day|date:'Y' day|date:'m' day|date:'d' as is_today %}
                             {% if is_today %}
